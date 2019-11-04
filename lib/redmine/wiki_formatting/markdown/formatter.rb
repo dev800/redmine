@@ -26,6 +26,16 @@ module Redmine
         include ActionView::Helpers::TagHelper
         include Redmine::Helpers::URL
 
+        def list_item(text, list_type)
+          if text.start_with?("[x]", "[X]")
+            text[0..2] = "<input type=\"checkbox\" disabled checked=\"checked\">"
+          elsif text.start_with?("[ ]")
+            text[0..2] = "<input type=\"checkbox\" disabled>"
+          end
+
+          "<li>#{text}</li>"
+        end
+
         def link(link, title, content)
           return nil unless uri_with_safe_scheme?(link)
 

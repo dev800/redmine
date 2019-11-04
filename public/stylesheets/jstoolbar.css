@@ -133,3 +133,7 @@
 .jstb_help {
     background-image: url(../images/help.png);
 }
+
+.jstEditor textarea, .jstEditor iframe {
+    padding: 4px;
+}

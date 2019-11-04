@@ -1222,20 +1222,16 @@ zh:
   setting_timelog_accept_0_hours: 允许计入0小时工时
   setting_timelog_max_hours_per_day: 每用户每天最大可计入工时上限
   label_x_revisions: "%{count} 修订"
-  error_can_not_delete_auth_source: This authentication mode is in use and cannot be
-    deleted.
-  button_actions: Actions
-  mail_body_lost_password_validity: Please be aware that you may change the password
-    only once using this link.
+  error_can_not_delete_auth_source: 此身份验证模式正在使用中，无法删除。
+  button_actions: 操作
+  mail_body_lost_password_validity: 请注意，您只能使用此链接更改一次密码。
   text_login_required_html: When not requiring authentication, public projects and their
     contents are openly available on the network. You can <a href="%{anonymous_role_path}">edit
     the applicable permissions</a>.
-  label_login_required_yes: 'Yes'
-  label_login_required_no: No, allow anonymous access to public projects
-  text_project_is_public_non_member: Public projects and their contents are available
-    to all logged-in users.
-  text_project_is_public_anonymous: Public projects and their contents are openly available
-    on the network.
+  label_login_required_yes: '是'
+  label_login_required_no: 不，允许匿名访问公共项目
+  text_project_is_public_non_member: 所有登录用户都可以使用公共项目及其内容。
+  text_project_is_public_anonymous: 公共项目及其内容在网络上是公开的。
   label_version_and_files: Versions (%{count}) and Files
   label_ldap: LDAP
   label_ldaps_verify_none: LDAPS (without certificate check)
@@ -1275,13 +1271,13 @@ zh:
   label_import_notifications: Send email notifications during the import
   text_gs_available: ImageMagick PDF support available (optional)
   field_recently_used_projects: Number of recently used projects in jump box
-  label_optgroup_bookmarks: Bookmarks
+  label_optgroup_bookmarks: 收藏
   label_optgroup_others: Other projects
-  label_optgroup_recents: Recently used
-  button_project_bookmark: Add bookmark
-  button_project_bookmark_delete: Remove bookmark
+  label_optgroup_recents: 最近使用
+  button_project_bookmark: 添加收藏
+  button_project_bookmark_delete: 移除收藏
   field_history_default_tab: Issue's history default tab
-  label_issue_history_properties: Property changes
+  label_issue_history_properties: 变更
   label_issue_history_notes: Notes
   label_last_tab_visited: Last visited tab
   field_unique_id: Unique ID
@@ -1296,8 +1292,8 @@ zh:
   label_ends_with: ends with
   label_issue_fixed_version_updated: Target version updated
   setting_project_list_defaults: Projects list defaults
-  label_display_type: Display results as
-  label_display_type_list: List
-  label_display_type_board: Board
-  label_my_bookmarks: My bookmarks
-  label_import_time_entries: Import time entries
+  label_display_type: 显示方式
+  label_display_type_list: 列表
+  label_display_type_board: 面板
+  label_my_bookmarks: 我的收藏
+  label_import_time_entries: 导入工时
