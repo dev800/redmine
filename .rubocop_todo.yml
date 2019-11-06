@@ -118,13 +118,6 @@ Layout/ExtraSpacing:
   Enabled: false
 
 # Cop supports --auto-correct.
-# Configuration parameters: IndentationWidth.
-Layout/IndentAssignment:
-  Exclude:
-    - 'app/helpers/application_helper.rb'
-    - 'test/unit/lib/redmine/helpers/gantt_test.rb'
-
-# Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, IndentationWidth.
 # SupportedStyles: consistent, consistent_relative_to_receiver, special_for_inner_method_call, special_for_inner_method_call_in_parentheses
 Layout/IndentFirstArgument:
@@ -198,7 +191,6 @@ Layout/MultilineBlockLayout:
   Exclude:
     - 'app/controllers/auth_sources_controller.rb'
     - 'app/controllers/auto_completes_controller.rb'
-    - 'app/models/message.rb'
 
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
@@ -1264,7 +1256,6 @@ Style/MultilineTernaryOperator:
     - 'app/models/issue_query.rb'
     - 'app/models/issue_relation.rb'
     - 'app/models/mail_handler.rb'
-    - 'app/models/message.rb'
     - 'lib/redmine/ciphering.rb'
     - 'lib/redmine/scm/adapters/filesystem_adapter.rb'
     - 'lib/redmine/scm/adapters/git_adapter.rb'

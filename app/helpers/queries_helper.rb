@@ -198,7 +198,8 @@ module QueriesHelper
       if options[:sort_link_options]
         link_options.merge! options[:sort_link_options]
       end
-      content = link_to(column.caption,
+      content = link_to(
+          column.caption,
           {:params => request.query_parameters.deep_merge(sort_param)},
           link_options
         )
@@ -233,7 +234,8 @@ module QueriesHelper
     when :done_ratio
       progress_bar(value)
     when :relations
-      content_tag('span',
+      content_tag(
+        'span',
         value.to_s(item) {|other| link_to_issue(other, :subject => false, :tracker => false)}.html_safe,
         :class => value.css_classes_for(item))
     when :hours, :estimated_hours
@@ -397,7 +399,8 @@ module QueriesHelper
     url_params = controller_name == 'issues' ? {:controller => 'issues', :action => 'index', :project_id => @project} : {}
 
     content_tag('h3', title) + "\n" +
-      content_tag('ul',
+      content_tag(
+        'ul',
         queries.collect {|query|
             css = +'query'
             clear_link = +''
