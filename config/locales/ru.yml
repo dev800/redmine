@@ -272,7 +272,7 @@ ru:
   default_activity_development: Разработка
   default_doc_category_tech: Техническая документация
   default_doc_category_user: Пользовательская документация
-  default_issue_status_in_progress: В работе
+  default_issue_status_solving: В работе
   default_issue_status_closed: Закрыта
   default_issue_status_feedback: Нужен отклик
   default_issue_status_new: Новая

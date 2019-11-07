@@ -109,7 +109,7 @@ function contextMenuShow(event) {
   $('#context-menu').html('');
 
   url = $(event.target).parents('form').first().data('cm-url');
-  if (url == null) {showAlert('no url'); return;}
+  if (url == null) {alert('no url'); return;}
 
   $.ajax({
     url: url,

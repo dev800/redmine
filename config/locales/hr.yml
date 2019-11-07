@@ -872,7 +872,7 @@ hr:
   label_close_versions: Close completed versions
   button_unarchive: Unarchive
   field_issue_to: Related issue
-  default_issue_status_in_progress: In Progress
+  default_issue_status_solving: In Progress
   text_own_membership_delete_confirmation: |-
     You are about to remove some or all of your permissions and may no longer be able to edit this project after that.
     Are you sure you want to continue?

@@ -221,6 +221,9 @@ zh:
   mail_body_wiki_content_updated: "'%{id}' wiki页面已由 %{author} 更新。"
 
 
+  field_flag_value: 标识
+  field_flag_color: 标识颜色
+  field_background_color: 背景颜色
   field_name: 名称
   field_description: 描述
   field_summary: 摘要
@@ -903,7 +906,7 @@ zh:
   default_tracker_feature: 功能
   default_tracker_support: 支持
   default_issue_status_new: 新建
-  default_issue_status_in_progress: 进行中
+  default_issue_status_solving: 进行中
   default_issue_status_resolved: 已解决
   default_issue_status_feedback: 反馈
   default_issue_status_closed: 已关闭
@@ -1301,3 +1304,4 @@ zh:
   field_checklist_new: 新建检查项
   field_checklist_edit: 编辑检查项
   label_checklists: 检查列表
+  wrong_rgb_value: 错误的颜色值

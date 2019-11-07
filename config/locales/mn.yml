@@ -864,7 +864,7 @@ mn:
   default_tracker_feature: Онцлог
   default_tracker_support: Тусламж
   default_issue_status_new: Шинэ
-  default_issue_status_in_progress: Ахицтай
+  default_issue_status_solving: Ахицтай
   default_issue_status_resolved: Шийдвэрлэгдсэн
   default_issue_status_feedback: Feedback
   default_issue_status_closed: Хаагдсан

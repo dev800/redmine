@@ -310,7 +310,7 @@ ar:
   field_watcher: مراقب
   field_identity_url: افتح الرابط الخاص بالهوية الشخصية
   field_content: المحتويات
-  field_group_by: تصنيف النتائج بواسطة 
+  field_group_by: تصنيف النتائج بواسطة
   field_sharing: مشاركة
   field_parent_issue: بند العمل الأصلي
   field_member_of_group: "مجموعة المحال"
@@ -947,7 +947,7 @@ ar:
   default_tracker_feature: خاصية
   default_tracker_support: دعم
   default_issue_status_new: جديد
-  default_issue_status_in_progress: جاري التحميل
+  default_issue_status_solving: جاري التحميل
   default_issue_status_resolved: الحل
   default_issue_status_feedback: التغذية الراجعة
   default_issue_status_closed: مغلق

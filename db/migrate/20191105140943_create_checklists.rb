@@ -1,5 +1,12 @@
 class CreateChecklists < ActiveRecord::Migration[5.2]
   def change
+    add_column :issue_statuses, :flag_color, :string, default: "ffffff", null: false
+    add_column :issue_statuses, :background_color, :string, default: "ffffff", null: false
+    add_column :issue_statuses, :flag_value, :string, null: false
+    add_column :trackers, :flag_color, :string, default: "ffffff", null: false
+    add_column :trackers, :background_color, :string, default: "ffffff", null: false
+    add_column :trackers, :flag_value, :string, null: false
+
     create_table :checklists do |t|
       # 排序值
       t.integer :position, default: 0, :limit => 8

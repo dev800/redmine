@@ -684,7 +684,7 @@ sk:
   default_tracker_feature: Funkcionalita
   default_tracker_support: Podpora
   default_issue_status_new: Nová
-  default_issue_status_in_progress: Rozpracovaná
+  default_issue_status_solving: Rozpracovaná
   default_issue_status_resolved: Vyriešená
   default_issue_status_feedback: Čaká na odsúhlasenie
   default_issue_status_closed: Uzavretá

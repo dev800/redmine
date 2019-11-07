@@ -1,23 +1,26 @@
-<li class="checklist clearfix">
+<li class="checklist clearfix" style="border-left-color: #<%= checklist.tracker.try(:flag_color) || 'fff' %>; background-color: #<%= checklist.status.try(:background_color) || 'fff' %>">
   <div class="checklist-info">
     <div class="checklist-row">
-      <span class="checklist-start-date"><%= format_date(checklist.start_date) %></span>
-      <span class="checklist-arrow">~</span>
-      <span class="checklist-due-date"><%= format_date(checklist.due_date) %></span>
-      <span class="checklist-author"><%= checklist.author ? link_to_user(checklist.author) : "?" %></span>
-      <span class="checklist-arrow">➤</span>
-      <span class="checklist-assigned-to"><%= checklist.assigned_to ? link_to_user(checklist.assigned_to) : "?" %></span>
+      <span class="checklist-author _unit"><%= checklist.author ? link_to_user(checklist.author) : "?" %></span>
+      <span class="checklist-arrow _unit">➤</span>
+      <span class="checklist-assigned-to _unit"><%= checklist.assigned_to ? link_to_user(checklist.assigned_to) : "?" %></span>
     </div>
     <div class="checklist-row">
-      <span class="checklist-created-on"><%= format_time(checklist.created_on) %></span>
+      <span class="checklist-created-on _unit"><%= format_time(checklist.created_on) %></span>
+      <span class="checklist-arrow _unit">~</span>
+      <span class="checklist-start-date _unit"><%= format_date(checklist.start_date) %></span>
+      <span class="checklist-arrow _unit">~</span>
+      <span class="checklist-due-date _unit"><%= format_date(checklist.due_date) %></span>
     </div>
   </div>
   <div class="checklist-body">
     <div class="checklist-row">
-      <label class="checklist-id">$<%= checklist.id %></label>
-      <div class="checklist-subject"><%= checklist.subject %></div>
+      <div class="checklist-id _unit"><i class="checklist-flag">$</i><%= checklist.id %></div>
+      <div class="checklist-subject _unit"><%= checklist.subject %></div>
     </div>
     <div class="checklist-row">
+      <span class="checklist-tracker _unit"><%= checklist.tracker.try(:name) %></span>
+      <span class="checklist-status _unit"><%= checklist.status.try(:name) %></span>
     </div>
   </div>
 </li>

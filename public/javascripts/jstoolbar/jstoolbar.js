@@ -191,7 +191,7 @@ jsCombo.prototype.draw = function() {
   select.onchange = function() {
     try {
       This.fn.call(This.scope, this.value);
-    } catch (e) { showAlert(e); }
+    } catch (e) { alert(e); }
 
     return false;
   }

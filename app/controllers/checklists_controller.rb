@@ -48,7 +48,10 @@ class ChecklistsController < ApplicationController
     if @checklist.save
       call_hook(:controller_checklists_new_after_save, { :params => params, :checklist => @checklist})
 
-      render :json => { :status => "ok" }
+      render :json => {
+        :status => "ok",
+        :message => l("notice_successful_create")
+      }
     else
       render status: 422, :json => {
         :status => 422,
