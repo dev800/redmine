@@ -362,7 +362,7 @@ zh:
   setting_repository_log_display_limit: 在文件变更记录页面上显示的最大修订版本数量
   setting_openid: 允许使用OpenID登录和注册
   setting_password_min_length: 最短密码长度
-  setting_new_project_user_role_id: 非管理员用户新建项目时将被赋予的（在该项目中的）角色
+  setting_new_project_user_role_id: 非管理员用户新建项目时将被赋予的角色
   setting_default_projects_modules: 新建项目默认启用的模块
   setting_issue_done_ratio: 计算问题完成度：
   setting_issue_done_ratio_issue_field: 使用问题（的完成度）属性
@@ -1278,8 +1278,8 @@ zh:
   button_project_bookmark_delete: 移除收藏
   field_history_default_tab: Issue's history default tab
   label_issue_history_properties: 变更
-  label_issue_history_notes: Notes
-  label_last_tab_visited: Last visited tab
+  label_issue_history_notes: 记录
+  label_last_tab_visited: 最后访问标签
   field_unique_id: Unique ID
   text_no_subject: no subject
   setting_password_required_char_classes: Required character classes for passwords
@@ -1288,8 +1288,8 @@ zh:
   label_password_char_class_digits: digits
   label_password_char_class_special_chars: special characters
   text_characters_must_contain: Must contain %{character_classes}.
-  label_starts_with: starts with
-  label_ends_with: ends with
+  label_starts_with: 开始于
+  label_ends_with: 截止于
   label_issue_fixed_version_updated: Target version updated
   setting_project_list_defaults: Projects list defaults
   label_display_type: 显示方式
@@ -1297,3 +1297,7 @@ zh:
   label_display_type_board: 面板
   label_my_bookmarks: 我的收藏
   label_import_time_entries: 导入工时
+  field_checklists: 检查列表
+  field_checklist_new: 新建检查项
+  field_checklist_edit: 编辑检查项
+  label_checklists: 检查列表

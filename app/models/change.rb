@@ -23,6 +23,7 @@ class Change < ActiveRecord::Base
   validates_presence_of :changeset_id, :action, :path
   before_save :init_path
   before_validation :replace_invalid_utf8_of_path
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
 
   def replace_invalid_utf8_of_path
     self.path      = Redmine::CodesetUtil.replace_invalid_utf8(self.path)

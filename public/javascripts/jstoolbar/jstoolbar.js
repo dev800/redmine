@@ -191,7 +191,7 @@ jsCombo.prototype.draw = function() {
   select.onchange = function() {
     try {
       This.fn.call(This.scope, this.value);
-    } catch (e) { alert(e); }
+    } catch (e) { showAlert(e); }
 
     return false;
   }
@@ -453,7 +453,7 @@ jsToolBar.prototype.resizeDragStop = function(event) {
 
 /* Code highlighting menu */
 jsToolBar.prototype.precodeMenu = function(fn){
-  var hlLanguages = ["c", "cpp", "csharp", "css", "diff", "go", "groovy", "html", "java", "javascript", "objc", "perl", "php", "python", "r", "ruby", "sass", "scala", "shell", "sql", "swift", "xml", "yaml"];
+  var hlLanguages = ["html", "css", "javascript", 'typescript', "sql", "sass", "shell", "xml", "yaml", "kotlin", "java", "ruby", "php", "python", "csharp", "c", "cpp", "diff", "go", "groovy", "objc", "perl", "r", "scala", "swift"];
   var menu = $("<ul style='position:absolute;'></ul>");
   for (var i = 0; i < hlLanguages.length; i++) {
     $("<li></li>").text(hlLanguages[i]).appendTo(menu).mousedown(function(){

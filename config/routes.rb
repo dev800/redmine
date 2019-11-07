@@ -361,6 +361,16 @@ Rails.application.routes.draw do
 
   match 'uploads', :to => 'attachments#upload', :via => :post
 
+  get 'issues/:id/checklists', :to => 'issues#checklists', :as => :issue_checklists
+  get 'checklists', :to => 'checklists#index', :as => :checklists
+  post 'checklists', :to => 'checklists#create', :as => :checklist_create
+  get 'checklists/new', :to => 'checklists#new', :as => :checklist_new
+  get 'checklists/preview', :to => 'checklists#preview', :as => :checklist_preview
+  get 'checklists/:id', :to => 'checklists#show', :as => :checklist
+  put 'checklists/:id', :to => 'checklists#update', :as => :checklist_update
+  delete 'checklists/:id', :to => 'checklists#destroy', :as => :checklist_delete
+  get 'checklists/:id/edit', :to => 'checklists#edit', :as => :checklist_edit
+
   get 'robots', :to => 'welcome#robots'
 
   Dir.glob File.expand_path("#{Redmine::Plugin.directory}/*") do |plugin_dir|

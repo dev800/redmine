@@ -35,6 +35,7 @@ class IssueRelation < ActiveRecord::Base
   include Redmine::SafeAttributes
   include Redmine::Utils::DateCalculation
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   belongs_to :issue_from, :class_name => 'Issue'
   belongs_to :issue_to, :class_name => 'Issue'
 

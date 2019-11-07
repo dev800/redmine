@@ -773,7 +773,7 @@ function beforeShowDatePicker(input, inst) {
           dataType: 'script',
           data: data,
           error: function(jqXHR, textStatus, errorThrown){
-            alert(jqXHR.status);
+            showAlert(jqXHR.status);
             sortable.sortable("cancel");
           },
           complete: function(jqXHR, textStatus, errorThrown){
@@ -873,7 +873,11 @@ function addFormObserversForDoubleSubmit() {
 
 function defaultFocus(){
   if (($('#content :focus').length == 0) && (window.location.hash == '')) {
-    $('#content input[type=text], #content textarea').first().focus();
+    var $input = $('#content input[type=text], #content textarea').first()
+
+    if (!$input.hasClass('noneed-focused')) {
+      $input.focus();
+    }
   }
 }
 
@@ -1065,3 +1069,52 @@ $(document).ready(setupFilePreviewNavigation);
 $(document).on('focus', '[data-auto-complete=true]', function(event) {
   inlineAutoComplete(event.target);
 });
+
+// Begin happy add /////////////////////////////////////////
+function escapeHTML(html) {
+  return html.replace(/&/g, '&amp;')
+  .replace(/>/g, '&gt;')
+  .replace(/</g, '&lt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&apos;')
+}
+
+function showAlert(msg, opts) {
+  var opts = opts || {};
+
+  $('#ajax-modal').html('<h3 class="title">' + escapeHTML(opts.title || 'alert') +
+    '</h3><div class="content">' + escapeHTML(msg) + '</div>'
+  );
+
+  showModal('ajax-modal');
+}
+
+function showErrorMessages(event) {
+  if (event.detail[2].status === 422) {
+    showAlert((((event.detail[0] || {}).errors || {}).full_messages || []).join("\n"), {title: 'Error'});
+  } else {
+    showAlert(event.detail[1]);
+  }
+}
+
+// Begin checklist /////////////////////////////////////////
+$(document).on('ajax:success', 'form.new_checklist', function(event) {
+  var $form = $(this);
+  var data = event.detail[0];
+
+  $form.find('[type="submit"]').prop('disabled', false);
+  $form.find('[name="checklist[subject]"]').val('');
+  $form.find('[name="checklist[description]"]').val('');
+  $form.find('.attachments_form .attachments_fields').empty();
+  $form.find('textarea').removeData('changed');
+}).on('ajax:error', 'form.new_checklist', function(event) {
+  var $form = $(this);
+
+  $form.find('[type="submit"]').prop('disabled', false);
+  showErrorMessages(event);
+});
+
+$(document).on('click', '.ui-widget-overlay', function() {
+  $(this).remove();
+  $('.ui-dialog').remove();
+})

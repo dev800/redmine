@@ -1,0 +1,1231 @@
+@import url(../../../stylesheets/application.css);
+
+body{ color:#303030; background:#e8eaec; }
+
+#top-menu { font-size: 80%; height: 2em; padding-top: 0.5em; background-color: #578bb8; }
+#top-menu a { font-weight: bold; }
+#header { background: #467aa7; height:5.8em; padding: 10px 0 0 0; }
+#header h1 { margin-left: 6px; }
+#quick-search { margin-right: 6px; }
+#main-menu { background-color: #578bb8; left: 0; border-top: 1px solid #fff; width: 100%; }
+#main-menu li { margin: 0; padding: 0; }
+#main-menu li a { background-color: #578bb8; border-right: 1px solid #fff; font-size: 90%; padding: 4px 8px 4px 8px; font-weight: bold; }
+#main-menu li a:hover { background-color: #80b0da; color: #ffffff; }
+#main-menu li a.selected, #main-menu li a.selected:hover { background-color: #80b0da; color: #ffffff; }
+#main-menu li a.new-object { background-color:#80b0da; }
+
+#main-menu .menu-children {
+  border-right: 1px solid #80b0da;
+  border-bottom: 1px solid #80b0da;
+  border-left: 1px solid #80b0da;
+}
+#main-menu .menu-children li a { border-right: none; }
+#main-menu .menu-children li a:hover { background-color: #80b0da }
+
+#footer { background-color: #578bb8; border: 0; color: #fff;}
+#footer a { color: #fff; font-weight: bold; }
+
+#main { font:90% Verdana,Tahoma,Arial,sans-serif; background: #e8eaec; }
+#main a { font-weight: bold; color: #467aa7;}
+#main a:hover { color: #2a5a8a; text-decoration: underline; }
+#content { background: #fff; }
+#content .tabs ul { bottom:-1px; }
+
+h2, h3, h4, #main .wiki h1, #main .wiki h2, #main .wiki h3 { border-bottom: 0px; color:#606060; font-family: Trebuchet MS,Georgia,"Times New Roman",serif; }
+h2, #main .wiki h1 { letter-spacing:-1px; }
+h4 { border-bottom: dotted 1px #c0c0c0; }
+
+#top-menu a.home, #top-menu a.my-page, #top-menu a.projects, #top-menu a.administration, #top-menu a.help {
+    background-position: 0% 40%;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+    padding-top: 2px;
+    padding-bottom: 3px;
+}
+
+#top-menu a.home { background-image: url(../images/home.png); }
+#top-menu a.my-page { background-image: url(../../../images/user.png); }
+#top-menu a.projects { background-image: url(../../../images/projects.png); }
+#top-menu a.administration { background-image: url(../images/wrench.png); }
+#top-menu a.help { background-image: url(../../../images/help.png); }
+
+/* Fixes for IE 11 */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  select::-ms-expand {
+    display: none;
+  }
+  select[multiple=multiple] {padding-right: 0;}
+}
+
+/**
+  #################################################
+  #################################################
+  ###### Begin Custom by happy ####################
+  #################################################
+  #################################################
+*/
+
+@font-face {
+  font-family: octicons-link;
+  src: url(data:font/woff;charset=utf-8;base64,d09GRgABAAAAAAZwABAAAAAACFQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEU0lHAAAGaAAAAAgAAAAIAAAAAUdTVUIAAAZcAAAACgAAAAoAAQAAT1MvMgAAAyQAAABJAAAAYFYEU3RjbWFwAAADcAAAAEUAAACAAJThvmN2dCAAAATkAAAABAAAAAQAAAAAZnBnbQAAA7gAAACyAAABCUM+8IhnYXNwAAAGTAAAABAAAAAQABoAI2dseWYAAAFsAAABPAAAAZwcEq9taGVhZAAAAsgAAAA0AAAANgh4a91oaGVhAAADCAAAABoAAAAkCA8DRGhtdHgAAAL8AAAADAAAAAwGAACfbG9jYQAAAsAAAAAIAAAACABiATBtYXhwAAACqAAAABgAAAAgAA8ASm5hbWUAAAToAAABQgAAAlXu73sOcG9zdAAABiwAAAAeAAAAME3QpOBwcmVwAAAEbAAAAHYAAAB/aFGpk3jaTY6xa8JAGMW/O62BDi0tJLYQincXEypYIiGJjSgHniQ6umTsUEyLm5BV6NDBP8Tpts6F0v+k/0an2i+itHDw3v2+9+DBKTzsJNnWJNTgHEy4BgG3EMI9DCEDOGEXzDADU5hBKMIgNPZqoD3SilVaXZCER3/I7AtxEJLtzzuZfI+VVkprxTlXShWKb3TBecG11rwoNlmmn1P2WYcJczl32etSpKnziC7lQyWe1smVPy/Lt7Kc+0vWY/gAgIIEqAN9we0pwKXreiMasxvabDQMM4riO+qxM2ogwDGOZTXxwxDiycQIcoYFBLj5K3EIaSctAq2kTYiw+ymhce7vwM9jSqO8JyVd5RH9gyTt2+J/yUmYlIR0s04n6+7Vm1ozezUeLEaUjhaDSuXHwVRgvLJn1tQ7xiuVv/ocTRF42mNgZGBgYGbwZOBiAAFGJBIMAAizAFoAAABiAGIAznjaY2BkYGAA4in8zwXi+W2+MjCzMIDApSwvXzC97Z4Ig8N/BxYGZgcgl52BCSQKAA3jCV8CAABfAAAAAAQAAEB42mNgZGBg4f3vACQZQABIMjKgAmYAKEgBXgAAeNpjYGY6wTiBgZWBg2kmUxoDA4MPhGZMYzBi1AHygVLYQUCaawqDA4PChxhmh/8ODDEsvAwHgMKMIDnGL0x7gJQCAwMAJd4MFwAAAHjaY2BgYGaA4DAGRgYQkAHyGMF8NgYrIM3JIAGVYYDT+AEjAwuDFpBmA9KMDEwMCh9i/v8H8sH0/4dQc1iAmAkALaUKLgAAAHjaTY9LDsIgEIbtgqHUPpDi3gPoBVyRTmTddOmqTXThEXqrob2gQ1FjwpDvfwCBdmdXC5AVKFu3e5MfNFJ29KTQT48Ob9/lqYwOGZxeUelN2U2R6+cArgtCJpauW7UQBqnFkUsjAY/kOU1cP+DAgvxwn1chZDwUbd6CFimGXwzwF6tPbFIcjEl+vvmM/byA48e6tWrKArm4ZJlCbdsrxksL1AwWn/yBSJKpYbq8AXaaTb8AAHja28jAwOC00ZrBeQNDQOWO//sdBBgYGRiYWYAEELEwMTE4uzo5Zzo5b2BxdnFOcALxNjA6b2ByTswC8jYwg0VlNuoCTWAMqNzMzsoK1rEhNqByEyerg5PMJlYuVueETKcd/89uBpnpvIEVomeHLoMsAAe1Id4AAAAAAAB42oWQT07CQBTGv0JBhagk7HQzKxca2sJCE1hDt4QF+9JOS0nbaaYDCQfwCJ7Au3AHj+LO13FMmm6cl7785vven0kBjHCBhfpYuNa5Ph1c0e2Xu3jEvWG7UdPDLZ4N92nOm+EBXuAbHmIMSRMs+4aUEd4Nd3CHD8NdvOLTsA2GL8M9PODbcL+hD7C1xoaHeLJSEao0FEW14ckxC+TU8TxvsY6X0eLPmRhry2WVioLpkrbp84LLQPGI7c6sOiUzpWIWS5GzlSgUzzLBSikOPFTOXqly7rqx0Z1Q5BAIoZBSFihQYQOOBEdkCOgXTOHA07HAGjGWiIjaPZNW13/+lm6S9FT7rLHFJ6fQbkATOG1j2OFMucKJJsxIVfQORl+9Jyda6Sl1dUYhSCm1dyClfoeDve4qMYdLEbfqHf3O/AdDumsjAAB42mNgYoAAZQYjBmyAGYQZmdhL8zLdDEydARfoAqIAAAABAAMABwAKABMAB///AA8AAQAAAAAAAAAAAAAAAAABAAAAAA==) format('woff');
+}
+
+#main {
+  font-family: 90% Verdana,Tahoma,Arial,sans-serif;
+}
+
+#main .wiki,
+#main .wiki h1,
+#main .wiki h2,
+#main .wiki h3,
+#main .wiki h4 {
+  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+}
+
+#main .wiki .octicon {
+  display: inline-block;
+  fill: currentColor;
+  vertical-align: text-bottom;
+}
+
+#main .wiki .anchor {
+  float: left;
+  line-height: 1;
+  margin-left: -20px;
+  padding-right: 4px;
+}
+
+#main .wiki .anchor:focus {
+  outline: none;
+}
+
+#main .wiki h1 .octicon-link,
+#main .wiki h2 .octicon-link,
+#main .wiki h3 .octicon-link,
+#main .wiki h4 .octicon-link,
+#main .wiki h5 .octicon-link,
+#main .wiki h6 .octicon-link {
+  color: #1b1f23;
+  vertical-align: middle;
+  visibility: hidden;
+}
+
+#main .wiki h1:hover .anchor,
+#main .wiki h2:hover .anchor,
+#main .wiki h3:hover .anchor,
+#main .wiki h4:hover .anchor,
+#main .wiki h5:hover .anchor,
+#main .wiki h6:hover .anchor {
+  text-decoration: none;
+}
+
+#main .wiki h1:hover .anchor .octicon-link,
+#main .wiki h2:hover .anchor .octicon-link,
+#main .wiki h3:hover .anchor .octicon-link,
+#main .wiki h4:hover .anchor .octicon-link,
+#main .wiki h5:hover .anchor .octicon-link,
+#main .wiki h6:hover .anchor .octicon-link {
+  visibility: visible;
+}
+
+#main .wiki {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  color: #24292e;
+  line-height: 1.5;
+  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+  font-size: 16px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+#main .wiki .pl-c {
+  color: #6a737d;
+}
+
+#main .wiki .pl-c1,
+#main .wiki .pl-s .pl-v {
+  color: #005cc5;
+}
+
+#main .wiki .pl-e,
+#main .wiki .pl-en {
+  color: #6f42c1;
+}
+
+#main .wiki .pl-s .pl-s1,
+#main .wiki .pl-smi {
+  color: #24292e;
+}
+
+#main .wiki .pl-ent {
+  color: #22863a;
+}
+
+#main .wiki .pl-k {
+  color: #d73a49;
+}
+
+#main .wiki .pl-pds,
+#main .wiki .pl-s,
+#main .wiki .pl-s .pl-pse .pl-s1,
+#main .wiki .pl-sr,
+#main .wiki .pl-sr .pl-cce,
+#main .wiki .pl-sr .pl-sra,
+#main .wiki .pl-sr .pl-sre {
+  color: #032f62;
+}
+
+#main .wiki .pl-smw,
+#main .wiki .pl-v {
+  color: #e36209;
+}
+
+#main .wiki .pl-bu {
+  color: #b31d28;
+}
+
+#main .wiki .pl-ii {
+  background-color: #b31d28;
+  color: #fafbfc;
+}
+
+#main .wiki .pl-c2 {
+  background-color: #d73a49;
+  color: #fafbfc;
+}
+
+#main .wiki .pl-c2:before {
+  content: "^M";
+}
+
+#main .wiki .pl-sr .pl-cce {
+  color: #22863a;
+  font-weight: 700;
+}
+
+#main .wiki .pl-ml {
+  color: #735c0f;
+}
+
+#main .wiki .pl-mh,
+#main .wiki .pl-mh .pl-en,
+#main .wiki .pl-ms {
+  color: #005cc5;
+  font-weight: 700;
+}
+
+#main .wiki .pl-mi {
+  color: #24292e;
+  font-style: italic;
+}
+
+#main .wiki .pl-mb {
+  color: #24292e;
+  font-weight: 700;
+}
+
+#main .wiki .pl-md {
+  background-color: #ffeef0;
+  color: #b31d28;
+}
+
+#main .wiki .pl-mi1 {
+  background-color: #f0fff4;
+  color: #22863a;
+}
+
+#main .wiki .pl-mc {
+  background-color: #ffebda;
+  color: #e36209;
+}
+
+#main .wiki .pl-mi2 {
+  background-color: #005cc5;
+  color: #f6f8fa;
+}
+
+#main .wiki .pl-mdr {
+  color: #6f42c1;
+  font-weight: 700;
+}
+
+#main .wiki .pl-ba {
+  color: #586069;
+}
+
+#main .wiki .pl-sg {
+  color: #959da5;
+}
+
+#main .wiki .pl-corl {
+  color: #032f62;
+  text-decoration: underline;
+}
+
+#main .wiki details {
+  display: block;
+}
+
+#main .wiki summary {
+  display: list-item;
+}
+
+#main .wiki a {
+  background-color: transparent;
+}
+
+#main .wiki a:active,
+#main .wiki a:hover {
+  outline-width: 0;
+}
+
+#main .wiki strong {
+  font-weight: inherit;
+  font-weight: bolder;
+}
+
+#main .wiki h1 {
+  font-size: 2em;
+  margin: .67em 0;
+}
+
+#main .wiki img {
+  border-style: none;
+}
+
+#main .wiki code,
+#main .wiki kbd,
+#main .wiki pre {
+  font-family: monospace,monospace;
+  font-size: 1em;
+}
+
+#main .wiki hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+}
+
+#main .wiki input {
+  font: inherit;
+  margin: 0;
+}
+
+#main .wiki input {
+  overflow: visible;
+}
+
+#main .wiki [type=checkbox] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+#main .wiki * {
+  box-sizing: border-box;
+}
+
+#main .wiki input {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+#main .wiki a {
+  color: #0366d6;
+  text-decoration: none;
+}
+
+#main .wiki a:hover {
+  text-decoration: underline;
+}
+
+#main .wiki strong {
+  font-weight: 600;
+}
+
+#main .wiki hr {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #dfe2e5;
+  height: 0;
+  margin: 15px 0;
+  overflow: hidden;
+}
+
+#main .wiki hr:before {
+  content: "";
+  display: table;
+}
+
+#main .wiki hr:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+#main .wiki table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+#main .wiki td,
+#main .wiki th {
+  padding: 0;
+}
+
+#main .wiki details summary {
+  cursor: pointer;
+}
+
+#main .wiki h1,
+#main .wiki h2,
+#main .wiki h3,
+#main .wiki h4,
+#main .wiki h5,
+#main .wiki h6 {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+#main .wiki h1 {
+  font-size: 32px;
+}
+
+#main .wiki h1,
+#main .wiki h2 {
+  font-weight: 600;
+}
+
+#main .wiki h2 {
+  font-size: 24px;
+}
+
+#main .wiki h3 {
+  font-size: 20px;
+}
+
+#main .wiki h3,
+#main .wiki h4 {
+  font-weight: 600;
+}
+
+#main .wiki h4 {
+  font-size: 16px;
+}
+
+#main .wiki h5 {
+  font-size: 14px;
+}
+
+#main .wiki h5,
+#main .wiki h6 {
+  font-weight: 600;
+}
+
+#main .wiki h6 {
+  font-size: 12px;
+}
+
+#main .wiki p {
+  margin-bottom: 10px;
+  margin-top: 0;
+}
+
+#main .wiki blockquote {
+  margin: 0;
+}
+
+#main .wiki ol,
+#main .wiki ul {
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-left: 0;
+}
+
+#main .wiki ol ol,
+#main .wiki ul ol {
+  list-style-type: lower-roman;
+}
+
+#main .wiki ol ol ol,
+#main .wiki ol ul ol,
+#main .wiki ul ol ol,
+#main .wiki ul ul ol {
+  list-style-type: lower-alpha;
+}
+
+#main .wiki dd {
+  margin-left: 0;
+}
+
+#main .wiki code,
+#main .wiki pre {
+  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+  font-size: 12px;
+}
+
+#main .wiki pre {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+#main .wiki input::-webkit-inner-spin-button,
+#main .wiki input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+#main .wiki .border {
+  border: 1px solid #e1e4e8!important;
+}
+
+#main .wiki .border-0 {
+  border: 0!important;
+}
+
+#main .wiki .border-bottom {
+  border-bottom: 1px solid #e1e4e8!important;
+}
+
+#main .wiki .rounded-1 {
+  border-radius: 3px!important;
+}
+
+#main .wiki .bg-white {
+  background-color: #fff!important;
+}
+
+#main .wiki .bg-gray-light {
+  background-color: #fafbfc!important;
+}
+
+#main .wiki .text-gray-light {
+  color: #6a737d!important;
+}
+
+#main .wiki .mb-0 {
+  margin-bottom: 0!important;
+}
+
+#main .wiki .my-2 {
+  margin-bottom: 8px!important;
+  margin-top: 8px!important;
+}
+
+#main .wiki .pl-0 {
+  padding-left: 0!important;
+}
+
+#main .wiki .py-0 {
+  padding-bottom: 0!important;
+  padding-top: 0!important;
+}
+
+#main .wiki .pl-1 {
+  padding-left: 4px!important;
+}
+
+#main .wiki .pl-2 {
+  padding-left: 8px!important;
+}
+
+#main .wiki .py-2 {
+  padding-bottom: 8px!important;
+  padding-top: 8px!important;
+}
+
+#main .wiki .pl-3,
+#main .wiki .px-3 {
+  padding-left: 16px!important;
+}
+
+#main .wiki .px-3 {
+  padding-right: 16px!important;
+}
+
+#main .wiki .pl-4 {
+  padding-left: 24px!important;
+}
+
+#main .wiki .pl-5 {
+  padding-left: 32px!important;
+}
+
+#main .wiki .pl-6 {
+  padding-left: 40px!important;
+}
+
+#main .wiki .f6 {
+  font-size: 12px!important;
+}
+
+#main .wiki .lh-condensed {
+  line-height: 1.25!important;
+}
+
+#main .wiki .text-bold {
+  font-weight: 600!important;
+}
+
+#main .wiki:before {
+  content: "";
+  display: table;
+}
+
+#main .wiki:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+#main .wiki a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+
+#main .wiki blockquote,
+#main .wiki dl,
+#main .wiki ol,
+#main .wiki p,
+#main .wiki pre,
+#main .wiki table,
+#main .wiki ul {
+  margin-bottom: 6px;
+  margin-top: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+#main .wiki hr {
+  background-color: #e1e4e8;
+  border: 0;
+  height: .25em;
+  margin: 24px 0;
+  padding: 0;
+}
+
+#main .wiki blockquote {
+  border-left: .25em solid #dfe2e5;
+  color: #6a737d;
+  padding: 0 1em;
+}
+
+#main .wiki blockquote>:first-child {
+  margin-top: 0;
+}
+
+#main .wiki blockquote>:last-child {
+  margin-bottom: 0;
+}
+
+#main .wiki kbd {
+  background-color: #fafbfc;
+  border: 1px solid #c6cbd1;
+  border-bottom-color: #959da5;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #959da5;
+  color: #444d56;
+  display: inline-block;
+  font-size: 11px;
+  line-height: 10px;
+  padding: 3px 5px;
+  vertical-align: middle;
+}
+
+#main .wiki h1,
+#main .wiki h2,
+#main .wiki h3,
+#main .wiki h4,
+#main .wiki h5,
+#main .wiki h6 {
+  font-weight: 600;
+  line-height: 1.25;
+  margin-bottom: 16px;
+  margin-top: 24px;
+}
+
+#main .wiki a:first-child + h1,
+#main .wiki a:first-child + h2,
+#main .wiki a:first-child + h3,
+#main .wiki a:first-child + h4,
+#main .wiki a:first-child + h5,
+#main .wiki a:first-child + h6 {
+  margin-top: 0;
+}
+
+#main .wiki h1 {
+  font-size: 2em;
+}
+
+#main .wiki h1,
+#main .wiki h2 {
+  border-bottom: 1px solid #eaecef;
+  padding-bottom: .3em;
+}
+
+#main .wiki h2 {
+  font-size: 1.5em;
+}
+
+#main .wiki h3 {
+  font-size: 1.25em;
+}
+
+#main .wiki h4 {
+  font-size: 1em;
+}
+
+#main .wiki h5 {
+  font-size: .875em;
+}
+
+#main .wiki h6 {
+  color: #6a737d;
+  font-size: .85em;
+}
+
+#main .wiki ol,
+#main .wiki ul {
+  padding-left: 2em;
+}
+
+#main .wiki ol ol,
+#main .wiki ol ul,
+#main .wiki ul ol,
+#main .wiki ul ul {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+#main .wiki li {
+  word-wrap: break-all;
+}
+
+#main .wiki li>p {
+  margin-top: 16px;
+}
+
+#main .wiki li+li {
+  margin-top: .25em;
+}
+
+#main .wiki dl {
+  padding: 0;
+}
+
+#main .wiki dl dt {
+  font-size: 1em;
+  font-style: italic;
+  font-weight: 600;
+  margin-top: 16px;
+  padding: 0;
+}
+
+#main .wiki dl dd {
+  margin-bottom: 16px;
+  padding: 0 16px;
+}
+
+#main .wiki table {
+  display: block;
+  overflow: auto;
+  width: 100%;
+}
+
+#main .wiki table th {
+  font-weight: 600;
+}
+
+#main .wiki table td,
+#main .wiki table th {
+  border: 1px solid #dfe2e5;
+  padding: 6px 13px;
+}
+
+#main .wiki table tr {
+  background-color: #fff;
+  border-top: 1px solid #c6cbd1;
+}
+
+#main .wiki table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+
+#main .wiki img {
+  background-color: #fff;
+  box-sizing: content-box;
+  max-width: 100%;
+}
+
+#main .wiki img[align=right] {
+  padding-left: 20px;
+}
+
+#main .wiki img[align=left] {
+  padding-right: 20px;
+}
+
+#main .wiki code {
+  background-color: rgba(27,31,35,.05);
+  border-radius: 3px;
+  font-size: 85%;
+  margin: 0;
+  padding: .2em .4em;
+}
+
+#main .wiki pre {
+  word-wrap: normal;
+}
+
+#main .wiki pre>code {
+  background: transparent;
+  border: 0;
+  font-size: 100%;
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  word-break: normal;
+}
+
+#main .wiki .highlight {
+  margin-bottom: 16px;
+}
+
+#main .wiki .highlight pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+#main .wiki .highlight pre,
+#main .wiki pre {
+  background-color: #f6f8fa;
+  border-radius: 3px;
+  font-size: 85%;
+  line-height: 1.45;
+  overflow: auto;
+  padding: 16px;
+}
+
+#main .wiki pre code {
+  background-color: transparent;
+  border: 0;
+  display: inline;
+  line-height: inherit;
+  margin: 0;
+  max-width: auto;
+  overflow: visible;
+  padding: 0;
+  word-wrap: normal;
+}
+
+#main .wiki .commit-tease-sha {
+  color: #444d56;
+  display: inline-block;
+  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+  font-size: 90%;
+}
+
+#main .wiki .blob-wrapper {
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+#main .wiki .blob-wrapper-embedded {
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+#main .wiki .blob-num {
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  color: rgba(27,31,35,.3);
+  cursor: pointer;
+  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+  font-size: 12px;
+  line-height: 20px;
+  min-width: 50px;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: right;
+  user-select: none;
+  vertical-align: top;
+  white-space: nowrap;
+  width: 1%;
+}
+
+#main .wiki .blob-num:hover {
+  color: rgba(27,31,35,.6);
+}
+
+#main .wiki .blob-num:before {
+  content: attr(data-line-number);
+}
+
+#main .wiki .blob-code {
+  line-height: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  position: relative;
+  vertical-align: top;
+}
+
+#main .wiki .blob-code-inner {
+  color: #24292e;
+  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+  font-size: 12px;
+  overflow: visible;
+  white-space: pre;
+  word-wrap: normal;
+}
+
+#main .wiki .pl-token.active,
+#main .wiki .pl-token:hover {
+  background: #ffea7f;
+  cursor: pointer;
+}
+
+#main .wiki kbd {
+  background-color: #fafbfc;
+  border: 1px solid #d1d5da;
+  border-bottom-color: #c6cbd1;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #c6cbd1;
+  color: #444d56;
+  display: inline-block;
+  font: 11px SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+  line-height: 10px;
+  padding: 3px 5px;
+  vertical-align: middle;
+}
+
+#main .wiki :checked+.radio-label {
+  border-color: #0366d6;
+  position: relative;
+  z-index: 1;
+}
+
+#main .wiki .tab-size[data-tab-size="1"] {
+  -moz-tab-size: 1;
+  tab-size: 1;
+}
+
+#main .wiki .tab-size[data-tab-size="2"] {
+  -moz-tab-size: 2;
+  tab-size: 2;
+}
+
+#main .wiki .tab-size[data-tab-size="3"] {
+  -moz-tab-size: 3;
+  tab-size: 3;
+}
+
+#main .wiki .tab-size[data-tab-size="4"] {
+  -moz-tab-size: 4;
+  tab-size: 4;
+}
+
+#main .wiki .tab-size[data-tab-size="5"] {
+  -moz-tab-size: 5;
+  tab-size: 5;
+}
+
+#main .wiki .tab-size[data-tab-size="6"] {
+  -moz-tab-size: 6;
+  tab-size: 6;
+}
+
+#main .wiki .tab-size[data-tab-size="7"] {
+  -moz-tab-size: 7;
+  tab-size: 7;
+}
+
+#main .wiki .tab-size[data-tab-size="8"] {
+  -moz-tab-size: 8;
+  tab-size: 8;
+}
+
+#main .wiki .tab-size[data-tab-size="9"] {
+  -moz-tab-size: 9;
+  tab-size: 9;
+}
+
+#main .wiki .tab-size[data-tab-size="10"] {
+  -moz-tab-size: 10;
+  tab-size: 10;
+}
+
+#main .wiki .tab-size[data-tab-size="11"] {
+  -moz-tab-size: 11;
+  tab-size: 11;
+}
+
+#main .wiki .tab-size[data-tab-size="12"] {
+  -moz-tab-size: 12;
+  tab-size: 12;
+}
+
+#main .wiki .task-list-item {
+  list-style-type: none;
+}
+
+#main .wiki .task-list-item+.task-list-item {
+  margin-top: 3px;
+}
+
+#main .wiki .task-list-item input {
+  margin: 0 .2em .25em -1.6em;
+  vertical-align: middle;
+}
+
+#main .wiki hr {
+  border-bottom-color: #eee;
+}
+
+#main .wiki .pl-0 {
+  padding-left: 0!important;
+}
+
+#main .wiki .pl-1 {
+  padding-left: 4px!important;
+}
+
+#main .wiki .pl-2 {
+  padding-left: 8px!important;
+}
+
+#main .wiki .pl-3 {
+  padding-left: 16px!important;
+}
+
+#main .wiki .pl-4 {
+  padding-left: 24px!important;
+}
+
+#main .wiki .pl-5 {
+  padding-left: 32px!important;
+}
+
+#main .wiki .pl-6 {
+  padding-left: 40px!important;
+}
+
+#main .wiki .pl-7 {
+  padding-left: 48px!important;
+}
+
+#main .wiki .pl-8 {
+  padding-left: 64px!important;
+}
+
+#main .wiki .pl-9 {
+  padding-left: 80px!important;
+}
+
+#main .wiki .pl-10 {
+  padding-left: 96px!important;
+}
+
+#main .wiki .pl-11 {
+  padding-left: 112px!important;
+}
+
+#main .wiki .pl-12 {
+  padding-left: 128px!important;
+}
+
+#header {
+  padding: 8px;
+}
+
+#header h1 {
+  margin-bottom: 0;
+}
+
+#header h1 .breadcrumbs {
+  display: inline-block;
+  font-size: 0.8em;
+  margin-right: 0.2em;
+}
+
+input[type="submit"] {
+  padding: 0 12px;
+}
+
+input[type="submit"][name="commit"] {
+  background: #2196f3;
+  color: #ffffff;
+}
+
+input[type="submit"][name="commit"]:hover {
+  background: #03a9f4;
+}
+
+div.issue .attributes .attribute .label {
+  text-align: right;
+}
+
+table.list td {
+  padding-left: 10px;
+}
+
+ #checklist_is_private_wrap {float:right; margin-right:1em;}
+input#checklist_subject { width: 99%; }
+select#checklist_done_ratio { width: 95px; }
+
+.form-actions {
+  padding: 12px;
+}
+
+.form-actions input[type="submit"] {
+  margin-right: 4px;
+  margin-left: 4px;
+}
+
+.form-actions > *:last-child {
+  margin-right: 0;
+}
+
+.form-actions > *:first-child {
+  margin-left: 0;
+}
+
+/** ################################# Begin checklist ################################# */
+.checklists {
+  list-style: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.checklists .checklist {
+  line-height: 1.8em;
+  padding: 8px;
+  border-bottom: 1px solid #dedede;
+  cursor: pointer;
+}
+
+.checklists .checklist .checklist-info {
+  float: right;
+  text-align: right;
+  color: #666666;
+}
+
+.checklists .checklist .checklist-id {
+  font-size: 1.4em;
+}
+
+.checklists .checklist .checklist-subject {
+  display: inline-block;
+  font-weight: bolder;
+  font-size: 1.4em;
+}
+
+.checklists .checklist .checklist-created-on {
+  font-size: 12px;
+  color: #999999;
+}
+
+.checklists .checklist:hover {
+  background: #EFEFEF;
+}
+
+.checklists .checklist .checklist-id {
+  display: inline-block;
+  width: 52px;
+  font-weight: bolder;
+  text-align: right;
+  padding-right: 6px;
+}
+
+.syntaxhl .err { color: #FF0000 } /* Error */
+
+#content .jstTabs.tabs li a {
+  border-bottom: 1px solid transparent;
+}
+
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+  outline: none;
+}
+
+/**
+  #################################################
+  #################################################
+  ###### Begin Custom by happy ####################
+  #################################################
+  #################################################
+*/
+@media screen and (max-width: 899px) {
+  #content > .contextual > a,
+  #content > .contextual .drdn,
+  p.buttons a {
+    padding: 6px 9px;
+  }
+
+  .ui-widget input[type="submit"],
+  .ui-widget #content > .contextual > a,
+  .ui-widget #content > .contextual .drdn,
+  .ui-widget p.buttons a {
+    margin: 0;
+    padding: 2px 9px;
+    height: auto;
+  }
+
+  table.issues th.subject {
+    width: 120px;
+  }
+
+  #header {
+    height: 46px;
+  }
+
+  #header .mobile-toggle-button {
+    line-height: 46px;
+    height: 46px;
+  }
+
+  #project-jump.drdn {
+    height: 46px;
+  }
+
+  #project-jump .drdn-trigger {
+    height: 38px;
+    line-height: 28px;
+    font-size: 1.2em;
+  }
+
+  #project-jump .drdn-trigger:before {
+    top: 5px;
+  }
+
+  #project-jump .drdn-content {
+    top: 48px;
+  }
+
+  #content > .contextual > a,
+  #content > .contextual .drdn,
+  p.buttons a {
+    margin: 5px 6px;
+  }
+
+  #main {
+    padding-top: 46px;
+  }
+
+  fieldset#filters td.field {
+    width: 25%;
+  }
+
+  fieldset#filters td.operator {
+    width: 30%;
+  }
+
+  fieldset#filters td.values select {
+    min-width: auto;
+  }
+}

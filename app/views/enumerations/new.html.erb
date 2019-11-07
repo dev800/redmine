@@ -3,5 +3,5 @@
 <%= labelled_form_for :enumeration, @enumeration, :url => enumerations_path, :html => {:multipart => true} do |f| %>
   <%= f.hidden_field :type  %>
   <%= render :partial => 'form', :locals => {:f => f} %>
-  <%= submit_tag l(:button_create) %>
+  <p class="form-actions"><%= submit_tag l(:button_create) %></p>
 <% end %>

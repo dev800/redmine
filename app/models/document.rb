@@ -22,6 +22,7 @@ class Document < ActiveRecord::Base
   belongs_to :project
   belongs_to :category, :class_name => "DocumentCategory"
   acts_as_attachable :delete_permission => :delete_documents
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   acts_as_customizable
 
   acts_as_searchable :columns => ['title', "#{table_name}.description"],

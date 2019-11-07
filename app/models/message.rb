@@ -25,6 +25,7 @@ class Message < ActiveRecord::Base
   acts_as_attachable
   belongs_to :last_reply, :class_name => 'Message'
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   acts_as_searchable :columns => ['subject', 'content'],
                      :preload => {:board => :project},
                      :project_key => "#{Board.table_name}.project_id"

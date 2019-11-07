@@ -30,7 +30,7 @@
     display: inline-block;
     vertical-align: bottom;
     line-height: 19px;
-  border-bottom: 1px solid transparent;
+    border-bottom: 1px solid transparent;
 }
 .jstElements {
     display: inline-block;

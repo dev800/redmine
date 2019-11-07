@@ -1,0 +1,6 @@
+<h2><%= link_to issue_heading(@issue), @issue %> - <%= @issue.subject %></h2>
+<h2><%= l(:label_checklists) %></h2>
+<%= render :partial => "checklists/checklists", :locals => { :checklists => @checklists } %>
+<div>
+  <%= render :partial => "checklists/new", :locals => { :checklist => @checklist } %>
+</div>

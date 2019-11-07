@@ -38,6 +38,7 @@ class TimeEntry < ActiveRecord::Base
                 :group => :issue,
                 :description => :comments
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   acts_as_activity_provider :timestamp => "#{table_name}.created_on",
                             :author_key => :user_id,
                             :scope => joins(:project).preload(:project)

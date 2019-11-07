@@ -24,6 +24,7 @@ class IssueStatus < ActiveRecord::Base
   has_many :workflows, :class_name => 'WorkflowTransition', :foreign_key => "old_status_id"
   has_many :workflow_transitions_as_new_status, :class_name => 'WorkflowTransition', :foreign_key => "new_status_id"
   acts_as_positioned
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
 
   after_update :handle_is_closed_change
   before_destroy :delete_workflow_rules

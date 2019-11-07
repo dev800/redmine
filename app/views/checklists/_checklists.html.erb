@@ -1,0 +1,5 @@
+<ul class="checklists">
+  <% checklists.each do |checklist| %>
+    <%= render :partial => "checklists/checklist", :locals => { :checklist => checklist } %>
+  <% end %>
+</ul>

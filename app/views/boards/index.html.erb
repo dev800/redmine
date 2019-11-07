@@ -16,7 +16,7 @@
   <tbody>
 <% Board.board_tree(@boards) do |board, level| %>
   <tr>
-    <td class="name" style="padding-left: <%= level * 18 %>px;">
+    <td class="name" style="padding-left: <%= level * 18 + 4 %>px; padding-right: 4px">
       <%= link_to board.name, project_board_path(board.project, board), :class => "board" %><br />
       <%=h board.description %>
     </td>

@@ -94,7 +94,7 @@ Redmine::AccessControl.map do |map|
 
   map.project_module :issue_tracking do |map|
     # Issues
-    map.permission :view_issues, {:issues => [:index, :show, :issue_tab],
+    map.permission :view_issues, {:issues => [:index, :show, :issue_tab, :checklists],
                                   :auto_complete => [:issues],
                                   :context_menus => [:issues],
                                   :versions => [:index, :show, :status_by],
@@ -305,6 +305,7 @@ Redmine::MenuManager.map :project_menu do |menu|
 end
 
 Redmine::Activity.map do |activity|
+  activity.register :checklists
   activity.register :issues, :class_name => %w(Issue Journal)
   activity.register :changesets
   activity.register :news
@@ -316,6 +317,7 @@ Redmine::Activity.map do |activity|
 end
 
 Redmine::Search.map do |search|
+  search.register :checklists
   search.register :issues
   search.register :news
   search.register :documents

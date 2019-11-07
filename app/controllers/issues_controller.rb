@@ -20,13 +20,13 @@
 class IssuesController < ApplicationController
   default_search_scope :issues
 
-  before_action :find_issue, :only => [:show, :edit, :update, :issue_tab]
+  before_action :find_issue, :only => [:show, :edit, :update, :issue_tab, :checklists]
   before_action :find_issues, :only => [:bulk_edit, :bulk_update, :destroy]
   before_action :authorize, :except => [:index, :new, :create]
   before_action :find_optional_project, :only => [:index, :new, :create]
   before_action :build_new_issue_from_params, :only => [:new, :create]
-  accept_rss_auth :index, :show
-  accept_api_auth :index, :show, :create, :update, :destroy
+  accept_rss_auth :index, :show, :checklists
+  accept_api_auth :index, :show, :create, :update, :destroy, :checklists
 
   rescue_from Query::StatementInvalid, :with => :query_statement_invalid
 
@@ -40,6 +40,44 @@ class IssuesController < ApplicationController
   include QueriesHelper
   helper :repositories
   helper :timelog
+
+  def checklists
+    @journals = @issue.visible_journals_with_index
+    @has_changesets = @issue.changesets.visible.preload(:repository, :user).exists?
+    @relations = @issue.relations.select {|r| r.other_issue(@issue) && r.other_issue(@issue).visible? }
+    @project = @issue.project
+
+    @checklists = @issue.checklists
+      .preload(:project, :status, :tracker, :priority, :author, :assigned_to, {:custom_values => :custom_field})
+      .order(:position => :asc)
+
+    @checklist = Checklist.new(project: @project, issue: @issue)
+    @checklist.tracker ||= @issue.allowed_target_trackers.first
+
+    @journals.reverse! if User.current.wants_comments_in_reverse_order?
+
+    respond_to do |format|
+      format.html {
+        @allowed_statuses = @issue.new_statuses_allowed_to(User.current)
+        @priorities = IssuePriority.active
+        @time_entry = TimeEntry.new(:issue => @issue, :project => @issue.project)
+        @time_entries = @issue.time_entries.visible.preload(:activity, :user)
+        @relation = IssueRelation.new
+        retrieve_previous_and_next_issue_ids
+        render :template => 'issues/checklists'
+      }
+      format.api {
+        @changesets = @issue.changesets.visible.preload(:repository, :user).to_a
+        @changesets.reverse! if User.current.wants_comments_in_reverse_order?
+      }
+      format.atom { render :template => 'journals/index', :layout => false, :content_type => 'application/atom+xml' }
+      format.pdf  {
+        send_file_headers! :type => 'application/pdf', :filename => "#{@project.identifier}-#{@issue.id}-checklists.pdf"
+      }
+    end
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
 
   def index
     use_session = !request.format.csv?

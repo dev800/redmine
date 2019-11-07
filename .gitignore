@@ -25,6 +25,7 @@
 /public/dispatch.*
 /public/plugin_assets/*
 /public/themes/*
+!/public/themes/professional
 !/public/themes/alternate
 !/public/themes/classic
 !/public/themes/README

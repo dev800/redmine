@@ -22,6 +22,7 @@ class Board < ActiveRecord::Base
   belongs_to :project
   has_many :messages, lambda {order("#{Message.table_name}.created_on DESC")}, :dependent => :destroy
   belongs_to :last_message, :class_name => 'Message'
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   acts_as_tree :dependent => :nullify
   acts_as_positioned :scope => [:project_id, :parent_id]
   acts_as_watchable

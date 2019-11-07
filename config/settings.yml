@@ -246,6 +246,7 @@ default_projects_modules:
   default:
   - issue_tracking
   - time_tracking
+  - checklists
   - news
   - documents
   - files

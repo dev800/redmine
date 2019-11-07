@@ -21,6 +21,7 @@ class Token < ActiveRecord::Base
   belongs_to :user
   validates_uniqueness_of :value
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   before_create :delete_previous_tokens, :generate_new_token
 
   cattr_accessor :validity_time

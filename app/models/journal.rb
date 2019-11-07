@@ -45,6 +45,7 @@ class Journal < ActiveRecord::Base
 
   before_create :split_private_notes
   after_create_commit :send_notification
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
 
   scope :visible, lambda {|*args|
     user = args.shift || User.current

@@ -1,0 +1,23 @@
+<li class="checklist clearfix">
+  <div class="checklist-info">
+    <div class="checklist-row">
+      <span class="checklist-start-date"><%= format_date(checklist.start_date) %></span>
+      <span class="checklist-arrow">~</span>
+      <span class="checklist-due-date"><%= format_date(checklist.due_date) %></span>
+      <span class="checklist-author"><%= checklist.author ? link_to_user(checklist.author) : "?" %></span>
+      <span class="checklist-arrow">➤</span>
+      <span class="checklist-assigned-to"><%= checklist.assigned_to ? link_to_user(checklist.assigned_to) : "?" %></span>
+    </div>
+    <div class="checklist-row">
+      <span class="checklist-created-on"><%= format_time(checklist.created_on) %></span>
+    </div>
+  </div>
+  <div class="checklist-body">
+    <div class="checklist-row">
+      <label class="checklist-id">$<%= checklist.id %></label>
+      <div class="checklist-subject"><%= checklist.subject %></div>
+    </div>
+    <div class="checklist-row">
+    </div>
+  </div>
+</li>

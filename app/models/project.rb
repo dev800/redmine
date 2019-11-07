@@ -63,6 +63,7 @@ class Project < ActiveRecord::Base
                      :edit_permission => :manage_files,
                      :delete_permission => :manage_files
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   acts_as_customizable
   acts_as_searchable :columns => ['name', 'identifier', 'description'], :project_key => "#{Project.table_name}.id", :permission => nil
   acts_as_event :title => Proc.new {|o| "#{l(:label_project)}: #{o.name}"},

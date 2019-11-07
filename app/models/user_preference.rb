@@ -26,6 +26,7 @@ class UserPreference < ActiveRecord::Base
   serialize :others
 
   before_save :set_others_hash, :clear_unused_block_settings
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
 
   safe_attributes 'hide_mail',
     'time_zone',
@@ -77,7 +78,7 @@ class UserPreference < ActiveRecord::Base
     end
   end
 
-  def comments_sorting; self[:comments_sorting] end
+  def comments_sorting; self[:comments_sorting] || 'desc' end
   def comments_sorting=(order); self[:comments_sorting]=order end
 
   def warn_on_leaving_unsaved; self[:warn_on_leaving_unsaved] || '1'; end

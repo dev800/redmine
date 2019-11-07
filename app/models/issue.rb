@@ -34,6 +34,7 @@ class Issue < ActiveRecord::Base
   belongs_to :category, :class_name => 'IssueCategory'
 
   has_many :journals, :as => :journalized, :dependent => :destroy, :inverse_of => :journalized
+  has_many :checklists, :dependent => :destroy
   has_many :time_entries, :dependent => :destroy
   has_and_belongs_to_many :changesets, lambda {order("#{Changeset.table_name}.committed_on ASC, #{Changeset.table_name}.id ASC")}
 
@@ -50,6 +51,8 @@ class Issue < ActiveRecord::Base
   acts_as_event :title => Proc.new {|o| "#{o.tracker.name} ##{o.id} (#{o.status}): #{o.subject}"},
                 :url => Proc.new {|o| {:controller => 'issues', :action => 'show', :id => o.id}},
                 :type => Proc.new {|o| 'issue' + (o.closed? ? '-closed' : '') }
+
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
 
   acts_as_activity_provider :scope => preload(:project, :author, :tracker, :status),
                             :author_key => :author_id

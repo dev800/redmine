@@ -71,6 +71,7 @@ class Role < ActiveRecord::Base
   has_many :member_roles, :dependent => :destroy
   has_many :members, :through => :member_roles
   acts_as_positioned :scope => :builtin
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
 
   serialize :permissions, ::Role::PermissionsAttributeCoder
   store :settings, :accessors => [:permissions_all_trackers, :permissions_tracker_ids]

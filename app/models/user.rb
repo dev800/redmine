@@ -95,6 +95,7 @@ class User < Principal
   scope :logged, lambda { where("#{User.table_name}.status <> #{STATUS_ANONYMOUS}") }
   scope :status, lambda {|arg| where(arg.blank? ? nil : {:status => arg.to_i}) }
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   acts_as_customizable
 
   attr_accessor :password, :password_confirmation, :generate_password
@@ -411,7 +412,7 @@ class User < Principal
   end
 
   def wants_comments_in_reverse_order?
-    self.pref[:comments_sorting] == 'desc'
+    self.pref[:comments_sorting] == 'asc'
   end
 
   # Return user's RSS key (a 40 chars long string), used to access feeds
