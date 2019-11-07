@@ -47,7 +47,12 @@
   <% end %>
 
   <div id="attributes" class="attributes">
-    <%= render :partial => 'checklists/attributes' %>
+    <%= render :partial => 'checklists/attributes', :locals => {
+      :checklist => @checklist,
+      :allowed_statuses => @allowed_statuses,
+      :priorities => @priorities,
+      :project => @project
+    } %>
   </div>
 
   <%= call_hook(:view_checklists_form_details_bottom, { :checklist => @checklist, :form => f }) %>

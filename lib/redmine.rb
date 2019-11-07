@@ -92,6 +92,13 @@ Redmine::AccessControl.map do |map|
   map.permission :manage_public_queries, {:queries => [:new, :create, :edit, :update, :destroy]}, :require => :member
   map.permission :save_queries, {:queries => [:new, :create, :edit, :update, :destroy]}, :require => :loggedin
 
+  map.project_module :checklist_tracking do |map|
+    # Checklists
+    map.permission :view_checklists, {:checklists => [:index, :show]}, :read => true
+    map.permission :add_checklists, {:checklists => [:new, :create]}
+    map.permission :edit_checklists, {:checklists => [:edit, :update, :delete, :destroy]}
+  end
+
   map.project_module :issue_tracking do |map|
     # Issues
     map.permission :view_issues, {:issues => [:index, :show, :issue_tab, :checklists],
@@ -215,6 +222,9 @@ Redmine::MenuManager.map :application_menu do |menu|
   menu.push :issues,   {:controller => 'issues', :action => 'index'},
     :if => Proc.new {User.current.allowed_to?(:view_issues, nil, :global => true) && EnabledModule.exists?(:project => Project.visible, :name => :issue_tracking)},
     :caption => :label_issue_plural
+  menu.push :checklists, {:controller => 'checklists', :action => 'index'},
+    :if => Proc.new {User.current.allowed_to?(:view_checklists, nil, :global => true) && EnabledModule.exists?(:project => Project.visible, :name => :checklist_tracking)},
+    :caption => :label_checklist_plural
   menu.push :time_entries, {:controller => 'timelog', :action => 'index'},
     :if => Proc.new {User.current.allowed_to?(:view_time_entries, nil, :global => true) && EnabledModule.exists?(:project => Project.visible, :name => :time_tracking)},
     :caption => :label_spent_time
@@ -285,6 +295,7 @@ Redmine::MenuManager.map :project_menu do |menu|
   menu.push :roadmap, { :controller => 'versions', :action => 'index' }, :param => :project_id,
               :if => Proc.new { |p| p.shared_versions.any? }
   menu.push :issues, { :controller => 'issues', :action => 'index' }, :param => :project_id, :caption => :label_issue_plural
+  menu.push :checklists, { :controller => 'checklists', :action => 'index' }, :param => :project_id, :caption => :label_checklist_plural
   menu.push :new_issue, { :controller => 'issues', :action => 'new', :copy_from => nil }, :param => :project_id, :caption => :label_issue_new,
               :html => { :accesskey => Redmine::AccessKeys.key_for(:new_issue) },
               :if => Proc.new { |p| Setting.new_item_menu_tab == '1' && Issue.allowed_target_trackers(p).any? },
@@ -305,8 +316,8 @@ Redmine::MenuManager.map :project_menu do |menu|
 end
 
 Redmine::Activity.map do |activity|
-  activity.register :checklists
   activity.register :issues, :class_name => %w(Issue Journal)
+  activity.register :checklists, :class_name => %w(Checklist)
   activity.register :changesets
   activity.register :news
   activity.register :documents, :class_name => %w(Document Attachment)

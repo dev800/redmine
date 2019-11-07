@@ -4,14 +4,17 @@ class ChecklistsController < ApplicationController
 
   before_action :find_checklist, :only => [:show, :edit, :update]
   before_action :find_checklists, :only => [:destroy]
-  before_action :authorize, :except => [:index, :new, :create]
+  before_action :find_optional_project, :only => [:index, :new, :create]
+  before_action :authorize, :except => [:index, :show, :edit, :new, :create]
   before_action :find_issue, :only => [:new, :create]
   before_action :build_new_checklist_from_params, :only => [:new, :create]
   accept_rss_auth :index, :show
   accept_api_auth :index, :show, :create, :update, :destroy
+  menu_item :checklists
 
   rescue_from Query::StatementInvalid, :with => :query_statement_invalid
 
+  helper :issues
   helper :journals
   helper :projects
   helper :custom_fields
@@ -61,6 +64,10 @@ class ChecklistsController < ApplicationController
         }
       }
     end
+  end
+
+  def show
+    @journals = @checklist.visible_journals_with_index
   end
 
   def edit

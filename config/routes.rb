@@ -125,6 +125,7 @@ Rails.application.routes.draw do
     end
 
     resource :enumerations, :controller => 'project_enumerations', :only => [:update, :destroy]
+    resources :checklists, :only => [:index]
 
     get 'issues/:copy_from/copy', :to => 'issues#new', :as => 'copy_issue'
     resources :issues, :only => [:index, :new, :create]
@@ -364,7 +365,7 @@ Rails.application.routes.draw do
   get 'issues/:id/checklists', :to => 'issues#checklists', :as => :issue_checklists
   get 'checklists', :to => 'checklists#index', :as => :checklists
   post 'checklists', :to => 'checklists#create', :as => :checklist_create
-  get 'checklists/new', :to => 'checklists#new', :as => :checklist_new
+  get '(issues/:issue_id/)checklists/new', :to => 'checklists#new', :as => :checklist_new
   get 'checklists/preview', :to => 'checklists#preview', :as => :checklist_preview
   get 'checklists/:id', :to => 'checklists#show', :as => :checklist
   put 'checklists/:id', :to => 'checklists#update', :as => :checklist_update

@@ -335,6 +335,15 @@ class ApplicationController < ActionController::Base
     self.model_object = model
   end
 
+  def find_checklist
+    @checklist = Checklist.find(params[:id])
+    raise Unauthorized unless @checklist.visible?
+    @project = @checklist.project
+    @issue = @checklist.issue
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
+
   # Find the issue whose id is the :id parameter
   # Raises a Unauthorized exception if the issue is not visible
   def find_issue

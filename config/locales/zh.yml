@@ -389,6 +389,9 @@ zh:
   permission_view_issues: 查看问题
   permission_add_issues: 新建问题
   permission_edit_issues: 更新问题
+  permission_view_checklists: 查看检查列表
+  permission_add_checklists: 新建检查项
+  permission_edit_checklists: 更新检查项
   permission_manage_issue_relations: 管理问题关联
   permission_add_issue_notes: 添加说明
   permission_edit_issue_notes: 编辑说明
@@ -432,6 +435,7 @@ zh:
   permission_export_wiki_pages: 导出 wiki 页面
   permission_manage_subtasks: 管理子任务
 
+  project_module_checklist_tracking: 检查列表
   project_module_issue_tracking: 问题跟踪
   project_module_time_tracking: 时间跟踪
   project_module_news: 新闻
@@ -459,6 +463,9 @@ zh:
   label_issue: 问题
   label_issue_new: 新建问题
   label_issue_plural: 问题
+  label_checklist_new: 新建检查项
+  label_checklist_edit: 编辑
+  label_checklist_plural: 检查列表
   label_issue_view_all: 查看所有问题
   label_issues_by: "按 %{value} 分组显示问题"
   label_issue_added: 问题已添加
@@ -662,6 +669,7 @@ zh:
   label_preview: 预览
   label_feed_plural: Feeds
   label_changes_details: 所有变更的详情
+  label_checklist_tracking: 检查列表
   label_issue_tracking: 问题跟踪
   label_spent_time: 耗时
   label_overall_spent_time: 总体耗时
