@@ -24,7 +24,7 @@ class Member < ActiveRecord::Base
   has_many :roles, lambda { distinct }, :through => :member_roles
   belongs_to :project
 
-  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
+  # acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   validates_presence_of :principal, :project
   validates_uniqueness_of :user_id, :scope => :project_id
   validate :validate_role

@@ -146,17 +146,17 @@ module Redmine
                                                            :view_changesets]
 
             # Issue statuses
-            new       = IssueStatus.create!(:name => l(:default_issue_status_new), :is_closed => false, :position => 1, :flag => 'new')
-            solving  = IssueStatus.create!(:name => l(:default_issue_status_solving), :is_closed => false, :position => 2, :flag => 'solving')
-            resolved  = IssueStatus.create!(:name => l(:default_issue_status_resolved), :is_closed => false, :position => 3, :flag => 'resolved')
-            feedback  = IssueStatus.create!(:name => l(:default_issue_status_feedback), :is_closed => false, :position => 4, :flag => 'feedback')
-            closed    = IssueStatus.create!(:name => l(:default_issue_status_closed), :is_closed => true, :position => 5, :flag => 'closed')
-            rejected  = IssueStatus.create!(:name => l(:default_issue_status_rejected), :is_closed => true, :position => 6, :flag => 'rejected')
+            new       = IssueStatus.create!(:name => l(:default_issue_status_new), :is_closed => false, :position => 1, :flag_value => 'new')
+            solving  = IssueStatus.create!(:name => l(:default_issue_status_solving), :is_closed => false, :position => 2, :flag_value => 'solving')
+            resolved  = IssueStatus.create!(:name => l(:default_issue_status_resolved), :is_closed => false, :position => 3, :flag_value => 'resolved')
+            feedback  = IssueStatus.create!(:name => l(:default_issue_status_feedback), :is_closed => false, :position => 4, :flag_value => 'feedback')
+            closed    = IssueStatus.create!(:name => l(:default_issue_status_closed), :is_closed => true, :position => 5, :flag_value => 'closed')
+            rejected  = IssueStatus.create!(:name => l(:default_issue_status_rejected), :is_closed => true, :position => 6, :flag_value => 'rejected')
 
             # Trackers
-            Tracker.create!(:name => l(:default_tracker_bug),     :default_status_id => new.id, :is_in_chlog => true,  :is_in_roadmap => false, :position => 1, :flag => 'bug')
-            Tracker.create!(:name => l(:default_tracker_feature), :default_status_id => new.id, :is_in_chlog => true,  :is_in_roadmap => true,  :position => 2, :flag => 'feature')
-            Tracker.create!(:name => l(:default_tracker_support), :default_status_id => new.id, :is_in_chlog => false, :is_in_roadmap => false, :position => 3, :flag => 'support')
+            Tracker.create!(:name => l(:default_tracker_bug),     :default_status_id => new.id, :is_in_chlog => true,  :is_in_roadmap => false, :position => 1, :flag_value => 'bug')
+            Tracker.create!(:name => l(:default_tracker_feature), :default_status_id => new.id, :is_in_chlog => true,  :is_in_roadmap => true,  :position => 2, :flag_value => 'feature')
+            Tracker.create!(:name => l(:default_tracker_support), :default_status_id => new.id, :is_in_chlog => false, :is_in_roadmap => false, :position => 3, :flag_value => 'support')
 
             if workflow
               # Workflow

@@ -61,7 +61,8 @@ class TrackersControllerTest < Redmine::ControllerTest
           :name => 'New tracker',
           :default_status_id => 1,
           :project_ids => ['1', '', ''],
-          :custom_field_ids => ['1', '6', '']
+          :custom_field_ids => ['1', '6', ''],
+          :flag_value => "new"
         }
       }
     end
@@ -80,7 +81,8 @@ class TrackersControllerTest < Redmine::ControllerTest
         :tracker => {
           :name => 'New tracker',
           :default_status_id => 1,
-          :core_fields => ['assigned_to_id', 'fixed_version_id', '']
+          :core_fields => ['assigned_to_id', 'fixed_version_id', ''],
+          :flag_value => "new"
         }
       }
     end
@@ -95,7 +97,8 @@ class TrackersControllerTest < Redmine::ControllerTest
       post :create, :params => {
         :tracker => {
           :name => 'New tracker',
-          :default_status_id => 1
+          :default_status_id => 1,
+          :flag_value => "new"
         },
         :copy_workflow_from => 1
       }
@@ -199,7 +202,7 @@ class TrackersControllerTest < Redmine::ControllerTest
   end
 
   def test_destroy
-    tracker = Tracker.generate!(:name => 'Destroyable')
+    tracker = Tracker.generate!(:name => 'Destroyable', flag_value: "destroyable")
     assert_difference 'Tracker.count', -1 do
       delete :destroy, :params => {:id => tracker.id}
     end

@@ -6,6 +6,7 @@ class CreateChangesets < ActiveRecord::Migration[4.2]
       t.column :committer, :string, :limit => 30
       t.column :committed_on, :datetime, :null => false
       t.column :comments, :text
+      t.column :deleted_at, :timestamp
     end
     add_index :changesets, [:repository_id, :revision], :unique => true, :name => :changesets_repos_rev
   end

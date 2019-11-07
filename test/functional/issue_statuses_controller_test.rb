@@ -46,7 +46,7 @@ class IssueStatusesControllerTest < Redmine::ControllerTest
   end
 
   def test_index_should_show_warning_when_no_workflow_is_defined
-    status = IssueStatus.new :name => "No workflow"
+    status = IssueStatus.new :name => "No workflow", flag_value: "new"
     status.save!
     get :index
     assert_response :success
@@ -70,7 +70,8 @@ class IssueStatusesControllerTest < Redmine::ControllerTest
     assert_difference 'IssueStatus.count' do
       post :create, :params => {
           :issue_status => {
-            :name => 'New status'
+            :name => 'New status',
+            :flag_value => "new"
           }
         }
     end
