@@ -43,18 +43,11 @@ class IssuesController < ApplicationController
 
   def checklists
     @journals = @issue.visible_journals_with_index
-    @has_changesets = @issue.changesets.visible.preload(:repository, :user).exists?
-    @relations = @issue.relations.select {|r| r.other_issue(@issue) && r.other_issue(@issue).visible? }
     @project = @issue.project
 
     @checklists = @issue.checklists
       .preload(:project, :status, :tracker, :priority, :author, :assigned_to, {:custom_values => :custom_field})
       .order(:position => :asc)
-
-    @checklist = Checklist.new(project: @project, issue: @issue)
-    @checklist.tracker ||= @issue.allowed_target_trackers.first
-
-    @journals.reverse! if User.current.wants_comments_in_reverse_order?
 
     respond_to do |format|
       format.html {
@@ -63,14 +56,19 @@ class IssuesController < ApplicationController
         @time_entry = TimeEntry.new(:issue => @issue, :project => @issue.project)
         @time_entries = @issue.time_entries.visible.preload(:activity, :user)
         @relation = IssueRelation.new
-        retrieve_previous_and_next_issue_ids
+
         render :template => 'issues/checklists'
       }
+
       format.api {
         @changesets = @issue.changesets.visible.preload(:repository, :user).to_a
         @changesets.reverse! if User.current.wants_comments_in_reverse_order?
       }
-      format.atom { render :template => 'journals/index', :layout => false, :content_type => 'application/atom+xml' }
+
+      format.atom {
+        render :template => 'journals/index', :layout => false, :content_type => 'application/atom+xml'
+      }
+
       format.pdf  {
         send_file_headers! :type => 'application/pdf', :filename => "#{@project.identifier}-#{@issue.id}-checklists.pdf"
       }

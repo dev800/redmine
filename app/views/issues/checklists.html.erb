@@ -1,13 +1,19 @@
 <h2><%= link_to issue_heading(@issue), @issue %> - <%= @issue.subject %></h2>
 <div class="content">
   <div class="contextual">
-    <%= link_to l(:label_checklist_new), checklist_new_path(issue_id: @issue.id), :class => 'icon icon-add new-checklist' %>
+    <%= link_to l(:label_checklist_new), "javascript:;",
+      :class => 'icon icon-add new-checklist',
+      'remote-href' => checklist_new_path(issue_id: @issue.id)
+    %>
   </div>
   <h2><%= l(:label_checklists) %></h2>
 </div>
 <%= render :partial => "checklists/checklists", :locals => { :checklists => @checklists } %>
-<div>
-  <%= render :partial => "checklists/new", :locals => { :checklist => @checklist } %>
-</div>
-
 <% html_title "#{l(:label_checklists)} - #{@issue.tracker.name} ##{@issue.id}: #{@issue.subject}" %>
+
+<% heads_for_wiki_formatter %>
+<% include_calendar_headers_tags %>
+
+<% content_for :header_tags do %>
+  <%= javascript_include_tag 'attachments' %>
+<% end %>

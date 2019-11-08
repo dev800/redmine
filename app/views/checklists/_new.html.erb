@@ -1,21 +1,27 @@
-<%= labelled_form_for checklist,
-  :url => checklist_create_path(format: 'js'),
-  :remote => true,
-  :authenticity_token => true,
-  :html => {:id => 'checklist-form'} do |f| %>
-  <fieldset class="tabular">
-    <legend><%= l(:field_checklist_new) %></legend>
-    <%= render :partial => 'checklists/form', :locals => {:f => f} %>
-    <p id="attachments_form">
-      <label><%= l(:label_attachment_plural) %></label>
-      <%= render :partial => 'attachments/form', :locals => {:container => @checklist} %>
-    </p>
-    <p class="form-actions">
-      <% if @checklist.new_record? %>
-        <%= submit_tag l(:button_create) %>
-      <% else %>
-        <%= submit_tag l(:button_update) %>
-      <% end %>
-    </p>
-  </fieldset>
-<% end %>
+<a href="javascript:;" class="close"><%= l(:button_close) %></a>
+<h3 class="title"><%= l(:field_checklist_new) %></h3>
+<div class="content-wrapper">
+  <div id="content" class="content">
+    <%= labelled_form_for checklist,
+      :url => checklist_create_path(format: 'js'),
+      :remote => true,
+      :authenticity_token => true,
+      :html => {:id => 'checklist-form'} do |f| %>
+      <fieldset class="tabular">
+        <legend><%= l(:field_checklist_new) %></legend>
+        <%= render :partial => 'checklists/form', :locals => {:f => f} %>
+        <p id="attachments_form">
+          <label><%= l(:label_attachment_plural) %></label>
+          <%= render :partial => 'attachments/form', :locals => {:container => checklist} %>
+        </p>
+        <p class="form-actions">
+          <% if checklist.new_record? %>
+            <%= submit_tag l(:button_create) %>
+          <% else %>
+            <%= submit_tag l(:button_update) %>
+          <% end %>
+        </p>
+      </fieldset>
+    <% end %>
+  </div>
+</div>

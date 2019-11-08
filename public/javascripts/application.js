@@ -1090,6 +1090,25 @@ function alert(msg, opts) {
   showModal('ajax-modal');
 }
 
+function showHTMLDialog(html) {
+  var $modal = $('#dialog-modal');
+
+  if ($modal.length === 0) {
+    $('body').append('<div id="dialog-modal-wrapper"><div id="dialog-modal"></div></div><div id="dialog-overlay"></div>')
+    $modal = $('#dialog-modal');
+  }
+
+  $modal.html(html);
+  showModal('dialog-modal');
+  $('body').addClass('modal-overflow-hidden');
+}
+
+function closeHTMLDialog() {
+  $('#dialog-modal-wrapper').remove();
+  $('#dialog-overlay').remove();
+  $('body').removeClass('modal-overflow-hidden');
+}
+
 function showErrorMessages(event) {
   if (event.detail[2].status === 422) {
     alert((((event.detail[0] || {}).errors || {}).full_messages || []).join("\n"), {title: 'Error'});
@@ -1109,6 +1128,8 @@ $(document).on('ajax:success', 'form.new_checklist', function(event) {
   $form.find('.attachments_form .attachments_fields').empty();
   $form.find('textarea').removeData('changed');
 
+  closeHTMLDialog();
+
   $.Toast.showToast({
     title: data.message,
     duration: 800,
@@ -1120,6 +1141,27 @@ $(document).on('ajax:success', 'form.new_checklist', function(event) {
 
   $form.find('[type="submit"]').prop('disabled', false);
   showErrorMessages(event);
+});
+
+$(document).on('click', '#dialog-modal .close', function(event) {
+  closeHTMLDialog();
+});
+
+$(document).on('click', '[remote-href]', function(event) {
+  var $target = $(this);
+
+  $.get($target.attr('remote-href'), {})
+    .success(function(html) {
+      showHTMLDialog(html)
+    })
+    .fail(function(res) {
+      $.Toast.showToast({
+        title: 'request fail',
+        duration: 800,
+        icon: 'error',
+        image: ''
+      });
+    })
 });
 
 $(document).on('click', '.ui-widget-overlay', function() {

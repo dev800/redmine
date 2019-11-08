@@ -51,9 +51,6 @@ class DefaultDataTest < ActiveSupport::TestCase
         assert_not_nil IssuePriority.first
         assert_not_nil TimeEntryActivity.first
       rescue ActiveRecord::RecordInvalid => e
-        pp '----------------'
-        pp e
-        pp '----------------'
         assert false, ":#{lang} default data is invalid (#{e.message})."
       end
     end

@@ -1192,6 +1192,69 @@ select#checklist_done_ratio { width: 95px; }
   outline: none;
 }
 
+.modal-overflow-hidden {
+  overflow: hidden;
+}
+
+#dialog-modal-wrapper {
+  z-index: 92;
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  overflow: hidden;
+  margin: 0px;
+}
+
+#dialog-modal {
+  position: relative;
+  background: #ffffff;
+  height: calc(100% - 24px);
+  width: calc(100% - 24px);
+  top: 12px;
+  left: 12px;
+  overflow: hidden;
+}
+
+#dialog-modal > .close {
+  float: right;
+  color: #ffffff;
+  position: relative;
+  display: block;
+  line-height: 32px;
+  padding: 0 12px;
+}
+
+#dialog-modal > .close:hover {
+  color: #f0f0f0;
+}
+
+#dialog-modal > .title {
+  background: #578bb8;
+  color: #ffffff;
+  padding: 4px 8px 8px 12px;
+  margin-bottom: 0;
+}
+
+#dialog-modal > .content-wrapper {
+  overflow-y: auto;
+  height: calc(100vh - 58px);
+}
+
+#dialog-overlay {
+  z-index: 90;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  height: 100vh;
+  width: 100vw;
+  opacity: 0.62;
+  background: rgb(0, 0, 0);
+}
+
 /**
   #################################################
   #################################################
@@ -1203,77 +1266,78 @@ select#checklist_done_ratio { width: 95px; }
   #content > .contextual > a,
   #content > .contextual .drdn,
   p.buttons a {
-    padding: 6px 9px;
+    padding: 6px 9px !important;
   }
 
   .ui-widget input[type="submit"],
   .ui-widget #content > .contextual > a,
   .ui-widget #content > .contextual .drdn,
   .ui-widget p.buttons a {
-    margin: 0;
-    padding: 2px 9px;
-    height: auto;
+    margin: 0 !important;
+    padding: 2px 9px !important;
+    height: auto !important;
   }
 
   table.issues th.subject {
-    width: 120px;
+    width: 120px !important;
   }
 
   #header {
-    height: 46px;
+    height: 46px !important;
+    z-index: 90 !important;
   }
 
   #header .mobile-toggle-button {
-    line-height: 46px;
-    height: 46px;
+    line-height: 46px !important;
+    height: 46px !important;
   }
 
   #project-jump.drdn {
-    height: 46px;
+    height: 46px !important;
   }
 
   #project-jump .drdn-trigger {
-    height: 38px;
-    line-height: 28px;
-    font-size: 1.2em;
+    height: 38px !important;
+    line-height: 28px !important;
+    font-size: 1.2em !important;
   }
 
   #project-jump .drdn-trigger:before {
-    top: 5px;
+    top: 5px !important;
   }
 
   #project-jump .drdn-content {
-    top: 48px;
+    top: 48px !important;
   }
 
   #content > .contextual > a,
   #content > .contextual .drdn,
   p.buttons a {
-    margin: 5px 6px;
+    margin: 5px 6px !important;
   }
 
   #main {
-    padding-top: 46px;
+    padding-top: 46px !important;
   }
 
   fieldset#filters td.field {
-    width: 25%;
+    width: 25% !important;
   }
 
   fieldset#filters td.operator {
-    width: 30%;
+    width: 30% !important;
   }
 
   fieldset#filters td.values select {
-    min-width: auto;
+    min-width: auto !important;
   }
 
   #main .tabular label,
   #main .tabular.settings label {
-    display: inline-block;
+    display: inline-block !important;
   }
 
   .checklists .checklist .checklist-subject {
-    font-size: 1em;
+    font-size: 1em !important;
   }
 }

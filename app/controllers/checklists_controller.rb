@@ -14,6 +14,7 @@ class ChecklistsController < ApplicationController
 
   rescue_from Query::StatementInvalid, :with => :query_statement_invalid
 
+  helper_method :find_issue
   helper :issues
   helper :journals
   helper :projects
@@ -31,19 +32,28 @@ class ChecklistsController < ApplicationController
   end
 
   def new
+    @journals = @issue.visible_journals_with_index
+    @project = @issue.project
 
+    @allowed_statuses = @issue.new_statuses_allowed_to(User.current)
+    @priorities = IssuePriority.active
+    @time_entry = TimeEntry.new(:issue => @issue, :project => @issue.project)
+    @time_entries = @issue.time_entries.visible.preload(:activity, :user)
+    @relation = IssueRelation.new
+
+    render :action => 'new', :layout => !request.xhr?
   end
 
   def create
-    # unless User.current.allowed_to?(:add_checklists, @checklist.project, :global => true)
-    #   render :status => 403, :json => {
-    #     :status => 403,
-    #     :errors => {
-    #       :messages => [],
-    #       :full_messages => {}
-    #     }
-    #   } and return
-    # end
+    unless User.current.allowed_to?(:add_checklists, @checklist.project, :global => true)
+      render :status => 403, :json => {
+        :status => 403,
+        :errors => {
+          :messages => [],
+          :full_messages => {}
+        }
+      } and return
+    end
 
     call_hook(:controller_checklists_new_before_save, { :params => params, :checklist => @checklist })
     @checklist.save_attachments(params[:attachments] || (params[:checklist] && params[:checklist][:uploads]))
@@ -100,7 +110,8 @@ class ChecklistsController < ApplicationController
 
     attrs = (params[:checklist] || {}).deep_dup
 
-    @checklist.tracker ||= Tracker.find(attrs[:tracker_id])
+    @checklist.tracker ||= @issue.allowed_target_trackers.first
+
 
     if action_name == 'new' && params[:was_default_status] == attrs[:status_id]
       attrs.delete(:status_id)
