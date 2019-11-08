@@ -19,7 +19,6 @@ Layout/AlignHash:
 # SupportedStylesAlignWith: either, start_of_block, start_of_line
 Layout/BlockAlignment:
   Exclude:
-    - 'app/helpers/queries_helper.rb'
     - 'app/models/principal.rb'
     - 'app/models/project.rb'
     - 'app/models/time_entry.rb'
@@ -1200,7 +1199,6 @@ Style/MethodCallWithoutArgsParentheses:
     - 'lib/redmine/helpers/gantt.rb'
     - 'lib/redmine/scm/adapters/cvs_adapter.rb'
     - 'lib/redmine/scm/adapters/filesystem_adapter.rb'
-    - 'test/unit/activity_test.rb'
 
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
@@ -1489,7 +1487,6 @@ Style/RescueModifier:
     - 'app/models/repository.rb'
     - 'lib/redmine/export/csv.rb'
     - 'lib/redmine/field_format.rb'
-    - 'lib/redmine/scm/adapters/mercurial_adapter.rb'
     - 'lib/redmine/search.rb'
     - 'lib/redmine/wiki_formatting.rb'
     - 'test/unit/lib/redmine/wiki_formatting/markdown_formatter_test.rb'

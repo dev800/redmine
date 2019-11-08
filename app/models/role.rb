@@ -85,20 +85,26 @@ class Role < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name
   validates_length_of :name, :maximum => 255
-  validates_inclusion_of :checklists_visibility,
-    :in => ISSUES_VISIBILITY_OPTIONS.collect(&:first),
-    :if => lambda {|role| role.respond_to?(:checklists_visibility) && role.checklists_visibility_changed?}
-  validates_inclusion_of :issues_visibility,
-    :in => ISSUES_VISIBILITY_OPTIONS.collect(&:first),
-    :if => lambda {|role| role.respond_to?(:issues_visibility) && role.issues_visibility_changed?}
-  validates_inclusion_of :users_visibility,
-    :in => USERS_VISIBILITY_OPTIONS.collect(&:first),
-    :if => lambda {|role| role.respond_to?(:users_visibility) && role.users_visibility_changed?}
-  validates_inclusion_of :time_entries_visibility,
-    :in => TIME_ENTRIES_VISIBILITY_OPTIONS.collect(&:first),
-    :if => lambda {|role| role.respond_to?(:time_entries_visibility) && role.time_entries_visibility_changed?}
 
-  safe_attributes 'name',
+  validates_inclusion_of(
+    :checklists_visibility,
+    :in => ISSUES_VISIBILITY_OPTIONS.collect(&:first),
+    :if => lambda {|role| role.respond_to?(:checklists_visibility) && role.checklists_visibility_changed?})
+  validates_inclusion_of(
+    :issues_visibility,
+    :in => ISSUES_VISIBILITY_OPTIONS.collect(&:first),
+    :if => lambda {|role| role.respond_to?(:issues_visibility) && role.issues_visibility_changed?})
+  validates_inclusion_of(
+    :users_visibility,
+    :in => USERS_VISIBILITY_OPTIONS.collect(&:first),
+    :if => lambda {|role| role.respond_to?(:users_visibility) && role.users_visibility_changed?})
+  validates_inclusion_of(
+    :time_entries_visibility,
+    :in => TIME_ENTRIES_VISIBILITY_OPTIONS.collect(&:first),
+    :if => lambda {|role| role.respond_to?(:time_entries_visibility) && role.time_entries_visibility_changed?})
+
+  safe_attributes(
+      'name',
       'assignable',
       'position',
       'checklists_visibility',
@@ -109,7 +115,7 @@ class Role < ActiveRecord::Base
       'managed_role_ids',
       'permissions',
       'permissions_all_trackers',
-      'permissions_tracker_ids'
+      'permissions_tracker_ids')
 
   # Copies attributes from another role, arg can be an id or a Role
   def copy_from(arg, options={})
