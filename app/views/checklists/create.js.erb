@@ -1,0 +1,16 @@
+<% if @checklist.save %>
+  closeHTMLDialog();
+
+  $.Toast.showToast({
+    title: '<%= l(:notice_successful_create) %>',
+    duration: 800,
+    icon: 'success',
+    image: ''
+  });
+
+  $('.checklists[data-issue-id="<%= @checklist.issue_id %>"]').append(
+    '<%= escape_javascript(render :partial => "checklists/checklist", :locals => { :checklist => @checklist }) %>'
+  )
+<% else %>
+  showErrorMessages("<%= @checklist.errors.full_messages.to_json %>", { title: "<%= l(:notice_fail_create) %>" })
+<% end %>

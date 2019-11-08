@@ -1,8 +1,14 @@
 class CreateChecklists < ActiveRecord::Migration[5.2]
   def change
+    add_column :roles, :checklists_visibility, :string, :limit => 30, :default => 'default', :null => false
+
+    add_column :time_entries, :checklist_id, :integer
+    add_index :time_entries, [:checklist_id], :name => :time_entries_checklist_id
+
     add_column :issue_statuses, :flag_color, :string, default: "ffffff", null: false
     add_column :issue_statuses, :background_color, :string, default: "ffffff", null: false
     add_column :issue_statuses, :flag_value, :string, null: false
+
     add_column :trackers, :flag_color, :string, default: "ffffff", null: false
     add_column :trackers, :background_color, :string, default: "ffffff", null: false
     add_column :trackers, :flag_value, :string, null: false

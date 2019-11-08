@@ -1269,6 +1269,12 @@ select#checklist_done_ratio { width: 95px; }
     padding: 6px 9px !important;
   }
 
+  #content > .contextual > a.icon,
+  #content > .contextual .drdn,
+  p.buttons a.icon {
+    padding-left: 24px !important;
+  }
+
   .ui-widget input[type="submit"],
   .ui-widget #content > .contextual > a,
   .ui-widget #content > .contextual .drdn,
@@ -1307,7 +1313,7 @@ select#checklist_done_ratio { width: 95px; }
   }
 
   #project-jump .drdn-content {
-    top: 48px !important;
+    top: 46px !important;
   }
 
   #content > .contextual > a,

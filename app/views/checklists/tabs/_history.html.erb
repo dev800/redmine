@@ -7,7 +7,7 @@
   <div id="change-<%= journal.id %>" class="<%= journal.css_classes %>">
     <div id="note-<%= journal.indice %>">
     <div class="contextual">
-      <span class="journal-actions"><%= render_journal_actions(checklist, journal, :reply_links => reply_links) %></span>
+      <span class="journal-actions"><%= render_journal_actions_for_checklist(checklist, journal, :reply_links => reply_links) %></span>
       <a href="#note-<%= journal.indice %>" class="journal-link">#<%= journal.indice %></a>
     </div>
     <h4 class='note-header'>

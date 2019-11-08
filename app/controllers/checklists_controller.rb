@@ -32,14 +32,10 @@ class ChecklistsController < ApplicationController
   end
 
   def new
-    @journals = @issue.visible_journals_with_index
     @project = @issue.project
 
     @allowed_statuses = @issue.new_statuses_allowed_to(User.current)
     @priorities = IssuePriority.active
-    @time_entry = TimeEntry.new(:issue => @issue, :project => @issue.project)
-    @time_entries = @issue.time_entries.visible.preload(:activity, :user)
-    @relation = IssueRelation.new
 
     render :action => 'new', :layout => !request.xhr?
   end
@@ -60,19 +56,6 @@ class ChecklistsController < ApplicationController
 
     if @checklist.save
       call_hook(:controller_checklists_new_after_save, { :params => params, :checklist => @checklist})
-
-      render :json => {
-        :status => "ok",
-        :message => l("notice_successful_create")
-      }
-    else
-      render status: 422, :json => {
-        :status => 422,
-        :errors => {
-          messages: @checklist.errors.messages,
-          full_messages: @checklist.errors.full_messages
-        }
-      }
     end
   end
 
@@ -81,11 +64,22 @@ class ChecklistsController < ApplicationController
   end
 
   def edit
+    @project = @issue.project
+    @allowed_statuses = @issue.new_statuses_allowed_to(User.current)
+    @priorities = IssuePriority.active
 
+    render :action => 'edit', :layout => !request.xhr?
   end
 
   def update
+    return unless update_checklist_from_params
 
+    call_hook(:controller_checklists_edit_before_save, { :params => params, :checklist => @checklist })
+    @checklist.save_attachments(params[:attachments] || (params[:checklist] && params[:checklist][:uploads]))
+
+    if @checklist.save
+      call_hook(:controller_checklists_edit_after_save, { :params => params, :checklist => @checklist})
+    end
   end
 
   def destroy
@@ -108,21 +102,21 @@ class ChecklistsController < ApplicationController
     @checklist.author ||= User.current
     @checklist.start_date ||= User.current.today if Setting.default_issue_start_date_to_creation_date?
 
-    attrs = (params[:checklist] || {}).deep_dup
+    checklist_attributes = (params[:checklist] || {}).deep_dup
 
     @checklist.tracker ||= @issue.allowed_target_trackers.first
 
 
-    if action_name == 'new' && params[:was_default_status] == attrs[:status_id]
-      attrs.delete(:status_id)
+    if action_name == 'new' && params[:was_default_status] == checklist_attributes[:status_id]
+      checklist_attributes.delete(:status_id)
     end
 
     if action_name == 'new' && params[:form_update_triggered_by] == 'issue_project_id'
-      attrs.delete(:fixed_version_id)
+      checklist_attributes.delete(:fixed_version_id)
     end
 
-    attrs[:assigned_to_id] = User.current.id if attrs[:assigned_to_id] == 'me'
-    @checklist.safe_attributes = attrs
+    checklist_attributes[:assigned_to_id] = User.current.id if checklist_attributes[:assigned_to_id] == 'me'
+    @checklist.safe_attributes = checklist_attributes
 
     if @checklist.project
       @checklist.tracker ||= @checklist.allowed_target_trackers.first
@@ -148,6 +142,37 @@ class ChecklistsController < ApplicationController
 
     @priorities = IssuePriority.active
     @allowed_statuses = @checklist.new_statuses_allowed_to(User.current)
+  end
+
+  def update_checklist_from_params
+    @time_entry = TimeEntry.new(:checklist => @checklist, :project => @checklist.project, :issue => @checklist.issue)
+
+    if params[:time_entry]
+      @time_entry.safe_attributes = params[:time_entry]
+    end
+
+    @checklist.init_journal(User.current)
+
+    checklist_attributes = params[:checklist]
+    checklist_attributes[:assigned_to_id] = User.current.id if checklist_attributes && checklist_attributes[:assigned_to_id] == 'me'
+
+    if checklist_attributes && params[:conflict_resolution]
+      case params[:conflict_resolution]
+      when 'overwrite'
+        checklist_attributes = checklist_attributes.dup
+        checklist_attributes.delete(:lock_version)
+      when 'add_notes'
+        checklist_attributes = checklist_attributes.slice(:notes, :private_notes)
+      when 'cancel'
+        redirect_to checklist_path(@checklist)
+        return false
+      end
+    end
+
+    @checklist.safe_attributes = checklist_attributes
+    @priorities = IssuePriority.active
+    @allowed_statuses = @issue.new_statuses_allowed_to(User.current)
+    true
   end
 
   def find_issue

@@ -237,6 +237,8 @@ project_list_defaults:
     - name
     - identifier
     - short_description
+checklist_done_ratio:
+  default: 'checklist_field'
 issue_done_ratio:
   default: 'issue_field'
 default_projects_public:

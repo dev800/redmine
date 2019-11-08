@@ -1,25 +1,32 @@
-<a href="javascript:;" class="close"><%= l(:button_close) %></a>
+<a href="javascript:;" class="close" style="display: none;"><%= l(:button_close) %></a>
 <h3 class="title"><%= l(:field_checklist_new) %></h3>
 <div class="content-wrapper">
   <div id="content" class="content">
     <%= labelled_form_for checklist,
       :url => checklist_create_path(format: 'js'),
       :remote => true,
+      :method => :post,
       :authenticity_token => true,
-      :html => {:id => 'checklist-form'} do |f| %>
+      :html => {
+        :id => 'checklist-form',
+        :class => 'with-indicator'
+      } do |f| %>
       <fieldset class="tabular">
         <legend><%= l(:field_checklist_new) %></legend>
-        <%= render :partial => 'checklists/form', :locals => {:f => f} %>
+        <%= render :partial => 'checklists/form', :locals => {
+          :f => f,
+          :checklist => checklist,
+          :issue => issue,
+          :project => project,
+          :allowed_statuses => allowed_statuses,
+          :priorities => priorities
+        } %>
         <p id="attachments_form">
           <label><%= l(:label_attachment_plural) %></label>
           <%= render :partial => 'attachments/form', :locals => {:container => checklist} %>
         </p>
         <p class="form-actions">
-          <% if checklist.new_record? %>
-            <%= submit_tag l(:button_create) %>
-          <% else %>
-            <%= submit_tag l(:button_update) %>
-          <% end %>
+          <%= submit_tag l(:button_create) %>
         </p>
       </fieldset>
     <% end %>

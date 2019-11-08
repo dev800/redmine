@@ -1,5 +1,7 @@
 <%= render :partial => "checklists/new", :locals => {
   :issue => @issue,
   :project => @project,
-  :checklist => @checklist
+  :checklist => @checklist,
+  :allowed_statuses => @allowed_statuses,
+  :priorities => @priorities
 } %>

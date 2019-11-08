@@ -1,43 +1,8 @@
-<h2><%= link_to issue_heading(@issue), @issue %> - <%= @issue.subject %></h2>
-<div class="content">
-  <div class="contextual">
-    <%= link_to l(:label_checklist_edit), checklist_edit_path(@checklist), :class => 'icon icon-edit edit-checklist' %>
-  </div>
-  <h2><%= @checklist.subject %></h2>
-
-  <p class="author">
-    <%= authoring @checklist.created_on, @checklist.author %>.
-    <% if @checklist.created_on != @checklist.updated_on %>
-      <%= l(:label_updated_time, time_tag(@checklist.updated_on)).html_safe %>.
-    <% end %>
-  </p>
-</div>
-
-<% if @checklist.description? %>
-  <hr />
-  <div class="description">
-    <p><strong><%=l(:field_description)%></strong></p>
-    <div class="wiki">
-      <%= textilizable @checklist, :description, :attachments => @checklist.attachments %>
-    </div>
-  </div>
-<% end %>
-
-<% if @checklist.attachments.any? %>
-  <hr />
-  <p><strong><%=l(:label_attachment_plural)%></strong></p>
-  <%= link_to_attachments @checklist, :thumbnails => true %>
-<% end %>
-
-<%= render_full_width_custom_fields_rows(@checklist) %>
-
-<%= call_hook(:view_checklists_show_description_bottom, :checklist => @checklist) %>
-
-<div id="history">
-  <%= render :partial => "checklists/tabs/history", :locals => { :checklist => @checklist, :journals => @journals } %>
-</div>
-
-<% html_title "#{@checklist.tracker.name} $#{@checklist.id}: #{@checklist.subject}" %>
-
-<%= context_menu %>
-
+<%= render :partial => "checklists/show", :locals => {
+  :issue => @issue,
+  :project => @project,
+  :checklist => @checklist,
+  :allowed_statuses => @allowed_statuses,
+  :priorities => @priorities,
+  :journals => @journals
+} %>

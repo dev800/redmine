@@ -1,4 +1,4 @@
-<li class="checklist clearfix" style="border-left-color: #<%= checklist.tracker.try(:flag_color) || 'fff' %>; background-color: #<%= checklist.status.try(:background_color) || 'fff' %>">
+<li class="checklist clearfix" data-checklist-id="<%= checklist.id %>" style="border-left-color: #<%= checklist.tracker.try(:flag_color) || 'fff' %>; background-color: #<%= checklist.status.try(:background_color) || 'fff' %>">
   <div class="checklist-info">
     <div class="checklist-row">
       <span class="checklist-author _unit"><%= checklist.author ? link_to_user(checklist.author) : "?" %></span>
@@ -20,7 +20,10 @@
       <div class="checklist-actions">
         <span class="checklist-tracker _unit"><%= checklist.tracker.try(:name) %></span>
         <span class="checklist-status _unit"><%= checklist.status.try(:name) %></span>
-        <a class="checklist-edit _unit" href="javascript:;"><%= l(:button_edit) %></a>
+        <%= link_to l(:button_edit), "javascript:;",
+          :class => 'checklist-edit _unit',
+          'remote-href' => checklist_edit_path(checklist)
+        %>
       </div>
     </div>
   </div>

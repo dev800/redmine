@@ -97,6 +97,16 @@ Redmine::AccessControl.map do |map|
     map.permission :view_checklists, {:checklists => [:index, :show]}, :read => true
     map.permission :add_checklists, {:checklists => [:new, :create]}
     map.permission :edit_checklists, {:checklists => [:edit, :update, :delete, :destroy]}
+
+    map.permission :edit_own_checklists, {:checklists => [:edit, :update], :journals => [:new], :attachments => :upload}
+    map.permission :set_checklists_private, {}
+    map.permission :set_own_checklists_private, {}, :require => :loggedin
+    map.permission :add_checklist_notes, {:checklists => [:edit, :update], :journals => [:new], :attachments => :upload}
+    map.permission :edit_checklist_notes, {:journals => [:edit, :update]}, :require => :loggedin
+    map.permission :edit_own_checklist_notes, {:journals => [:edit, :update]}, :require => :loggedin
+    map.permission :view_private_notes, {}, :read => true, :require => :member
+    map.permission :set_notes_private, {}, :require => :member
+    map.permission :delete_checklists, {:checklists => :destroy}, :require => :member
   end
 
   map.project_module :issue_tracking do |map|

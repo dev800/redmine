@@ -1092,56 +1092,32 @@ function alert(msg, opts) {
 
 function showHTMLDialog(html) {
   var $modal = $('#dialog-modal');
-
-  if ($modal.length === 0) {
-    $('body').append('<div id="dialog-modal-wrapper"><div id="dialog-modal"></div></div><div id="dialog-overlay"></div>')
-    $modal = $('#dialog-modal');
-  }
-
   $modal.html(html);
-  showModal('dialog-modal');
+  $modal.find('input[type=text], textarea').first().focus();
+  $modal.find('.close').show();
+  $("#dialog-overlay").show();
+  $("#dialog-modal-wrapper").show();
   $('body').addClass('modal-overflow-hidden');
 }
 
 function closeHTMLDialog() {
-  $('#dialog-modal-wrapper').remove();
-  $('#dialog-overlay').remove();
+  $('#dialog-modal-wrapper').hide();
+  $('#dialog-overlay').hide();
   $('body').removeClass('modal-overflow-hidden');
 }
 
-function showErrorMessages(event) {
-  if (event.detail[2].status === 422) {
-    alert((((event.detail[0] || {}).errors || {}).full_messages || []).join("\n"), {title: 'Error'});
-  } else {
-    alert(event.detail[1]);
-  }
+function showErrorMessages(fullMessages, opts) {
+  var opts = opts || {};
+  alert(fullMessages.join("\n"), {title: opts.title || 'Error'});
 }
 
-// Begin checklist /////////////////////////////////////////
-$(document).on('ajax:success', 'form.new_checklist', function(event) {
-  var $form = $(this);
-  var data = event.detail[0];
-
-  $form.find('[type="submit"]').prop('disabled', false);
-  $form.find('[name="checklist[subject]"]').val('');
-  $form.find('[name="checklist[description]"]').val('');
-  $form.find('.attachments_form .attachments_fields').empty();
-  $form.find('textarea').removeData('changed');
-
-  closeHTMLDialog();
-
-  $.Toast.showToast({
-    title: data.message,
-    duration: 800,
-    icon: 'success',
-    image: ''
-  });
-}).on('ajax:error', 'form.new_checklist', function(event) {
-  var $form = $(this);
-
-  $form.find('[type="submit"]').prop('disabled', false);
-  showErrorMessages(event);
-});
+$(document).on('ajax:success', 'form.with-indicator', function(event) {
+  $('#ajax-indicator').show();
+}).on('ajax:success', 'form.with-indicator', function(event) {
+  $('#ajax-indicator').hide();
+}).on('ajax:error', 'form.with-indicator', function(event) {
+  $('#ajax-indicator').hide();
+})
 
 $(document).on('click', '#dialog-modal .close', function(event) {
   closeHTMLDialog();
@@ -1161,7 +1137,7 @@ $(document).on('click', '[remote-href]', function(event) {
         icon: 'error',
         image: ''
       });
-    })
+    }).complete(function() { })
 });
 
 $(document).on('click', '.ui-widget-overlay', function() {
@@ -1178,7 +1154,7 @@ $(document).on('click', '.ui-widget-overlay', function() {
 
   var Toast = {
     default : {
-      "title": "加载中...", // <String>提示的内容，默认："加载中..."
+      "title": "loading...", // <String>提示的内容，默认："加载中..."
       "icon": "loading", // <String>图标，有效值 "success", "loading", "none", "error"，默认"loading"
       "image": "", // <String>自定义图标的本地路径，image 的优先级高于 icon
       "duration": 1500, // <Number>提示的延迟时间，单位毫秒，默认：1500(设置为0时不自动关闭)

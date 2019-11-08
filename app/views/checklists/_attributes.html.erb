@@ -70,7 +70,7 @@
     <% end %>
 
     <% if checklist.safe_attribute? 'estimated_hours' %>
-    <p><%= f.hours_field :estimated_hours, :size => 3, :required => checklist.required_attribute?('estimated_hours') %> <%= l(:field_hours) %></p>
+    <p><%= f.hours_field :estimated_hours, :size => 10, :required => checklist.required_attribute?('estimated_hours') %> <%= l(:field_hours) %></p>
     <% end %>
 
     <% if checklist.safe_attribute?('done_ratio') && Issue.use_field_for_done_ratio? %>

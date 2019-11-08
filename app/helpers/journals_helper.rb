@@ -25,6 +25,29 @@ module JournalsHelper
     ids.any? ? Attachment.where(:id => ids).select(&:thumbnailable?) : []
   end
 
+  def render_journal_actions_for_checklist(checklist, journal, options={})
+    links = []
+    if journal.notes.present?
+      if journal.editable_by?(User.current)
+        links << link_to(l(:button_edit),
+                         edit_journal_path(journal),
+                         :remote => true,
+                         :method => 'get',
+                         :title => l(:button_edit),
+                         :class => 'icon-only icon-edit'
+                        )
+        links << link_to(l(:button_delete),
+                         journal_path(journal, :journal => {:notes => ""}),
+                         :remote => true,
+                         :method => 'put', :data => {:confirm => l(:text_are_you_sure)},
+                         :title => l(:button_delete),
+                         :class => 'icon-only icon-del'
+                        )
+      end
+    end
+    safe_join(links, ' ')
+  end
+
   # Returns the action links for an issue journal
   def render_journal_actions(issue, journal, options={})
     links = []

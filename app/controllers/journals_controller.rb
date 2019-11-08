@@ -102,7 +102,16 @@ class JournalsController < ApplicationController
   private
 
   def find_journal
-    @journal = Journal.visible.find(params[:id])
+    journal = Journal.find(params[:id])
+
+    if journal
+      if journal.journalized_type === 'Checklist'
+        @journal = Journal.visible_for_checklist.find(params[:id])
+      else
+        @journal = Journal.visible.find(params[:id])
+      end
+    end
+
     @project = @journal.journalized.project
   rescue ActiveRecord::RecordNotFound
     render_404

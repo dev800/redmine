@@ -8,7 +8,10 @@
   </div>
   <h2><%= l(:label_checklists) %></h2>
 </div>
-<%= render :partial => "checklists/checklists", :locals => { :checklists => @checklists } %>
+<%= render :partial => "checklists/checklists", :locals => {
+  :checklists => @checklists,
+  :issue => @issue
+} %>
 <% html_title "#{l(:label_checklists)} - #{@issue.tracker.name} ##{@issue.id}: #{@issue.subject}" %>
 
 <% heads_for_wiki_formatter %>
