@@ -642,8 +642,8 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
 #main .wiki h6 {
   font-weight: 600;
   line-height: 1.25;
-  margin-bottom: 16px;
-  margin-top: 24px;
+  margin-bottom: 1.2;
+  margin-top: 2.0;
 }
 
 #main .wiki a:first-child + h1,
@@ -800,12 +800,12 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
 
 #main .wiki .highlight pre,
 #main .wiki pre {
-  background-color: #f6f8fa;
+  background-color: #ffffff;
   border-radius: 3px;
   font-size: 85%;
   line-height: 1.45;
   overflow: auto;
-  padding: 16px;
+  padding: 10px;
 }
 
 #main .wiki pre code {
@@ -1102,7 +1102,7 @@ select#checklist_done_ratio { width: 95px; }
 }
 
 .checklists .checklist {
-  line-height: 1.8em;
+  line-height: 1.6em;
   padding: 2px 4px;
   border-bottom: 2px solid #dedede;
   border-left-width: 8px;
@@ -1131,6 +1131,15 @@ select#checklist_done_ratio { width: 95px; }
   padding-right: 0;
 }
 
+#main .checklists .checklist a.checklist-edit {
+  font-weight: normal;
+  color: #999999;
+}
+
+#main .checklists .checklist a.checklist-edit:hover {
+  color: #467aa7;
+}
+
 .checklists .checklist .checklist-info {
   float: right;
   text-align: right;
@@ -1152,7 +1161,6 @@ select#checklist_done_ratio { width: 95px; }
 
 .checklists .checklist .checklist-subject {
   font-weight: bolder;
-  font-size: 1.4em;
   word-break: break-all;
 }
 
@@ -1242,6 +1250,7 @@ select#checklist_done_ratio { width: 95px; }
 #dialog-modal > .content-wrapper {
   overflow-y: auto;
   height: calc(100vh - 58px);
+  width: 100%;
 }
 
 #dialog-overlay {
@@ -1253,6 +1262,78 @@ select#checklist_done_ratio { width: 95px; }
   width: 100vw;
   opacity: 0.62;
   background: rgb(0, 0, 0);
+}
+
+.checklist-show .checklist-info {
+  padding: 6px;
+  margin-bottom: 6px;
+  border: 1px solid #d7d7d7;
+  border-radius: 3px;
+}
+.checklist-show .checklist-info div.subject div div { padding-left: 16px; }
+.checklist-show .checklist-info div.subject p {margin: 0; margin-bottom: 0.1em; font-size: 90%; color: #999;}
+.checklist-show .checklist-info div.subject>div>p { margin-top: 0.5em; }
+.checklist-show .checklist-info div.subject h3 {margin: 0; margin-bottom: 0.1em;}
+.checklist-show .checklist-info p.author {margin-top:0.5em;}
+.checklist-show .checklist-info span.private, div.journal span.private {font-size: 60%;}
+.checklist-show .checklist-info .next-prev-links {color:#999;}
+.checklist-show .checklist-info .attributes {margin-top: 2em;}
+.checklist-show .checklist-info .attributes .attribute {padding-left:180px; clear:left; min-height: 1.8em;}
+.checklist-show .checklist-info .attributes .attribute .label {text-align: right; width: 170px; margin-left:-180px; font-weight:bold; float:left;  overflow:hidden; text-overflow: ellipsis;}
+.checklist-show .checklist-info .attribute .value {overflow:auto; text-overflow: ellipsis;}
+.checklist-show .checklist-info.overdue .due-date .value { color: #c22; }
+
+.checklist-show .checklist-info .attributes .attribute,
+div.issue .attributes .attribute {
+  padding-left: 120px;
+}
+
+.checklist-show .checklist-info .attributes .attribute .label,
+div.issue .attributes .attribute .label {
+  width: 180px;
+  margin-left: -186px;
+}
+
+#history .tab-content {
+  padding: 0;
+  margin-bottom: 10px;
+  border-right: none;
+  border-bottom: none;
+  border-left: none;
+  border-radius: 0 0 3px 3px / 0 0 3px 3px;
+}
+
+#content .tabs {
+  margin-bottom: 0.6em;
+}
+
+#main a {
+  word-break: break-all;
+}
+
+#main .journal {
+  overflow: auto;
+  background: #f5f5f5;
+  padding: 0.4em 0.6em;
+  margin: 0.4em;
+  border-radius: 4px;
+}
+
+#main .journal h4.note-header {
+  border-bottom: dotted 1px #c0c0c0;
+  padding-bottom: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+#main .journal ul.details,
+#main ul.revision-info {
+  color: #959595;
+  margin-bottom: 0.5em;
+  padding-left: 2em;
+}
+
+#content .tabs ul li a {
+  padding: 4px 8px;
 }
 
 /**

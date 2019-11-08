@@ -232,9 +232,9 @@ Redmine::MenuManager.map :application_menu do |menu|
   menu.push :issues,   {:controller => 'issues', :action => 'index'},
     :if => Proc.new {User.current.allowed_to?(:view_issues, nil, :global => true) && EnabledModule.exists?(:project => Project.visible, :name => :issue_tracking)},
     :caption => :label_issue_plural
-  menu.push :checklists, {:controller => 'checklists', :action => 'index'},
-    :if => Proc.new {User.current.allowed_to?(:view_checklists, nil, :global => true) && EnabledModule.exists?(:project => Project.visible, :name => :checklist_tracking)},
-    :caption => :label_checklist_plural
+  # menu.push :checklists, {:controller => 'checklists', :action => 'index'},
+  #   :if => Proc.new {User.current.allowed_to?(:view_checklists, nil, :global => true) && EnabledModule.exists?(:project => Project.visible, :name => :checklist_tracking)},
+  #   :caption => :label_checklist_plural
   menu.push :time_entries, {:controller => 'timelog', :action => 'index'},
     :if => Proc.new {User.current.allowed_to?(:view_time_entries, nil, :global => true) && EnabledModule.exists?(:project => Project.visible, :name => :time_tracking)},
     :caption => :label_spent_time
@@ -305,7 +305,7 @@ Redmine::MenuManager.map :project_menu do |menu|
   menu.push :roadmap, { :controller => 'versions', :action => 'index' }, :param => :project_id,
               :if => Proc.new { |p| p.shared_versions.any? }
   menu.push :issues, { :controller => 'issues', :action => 'index' }, :param => :project_id, :caption => :label_issue_plural
-  menu.push :checklists, { :controller => 'checklists', :action => 'index' }, :param => :project_id, :caption => :label_checklist_plural
+  # menu.push :checklists, { :controller => 'checklists', :action => 'index' }, :param => :project_id, :caption => :label_checklist_plural
   menu.push :new_issue, { :controller => 'issues', :action => 'new', :copy_from => nil }, :param => :project_id, :caption => :label_issue_new,
               :html => { :accesskey => Redmine::AccessKeys.key_for(:new_issue) },
               :if => Proc.new { |p| Setting.new_item_menu_tab == '1' && Issue.allowed_target_trackers(p).any? },

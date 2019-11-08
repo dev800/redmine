@@ -16,6 +16,7 @@ class Checklist < ActiveRecord::Base
   belongs_to :priority, :class_name => 'IssuePriority'
   belongs_to :category, :class_name => 'IssueCategory'
 
+  has_many :time_entries, :dependent => :destroy
   has_many :journals, class_name: "Journal", :as => :journalized, :dependent => :destroy, :inverse_of => :journalized
   has_and_belongs_to_many :changesets, lambda {order("#{Changeset.table_name}.committed_on ASC, #{Changeset.table_name}.id ASC")}
 
@@ -1019,6 +1020,20 @@ class Checklist < ActiveRecord::Base
 
   def notify=(arg)
     @notify = arg
+  end
+
+  # Returns the number of hours spent on this issue
+  def spent_hours
+    @spent_hours ||= time_entries.sum(:hours) || 0.0
+  end
+
+  def total_spent_hours
+    @total_spent_hours ||=
+      if leaf?
+        spent_hours
+      else
+        self_and_descendants.joins(:time_entries).sum("#{TimeEntry.table_name}.hours").to_f || 0.0
+      end
   end
 
   def total_estimated_hours

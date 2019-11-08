@@ -12,7 +12,7 @@
     </div>
   </div>
   <div class="checklist-body">
-    <%= link_to checklist_path(checklist), :target => "_blank", :class => "checklist-row checklist-content" do %>
+    <%= link_to checklist_path(checklist), :class => "checklist-row checklist-content" do %>
       <span class="checklist-id _unit"><i class="checklist-flag">$</i><%= checklist.id %></span>
       <span class="checklist-subject _unit"><%= checklist.subject %></span>
     <% end %>

@@ -10,7 +10,7 @@
 
   $('.checklists[data-issue-id="<%= @checklist.issue_id %>"] .checklist[data-checklist-id="<%= @checklist.id %>"]').replaceWith(
     '<%= escape_javascript(render :partial => "checklists/checklist", :locals => { :checklist => @checklist }) %>'
-  )
+  );
 
   $('.checklist-show[data-checklist-id="<%= @checklist.id %>"]').replaceWith(
     '<%= escape_javascript(render :partial => "checklists/show", :locals => {
@@ -22,6 +22,8 @@
       :journals => @checklist.visible_journals_with_index
     }) %>'
   )
+
+  $('textarea').removeData('changed');
 <% else %>
   showErrorMessages("<%= @checklist.errors.full_messages.to_json %>", { title: "<%= l(:notice_fail_update) %>" })
 <% end %>

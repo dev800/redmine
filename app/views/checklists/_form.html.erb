@@ -38,7 +38,7 @@
           :rows => [[10, checklist.description.to_s.length / 50].max, 20].min,
           :data => {
             :auto_complete => true,
-            issues_url => auto_complete_issues_path(:project_id => issue.project, :q => '')
+            :issues_url => auto_complete_issues_path(:project_id => issue.project, :q => '')
           },
           :no_label => true %>
       <% end %>
