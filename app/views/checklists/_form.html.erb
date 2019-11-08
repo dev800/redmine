@@ -12,11 +12,6 @@
     </p>
   <% end %>
 
-  <% projects = checklist.allowed_target_projects(User.current, project) %>
-  <% if (checklist.safe_attribute?('project_id') || checklist.project_id_changed?) && (project.nil? || projects.length > 1) %>
-    <p><%= f.select :project_id, project_tree_options_for_select(projects, :selected => checklist.project), {:required => true} %></p>
-  <% end %>
-
   <% if checklist.safe_attribute?('tracker_id') || (checklist.persisted? && checklist.tracker_id_changed?) %>
     <p>
       <%= f.select :tracker_id, trackers_options_for_select(issue), {:required => true} %>
@@ -35,7 +30,7 @@
       <%= content_tag 'span', :id => "checklist_description_and_toolbar", :style => (checklist.new_record? ? nil : 'display:none') do %>
         <%= f.text_area :description, :cols => 60, :accesskey => accesskey(:edit),
           :class => 'wiki-edit',
-          :rows => [[10, checklist.description.to_s.length / 50].max, 20].min,
+          :rows => [[5, checklist.description.to_s.length / 50].max, 20].min,
           :data => {
             :auto_complete => true,
             :issues_url => auto_complete_issues_path(:project_id => issue.project, :q => '')

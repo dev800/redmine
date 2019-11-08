@@ -14,5 +14,5 @@
 
   $('textarea').removeData('changed');
 <% else %>
-  showErrorMessages("<%= @checklist.errors.full_messages.to_json %>", { title: "<%= l(:notice_fail_create) %>" })
+  showErrorMessages(<%= raw @checklist.errors.full_messages.to_json %>, { title: '<%= l(:notice_fail_create) %>' })
 <% end %>

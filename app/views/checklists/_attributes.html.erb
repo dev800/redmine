@@ -80,7 +80,7 @@
 </div>
 
 <% if checklist.safe_attribute? 'custom_field_values' %>
-<%= render :partial => 'issues/form_custom_fields' %>
+  <%= render :partial => 'checklists/form_custom_fields', :locals => { :checklist => checklist } %>
 <% end %>
 
 <% end %>

@@ -1,0 +1,24 @@
+<% custom_field_values = checklist.editable_custom_field_values %>
+<% custom_field_values_full_width = custom_field_values.select { |value| value.custom_field.full_width_layout? } %>
+<% custom_field_values -= custom_field_values_full_width %>
+
+<% if custom_field_values.present? %>
+<div class="splitcontent">
+<div class="splitcontentleft">
+<% i = 0 %>
+<% split_on = (custom_field_values.size / 2.0).ceil - 1 %>
+<% custom_field_values.each do |value| %>
+  <p><%= custom_field_tag_with_label :checklist, value, :required => checklist.required_attribute?(value.custom_field_id) %></p>
+<% if i == split_on -%>
+</div><div class="splitcontentright">
+<% end -%>
+<% i += 1 -%>
+<% end -%>
+</div>
+</div>
+<% end %>
+
+<% custom_field_values_full_width.each do |value| %>
+  <p><%= custom_field_tag_with_label :checklist, value, :required => checklist.required_attribute?(value.custom_field_id) %></p>
+  <%= wikitoolbar_for "checklist_custom_field_values_#{value.custom_field_id}", checklist_preview_path(id: checklist.id, :project_id => checklist.project, :issue_id => checklist.id) if value.custom_field.full_text_formatting? %>
+<% end %>

@@ -655,6 +655,15 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
   margin-top: 0;
 }
 
+#main .wiki h1,
+#main .wiki h2,
+#main .wiki h3,
+#main .wiki h4,
+#main .wiki h5,
+#main .wiki h6 {
+  margin-bottom: 0.4em;
+}
+
 #main .wiki h1 {
   font-size: 2em;
 }
@@ -1038,6 +1047,10 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
   padding-left: 128px!important;
 }
 
+#main, h1, h2, h3, h4, h5, h6, #main .wiki h1, #main .wiki h2, #main .wiki h3 {
+  font-family: Verdana,Tahoma,Arial,sans-serif;
+}
+
 #header {
   padding: 8px;
 }
@@ -1209,12 +1222,13 @@ select#checklist_done_ratio { width: 95px; }
   position: fixed;
   height: 100vh;
   width: 100vw;
+  max-width: 720px;
   top: 0px;
   right: 0px;
   bottom: 0px;
   left: 0px;
   overflow: hidden;
-  margin: 0px;
+  margin: 0 auto;
 }
 
 #dialog-modal {
@@ -1283,6 +1297,16 @@ select#checklist_done_ratio { width: 95px; }
 .checklist-show .checklist-info .attribute .value {overflow:auto; text-overflow: ellipsis;}
 .checklist-show .checklist-info.overdue .due-date .value { color: #c22; }
 
+.checklist-show .checklist-info .checklist-title {
+  border-left-width: 8px; border-left-style: solid; padding-left: 8px;
+}
+
+.checklist-show .checklist-info,
+div.issue {
+  padding: 8px;
+}
+
+
 .checklist-show .checklist-info .attributes .attribute,
 div.issue .attributes .attribute {
   padding-left: 120px;
@@ -1334,6 +1358,31 @@ div.issue .attributes .attribute .label {
 
 #content .tabs ul li a {
   padding: 4px 8px;
+}
+
+#issue-form .splitcontent,
+#checklist-form .splitcontent,
+div.checklist-show .splitcontent,
+div.issue .splitcontent {
+  width: 600px;
+}
+
+#issue-form .tabular p,
+#checklist-form .tabular p,
+div.checklist-show .tabular p,
+div.issue .tabular p {
+  padding-left: 90px;
+}
+
+#issue-form .tabular .attributes p,
+#checklist-form .tabular .attributes p,
+div.checklist-show .tabular .attributes p,
+div.issue .tabular .attributes p {
+  padding-left: 90px;
+}
+
+fieldset {
+  margin-bottom: 8px;
 }
 
 /**
@@ -1426,5 +1475,13 @@ div.issue .attributes .attribute .label {
 
   .checklists .checklist .checklist-subject {
     font-size: 1em !important;
+  }
+
+  .tabular .attributes p {
+    padding-left: 0;
+  }
+
+  .splitcontent {
+    width: auto;
   }
 }

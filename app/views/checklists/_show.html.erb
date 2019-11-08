@@ -8,7 +8,7 @@
           'remote-href' => checklist_edit_path(checklist)
         %>
       </div>
-      <h2 style="border-left-color: #<%= checklist.tracker.try(:flag_color) || 'fff' %>; border-left-width: 4px; border-left-style: solid; padding-left: 4px">
+      <h2 class="checklist-title" style="border-left-color: #<%= checklist.tracker.try(:flag_color) || 'fff' %>">
         <%= checklist.tracker.try(:name) %>
         $<%= checklist.id %> - <%= checklist.subject %>
       </h2>
