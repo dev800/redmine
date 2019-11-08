@@ -157,8 +157,6 @@ Layout/IndentFirstHashElement:
 # SupportedStyles: squiggly, active_support, powerpack, unindent
 Layout/IndentHeredoc:
   Exclude:
-    - 'test/unit/lib/redmine/syntax_highlighting/rouge_test.rb'
-    - 'test/unit/lib/redmine/unified_diff_test.rb'
     - 'test/unit/lib/redmine/wiki_formatting/macros_test.rb'
     - 'test/unit/lib/redmine/wiki_formatting/markdown_formatter_test.rb'
     - 'test/unit/lib/redmine/wiki_formatting/textile_formatter_test.rb'
@@ -322,11 +320,9 @@ Layout/SpaceInsideParens:
     - 'app/helpers/issues_helper.rb'
     - 'app/models/auth_source_ldap.rb'
     - 'app/models/repository/cvs.rb'
-    - 'app/models/repository/mercurial.rb'
     - 'lib/redmine/scm/adapters/abstract_adapter.rb'
     - 'lib/redmine/scm/adapters/cvs_adapter.rb'
     - 'lib/redmine/scm/adapters/git_adapter.rb'
-    - 'lib/redmine/scm/adapters/mercurial_adapter.rb'
     - 'lib/redmine/sudo_mode.rb'
     - 'lib/redmine/wiki_formatting/textile/formatter.rb'
     - 'lib/redmine/wiki_formatting/textile/redcloth3.rb'
@@ -1194,7 +1190,6 @@ Style/LineEndConcatenation:
 # Configuration parameters: IgnoredMethods.
 Style/MethodCallWithoutArgsParentheses:
   Exclude:
-    - 'app/models/repository/cvs.rb'
     - 'lib/redmine/export/pdf.rb'
     - 'lib/redmine/helpers/gantt.rb'
     - 'lib/redmine/scm/adapters/cvs_adapter.rb'
@@ -1218,10 +1213,6 @@ Style/MissingRespondToMissing:
 Style/MixinUsage:
   Exclude:
     - 'test/test_helper.rb'
-
-Style/MultilineBlockChain:
-  Exclude:
-    - 'lib/redmine/scm/adapters/mercurial_adapter.rb'
 
 # Cop supports --auto-correct.
 Style/MultilineIfModifier:
@@ -1252,8 +1243,6 @@ Style/MultilineTernaryOperator:
     - 'app/controllers/workflows_controller.rb'
     - 'app/helpers/settings_helper.rb'
     - 'app/models/issue_query.rb'
-    - 'app/models/issue_relation.rb'
-    - 'app/models/mail_handler.rb'
     - 'lib/redmine/ciphering.rb'
     - 'lib/redmine/scm/adapters/filesystem_adapter.rb'
     - 'lib/redmine/scm/adapters/git_adapter.rb'
@@ -1306,7 +1295,6 @@ Style/NestedParenthesizedCalls:
 Style/NestedTernaryOperator:
   Exclude:
     - 'app/helpers/queries_helper.rb'
-    - 'app/models/issue_relation.rb'
     - 'app/models/journal.rb'
 
 # Cop supports --auto-correct.
@@ -1426,7 +1414,6 @@ Style/RedundantInterpolation:
     - 'lib/redmine/wiki_formatting.rb'
     - 'test/functional/versions_controller_test.rb'
     - 'test/functional/watchers_controller_test.rb'
-    - 'test/unit/repository_mercurial_test.rb'
 
 # Cop supports --auto-correct.
 Style/RedundantParentheses:

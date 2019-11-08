@@ -69,7 +69,8 @@ class Tracker < ActiveRecord::Base
     joins(:projects).where(condition).distinct
   }
 
-  safe_attributes 'name',
+  safe_attributes(
+    'name',
     'flag_value',
     'flag_color',
     'background_color',
@@ -79,7 +80,7 @@ class Tracker < ActiveRecord::Base
     'position',
     'custom_field_ids',
     'project_ids',
-    'description'
+    'description')
 
   def to_s; name end
 
