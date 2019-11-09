@@ -16,6 +16,14 @@
   :checklists => @checklists,
   :issue => @issue
 } %>
+
+<div class="contextual">
+  <%= link_to l(:label_checklist_new), "javascript:;",
+    :class => 'icon icon-add new-checklist',
+    'remote-href' => checklist_new_path(issue_id: @issue.id)
+  %>
+</div>
+
 <% html_title "#{l(:label_checklists)} - #{@issue.tracker.name} ##{@issue.id}: #{@issue.subject}" %>
 
 <% content_for :sidebar do %>

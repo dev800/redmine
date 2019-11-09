@@ -1093,11 +1093,11 @@ function alert(msg, opts) {
 function showHTMLDialog(html) {
   var $modal = $('#dialog-modal');
   $modal.html(html);
-  $modal.find('input[type=text], textarea').first().focus();
   $modal.find('.close').show();
   $("#dialog-overlay").show();
   $("#dialog-modal-wrapper").show();
   $('body').addClass('modal-overflow-hidden');
+  $modal.find('input[type=text], textarea').first().focus();
 }
 
 function closeHTMLDialog() {
