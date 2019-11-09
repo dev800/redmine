@@ -1028,6 +1028,26 @@ module ApplicationHelper
                                :title => truncate_single_line_raw(changeset.comments, 100))
               end
             end
+          elsif sep == '$' || sep == '$$'
+            oid = identifier.to_i
+            case prefix
+            when nil
+              if oid.to_s == identifier &&
+                checklist = Checklist.visible.find_by_id(oid)
+                anchor = comment_id ? "note-#{comment_id}" : nil
+                url = checklist_url(checklist, :only_path => only_path, :anchor => anchor)
+                link =
+                  if sep == '$$'
+                    content = "#{checklist.tracker.name} ##{checklist.id}"
+                    title = "#{checklist.tracker.name} ##{checklist.id}: #{checklist.subject.truncate(100)} (#{checklist.status.name})"
+                    link_to(content, url, :title => title, :class => checklist.css_classes + " inner-link")
+                  else
+                    content = "#{checklist.tracker.name} ##{checklist.id}"
+                    title = "#{checklist.tracker.name} ##{checklist.id}: #{checklist.subject.truncate(100)} (#{checklist.status.name})"
+                    link_to(content, url, :title => title, :class => checklist.css_classes + " inner-link")
+                  end
+              end
+            end
           elsif sep == '#' || sep == '##'
             oid = identifier.to_i
             case prefix
@@ -1038,15 +1058,13 @@ module ApplicationHelper
                 url = issue_url(issue, :only_path => only_path, :anchor => anchor)
                 link =
                   if sep == '##'
-                    link_to("#{issue.tracker.name} ##{oid}#{comment_suffix}",
-                            url,
-                            :class => issue.css_classes,
-                            :title => "#{issue.tracker.name}: #{issue.subject.truncate(100)} (#{issue.status.name})") + ": #{issue.subject}"
+                    content = "#{issue.tracker.name} ##{issue.id}"
+                    title = "#{issue.tracker.name} ##{issue.id}: #{issue.subject.truncate(100)} (#{issue.status.name})"
+                    link_to(content, url, :title => title, :class => issue.css_classes + " inner-link")
                   else
-                    link_to("##{oid}#{comment_suffix}",
-                            url,
-                            :class => issue.css_classes,
-                            :title => "#{issue.tracker.name}: #{issue.subject.truncate(100)} (#{issue.status.name})")
+                    content = "#{issue.tracker.name} ##{issue.id}"
+                    title = "#{issue.tracker.name} ##{issue.id}: #{issue.subject.truncate(100)} (#{issue.status.name})"
+                    link_to(content, url, :title => title, :class => issue.css_classes + " inner-link")
                   end
               elsif identifier == 'note'
                 link = link_to("#note-#{comment_id}", "#note-#{comment_id}")

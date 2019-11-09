@@ -1050,6 +1050,14 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
   font-family: Verdana,Tahoma,Arial,sans-serif;
 }
 
+#main .wiki {
+  font-family: Verdana,Tahoma,Arial,sans-serif;
+}
+
+#main .wiki a.inner-link {
+  font-style: italic;
+}
+
 #header {
   padding: 8px;
 }
