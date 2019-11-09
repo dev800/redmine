@@ -1315,4 +1315,5 @@ zh:
   field_checklist_new: 新建检查项
   field_checklist_edit: 编辑检查项
   label_checklists: 检查列表
+  label_checklists_empty: 检查列表为空
   wrong_rgb_value: 错误的颜色值

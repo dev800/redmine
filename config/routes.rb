@@ -366,7 +366,7 @@ Rails.application.routes.draw do
   get 'checklists', :to => 'checklists#index', :as => :checklists
   post 'checklists', :to => 'checklists#create', :as => :checklist_create
   get '(issues/:issue_id/)checklists/new', :to => 'checklists#new', :as => :checklist_new
-  get 'checklists/preview', :to => 'checklists#preview', :as => :checklist_preview
+  post 'checklists/preview', :to => 'previews#checklist', :as => :checklist_preview
   get 'checklists/:id', :to => 'checklists#show', :as => :checklist
   put 'checklists/:id', :to => 'checklists#update', :as => :checklist_update
   delete 'checklists/:id', :to => 'checklists#destroy', :as => :checklist_delete

@@ -932,17 +932,17 @@ function toggleNewObjectDropdown() {
 }( jQuery ));
 
 $(document).ready(function(){
-  $('#content').on('change', 'input[data-disables], input[data-enables], input[data-shows]', toggleDisabledOnChange);
+  $(document).on('change', '#content input[data-disables], input[data-enables], input[data-shows]', toggleDisabledOnChange);
   toggleDisabledInit();
 
-  $('#history .tabs').on('click', 'a', function(e){
+  $(document).on('click', '#history .tabs a', function(e){
     var tab = $(e.target).attr('id').replace('tab-','');
     document.cookie = 'history_last_tab=' + tab
   });
 });
 
 $(document).ready(function(){
-  $('#content').on('click', 'div.jstTabs a.tab-preview', function(event){
+  $(document).on('click', '#content div.jstTabs a.tab-preview', function(event) {
     var tab = $(event.target);
 
     var url = tab.data('url');
@@ -1104,6 +1104,7 @@ function closeHTMLDialog() {
   $('#dialog-modal-wrapper').hide();
   $('#dialog-overlay').hide();
   $('body').removeClass('modal-overflow-hidden');
+  $('#dialog-modal-wrapper textarea').removeData('changed');
 }
 
 function showErrorMessages(fullMessages, opts) {

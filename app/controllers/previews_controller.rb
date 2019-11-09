@@ -30,6 +30,15 @@ class PreviewsController < ApplicationController
     render :partial => 'common/preview'
   end
 
+  def checklist
+    @checklist = Checklist.visible.find_by_id(params[:checklist_id]) unless params[:checklist_id].blank?
+    if @checklist
+      @previewed = @checklist
+    end
+    @text = params[:text] ? params[:text] : nil
+    render :partial => 'common/preview'
+  end
+
   def news
     if params[:id].present? && news = News.visible.find_by_id(params[:id])
       @previewed = news

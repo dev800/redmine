@@ -35,7 +35,7 @@
                   :issues_url => auto_complete_issues_path(:project_id => issue.project, :q => '')
               },
               :no_label => true %>
-        <%= wikitoolbar_for 'checklist_notes', checklist_preview_path(:project_id => project, :checklist_id => checklist.id) %>
+        <%= wikitoolbar_for 'checklist_notes', checklist_preview_path(:project_id => issue.project, :issue_id => issue.id, :checklist_id => checklist.id) %>
 
         <% if checklist.safe_attribute? 'private_notes' %>
           <%= f.check_box :private_notes, :no_label => true %> <label for="checklist_private_notes"><%= l(:field_private_notes) %></label>

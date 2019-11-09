@@ -18,7 +18,7 @@
     <% end %>
     <div class="checklist-row">
       <div class="checklist-actions">
-        <span class="checklist-tracker _unit"><%= checklist.tracker.try(:name) %></span>
+        <span class="checklist-tracker _unit" style="color: #<%= checklist.tracker.try(:flag_color) || '999999' %>"><%= checklist.tracker.try(:name) %></span>
         <span class="checklist-status _unit"><%= checklist.status.try(:name) %></span>
         <%= link_to l(:button_edit), "javascript:;",
           :class => 'checklist-edit _unit',

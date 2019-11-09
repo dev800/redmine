@@ -53,7 +53,7 @@ module ApplicationHelper
       name = h(user.name(options[:format]))
       if user.active? || (User.current.admin? && user.logged?)
         only_path = options[:only_path].nil? ? true : options[:only_path]
-        link_to name, user_url(user, :only_path => only_path), :class => user.css_classes
+        link_to "#{options[:name_prefix]}#{name}", user_url(user, :only_path => only_path), :class => user.css_classes
       else
         name
       end
@@ -1153,7 +1153,7 @@ module ApplicationHelper
           elsif sep == "@"
             name = remove_double_quotes(identifier)
             u = User.visible.find_by("LOWER(login) = :s AND type = 'User'", :s => name.downcase)
-            link = link_to_user(u, :only_path => only_path) if u
+            link = link_to_user(u, :only_path => only_path, :name_prefix => "@") if u
           end
         end
         (leading + (link || "#{project_prefix}#{prefix}#{repo_prefix}#{sep}#{identifier}#{comment_suffix}"))

@@ -13,6 +13,12 @@
   )
 
   $('textarea').removeData('changed');
+
+  if ($('.checklists[data-issue-id="<%= @checklist.issue_id %>"] > .checklist').length > 0) {
+    $('.checklists-empty[data-issue-id="<%= @checklist.issue_id %>"]').hide();
+  } else {
+    $('.checklists-empty[data-issue-id="<%= @checklist.issue_id %>"]').show();
+  }
 <% else %>
   showErrorMessages(<%= raw @checklist.errors.full_messages.to_json %>, { title: '<%= l(:notice_fail_create) %>' })
 <% end %>
