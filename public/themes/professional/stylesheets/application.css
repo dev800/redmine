@@ -1448,6 +1448,7 @@ tr.issue td.last_updated_by {
   color: #959595;
   margin-bottom: 0.8em;
   padding-left: 2em;
+  padding-right: 0.6em;
 }
 
 #content .tabs ul li a {
@@ -1464,10 +1465,7 @@ div.issue .splitcontent {
 #issue-form .tabular p,
 #checklist-form .tabular p,
 div.checklist-show .tabular p,
-div.issue .tabular p {
-  padding-left: 90px;
-}
-
+div.issue .tabular p,
 #issue-form .tabular .attributes p,
 #checklist-form .tabular .attributes p,
 div.checklist-show .tabular .attributes p,
@@ -1560,6 +1558,24 @@ fieldset {
 
   fieldset#filters td.values select {
     min-width: auto !important;
+  }
+
+  #issue-form .splitcontent,
+  #checklist-form .splitcontent,
+  div.checklist-show .splitcontent,
+  div.issue .splitcontent {
+    width: 100%;
+  }
+
+  #issue-form .tabular p,
+  #checklist-form .tabular p,
+  div.checklist-show .tabular p,
+  div.issue .tabular p,
+  #issue-form .tabular .attributes p,
+  #checklist-form .tabular .attributes p,
+  div.checklist-show .tabular .attributes p,
+  div.issue .tabular .attributes p {
+    padding-left: 0;
   }
 
   #main .tabular label,
