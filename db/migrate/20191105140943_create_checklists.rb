@@ -5,11 +5,18 @@ class CreateChecklists < ActiveRecord::Migration[5.2]
     add_column :time_entries, :checklist_id, :integer
     add_index :time_entries, [:checklist_id], :name => :time_entries_checklist_id
 
+    add_column :enumerations, :flag_color, :string, default: "ffffff", null: false
+    add_column :enumerations, :color, :string, default: "000000", null: false
+    add_column :enumerations, :background_color, :string, default: "ffffff", null: false
+    add_column :enumerations, :flag_value, :string, null: false
+
     add_column :issue_statuses, :flag_color, :string, default: "ffffff", null: false
+    add_column :issue_statuses, :color, :string, default: "000000", null: false
     add_column :issue_statuses, :background_color, :string, default: "ffffff", null: false
     add_column :issue_statuses, :flag_value, :string, null: false
 
     add_column :trackers, :flag_color, :string, default: "ffffff", null: false
+    add_column :trackers, :color, :string, default: "000000", null: false
     add_column :trackers, :background_color, :string, default: "ffffff", null: false
     add_column :trackers, :flag_value, :string, null: false
 

@@ -44,10 +44,7 @@ class IssuesController < ApplicationController
   def checklists
     @journals = @issue.visible_journals_with_index
     @project = @issue.project
-
-    @checklists = @issue.checklists
-      .preload(:project, :status, :tracker, :priority, :author, :assigned_to, {:custom_values => :custom_field})
-      .order(:position => :asc)
+    @checklists = @issue.queried_checklists
 
     respond_to do |format|
       format.html {

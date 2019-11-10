@@ -1066,9 +1066,9 @@ $(document).ready(defaultFocus);
 $(document).ready(setupAttachmentDetail);
 $(document).ready(setupTabs);
 $(document).ready(setupFilePreviewNavigation);
-$(document).on('focus', '[data-auto-complete=true]', function(event) {
-  inlineAutoComplete(event.target);
-});
+// $(document).on('focus', '[data-auto-complete=true]', function(event) {
+//   inlineAutoComplete(event.target);
+// });
 
 // Begin happy add /////////////////////////////////////////
 function escapeHTML(html) {

@@ -36,18 +36,21 @@ class IssueStatus < ActiveRecord::Base
   validates_length_of :name, :maximum => 30
   validates_inclusion_of :default_done_ratio, :in => 0..100, :allow_nil => true
   validates :flag_color, format: {with: COLOR_REGEX, message: l(:wrong_rgb_value)}, presence: true
+  validates :color, format: {with: COLOR_REGEX, message: l(:wrong_rgb_value)}, presence: true
   validates :background_color, format: {with: COLOR_REGEX, message: l(:wrong_rgb_value)}, presence: true
 
   scope :sorted, lambda { order(:position) }
   scope :named, lambda {|arg| where("LOWER(#{table_name}.name) = LOWER(?)", arg.to_s.strip)}
 
-  safe_attributes 'name',
+  safe_attributes(
+    'name',
     'flag_value',
     'flag_color',
+    'color',
     'background_color',
     'is_closed',
     'position',
-    'default_done_ratio'
+    'default_done_ratio')
 
   # Update all the +Issues+ setting their done_ratio to the value of their +IssueStatus+
   def self.update_issue_done_ratios

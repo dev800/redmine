@@ -152,6 +152,12 @@ class Issue < ActiveRecord::Base
     end
   end
 
+  def queried_checklists
+    @queried_checklists ||= self.checklists
+      .preload(:project, :status, :tracker, :priority, :author, :assigned_to, {:custom_values => :custom_field})
+      .order(:position => :asc, :id => :asc)
+  end
+
   # Returns true if usr or current user is allowed to view the issue
   def visible?(usr=nil)
     (usr || User.current).allowed_to?(:view_issues, self.project) do |role, user|

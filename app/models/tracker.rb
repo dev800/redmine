@@ -41,6 +41,7 @@ class Tracker < ActiveRecord::Base
   validates_length_of :name, :maximum => 30
   validates_length_of :description, :maximum => 255
   validates :flag_color, format: {with: ::IssueStatus::COLOR_REGEX, message: l(:wrong_rgb_value)}, presence: true
+  validates :color, format: {with: ::IssueStatus::COLOR_REGEX, message: l(:wrong_rgb_value)}, presence: true
   validates :background_color, format: {with: ::IssueStatus::COLOR_REGEX, message: l(:wrong_rgb_value)}, presence: true
 
   scope :sorted, lambda { order(:position) }
@@ -73,6 +74,7 @@ class Tracker < ActiveRecord::Base
     'name',
     'flag_value',
     'flag_color',
+    'color',
     'background_color',
     'default_status_id',
     'is_in_roadmap',
