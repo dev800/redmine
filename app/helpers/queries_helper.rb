@@ -224,7 +224,7 @@ module QueriesHelper
     when :id
       link_to value, issue_path(item)
     when :subject
-      link_to value, issue_path(item)
+      link_to value.truncate(128), issue_path(item)
     when :parent
       value ? (value.visible? ? link_to_issue(value, :subject => false) : "##{value.id}") : ''
     when :description

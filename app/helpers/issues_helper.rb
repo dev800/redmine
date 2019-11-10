@@ -123,7 +123,9 @@ module IssuesHelper
              content_tag('td',
                          link_to_issue(
                            child,
-                           :project => (issue.project_id != child.project_id)),
+                           :project => (issue.project_id != child.project_id),
+                           :truncate => 128
+                         ),
                          :class => 'subject', :style => 'width: 50%') +
              content_tag('td', h(child.status), :class => 'status') +
              content_tag('td', format_date(child.start_date), :class => 'start_date') +

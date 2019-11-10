@@ -616,9 +616,10 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
 }
 
 #main .wiki blockquote {
-  border-left: .25em solid #dfe2e5;
+  border-left: .25em solid #8d8f91;
   color: #6a737d;
   padding: 0 1em;
+  font-size: 12px;
 }
 
 #main .wiki blockquote>:first-child {
@@ -679,7 +680,7 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
 #main .wiki h4,
 #main .wiki h5,
 #main .wiki h6 {
-  margin-bottom: 0.4em;
+  margin-bottom: 0.2em;
 }
 
 #main .wiki h1 {
@@ -1065,12 +1066,19 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
   padding-left: 128px!important;
 }
 
-#main, h1, h2, h3, h4, h5, h6, #main .wiki h1, #main .wiki h2, #main .wiki h3 {
+#main,
+#main .wiki,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+#main .wiki h1,
+#main .wiki h2,
+#main .wiki h3 {
   font-family: Verdana,Tahoma,Arial,sans-serif;
-}
-
-#main .wiki {
-  font-family: Verdana,Tahoma,Arial,sans-serif;
+  word-break: break-all;
 }
 
 #main .wiki a.inner-link {
@@ -1338,9 +1346,8 @@ select#checklist_done_ratio { width: 95px; }
 
 .checklist-show .checklist-info,
 div.issue {
-  padding: 8px;
+  padding: 4px 8px;
 }
-
 
 .checklist-show .checklist-info .attributes .attribute,
 div.issue .attributes .attribute {
@@ -1366,8 +1373,30 @@ div.issue .attributes .attribute .label {
   margin-bottom: 0.6em;
 }
 
-#main a {
-  word-break: break-all;
+/* tr.issue td.subject,
+tr.issue td.category,
+tr.issue td.assigned_to,
+tr.issue td.last_updated_by,
+tr.issue td.string,
+tr.issue td.text,
+tr.issue td.list,
+tr.issue td.relations,
+tr.issue td.parent {
+  white-space: nowrap;
+} */
+
+table.list td {
+  padding: 4px 6px;
+}
+
+tr.issue td.subject a {
+  min-width: 120px;
+  display: block;
+}
+
+tr.issue td.assigned_to,
+tr.issue td.last_updated_by {
+  white-space: nowrap;
 }
 
 #main a.checklist.closed,
@@ -1388,23 +1417,36 @@ div.issue .attributes .attribute .label {
 #main .journal {
   overflow: auto;
   background: #ffffff;
-  padding: 0.4em 0.6em 0.6em;
-  margin: 0.4em;
+  padding: 0;
+  margin: 0.4em 0.4em 0.8em;
   border-radius: 4px;
   border: 1px solid #F2F2F2;
   box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.1);
 }
 
+#main .journal .wiki {
+  padding: 0.4em;
+}
+
+#main .contextual {
+  float: right;
+  white-space: nowrap;
+  line-height: 1.4em;
+  margin: 0;
+  padding: 8px;
+  font-size: 0.9em;
+}
+
 #main .journal h4.note-header {
   border-bottom: dotted 1px #c0c0c0;
-  padding-bottom: 0.5em;
-  margin-bottom: 0.5em;
+  padding: 0.45em 0.8em;
+  margin-bottom: 0;
 }
 
 #main .journal ul.details,
 #main ul.revision-info {
   color: #959595;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.8em;
   padding-left: 2em;
 }
 
