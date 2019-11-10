@@ -35,7 +35,8 @@ class AuthSource < ActiveRecord::Base
 
   acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
 
-  safe_attributes 'name',
+  safe_attributes(
+    'name',
     'host',
     'port',
     'account',
@@ -49,7 +50,7 @@ class AuthSource < ActiveRecord::Base
     'tls',
     'verify_peer',
     'filter',
-    'timeout'
+    'timeout')
 
   def authenticate(login, password)
   end
