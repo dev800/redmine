@@ -98,9 +98,9 @@ module ApplicationHelper
       end
     end
     only_path = options[:only_path].nil? ? true : options[:only_path]
+    text = subject ? "#{text}: #{subject}" : text
     s = link_to(text, issue_url(issue, :only_path => only_path),
                 :class => issue.css_classes, :title => title)
-    s << h(": #{subject}") if subject
     s = h("#{issue.project} - ") + s if options[:project]
     s
   end

@@ -74,14 +74,6 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
   font-family: 90% Verdana,Tahoma,Arial,sans-serif;
 }
 
-#main .wiki,
-#main .wiki h1,
-#main .wiki h2,
-#main .wiki h3,
-#main .wiki h4 {
-  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
-}
-
 #main .wiki .octicon {
   display: inline-block;
   fill: currentColor;
@@ -133,7 +125,7 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
   -webkit-text-size-adjust: 100%;
   color: #24292e;
   line-height: 1.5;
-  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
   font-size: 16px;
   line-height: 1.5;
   word-wrap: break-word;
@@ -1077,7 +1069,6 @@ h6,
 #main .wiki h1,
 #main .wiki h2,
 #main .wiki h3 {
-  font-family: Verdana,Tahoma,Arial,sans-serif;
   word-break: break-all;
 }
 
@@ -1389,6 +1380,8 @@ table.list td {
   padding: 4px 6px;
 }
 
+tr.time-entry td.issue a,
+tr.time-entry td.subject a,
 tr.issue td.subject a {
   min-width: 120px;
   display: block;
@@ -1471,6 +1464,24 @@ div.issue .tabular p,
 div.checklist-show .tabular .attributes p,
 div.issue .tabular .attributes p {
   padding-left: 90px;
+}
+
+tr.time-entry td.issue,
+tr.time-entry td.comments,
+tr.time-entry td.subject,
+tr.time-entry td.activity,
+tr.time-entry td.project {
+  white-space: nowrap;
+}
+
+tr.time-entry td.issue,
+tr.time-entry td.subject {
+  white-space: normal;
+}
+
+.jstEditor textarea,
+.jstEditor iframe {
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
 }
 
 fieldset {
