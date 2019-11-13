@@ -1058,7 +1058,6 @@ function inlineAutoComplete(element) {
     tribute.attach(element);
 }
 
-
 $(document).ready(setupAjaxIndicator);
 $(document).ready(hideOnLoad);
 $(document).ready(addFormObserversForDoubleSubmit);
@@ -1140,6 +1139,15 @@ $(document).on('click', '[remote-href]', function(event) {
       });
     }).complete(function() { })
 });
+
+$(function() {
+  $( ".checklists.ui-sortable" ).sortable({
+    stop: function() {
+      var $checklists = $(this);
+      debugger
+    }
+  });
+})
 
 $(document).on('click', '.ui-widget-overlay', function() {
   $(this).remove();

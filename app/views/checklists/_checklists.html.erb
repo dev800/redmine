@@ -1,4 +1,4 @@
-<ul class="checklists" data-issue-id="<%= issue.id %>">
+<ul class="checklists ui-sortable" data-issue-id="<%= issue.id %>">
   <% checklists.each do |checklist| %>
     <%= render :partial => "checklists/checklist", :locals => { :checklist => checklist } %>
   <% end %>

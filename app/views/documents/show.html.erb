@@ -24,8 +24,10 @@
 <%= textilizable @document, :description, :attachments => @document.attachments %>
 </div>
 
-<h3><%= l(:label_attachment_plural) %></h3>
-<%= link_to_attachments @document, :thumbnails => true %>
+<div class="attachments-wrapper">
+  <h3><%= l(:label_attachment_plural) %></h3>
+  <%= link_to_attachments @document, :thumbnails => true %>
+</div>
 
 <% if authorize_for('documents', 'add_attachment') %>
 <p><%= link_to l(:label_attachment_new), {}, :onclick => "$('#add_attachment_form').show(); return false;",

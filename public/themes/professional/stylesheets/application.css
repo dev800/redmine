@@ -1070,6 +1070,8 @@ h6,
 #main .wiki h2,
 #main .wiki h3 {
   word-break: break-all;
+  padding-bottom: 0.32em;
+  margin-bottom: 0.52em;
 }
 
 #main .wiki a.inner-link {
@@ -1488,6 +1490,52 @@ fieldset {
   margin-bottom: 8px;
 }
 
+.autoscroll {
+  overflow-x: initial;
+}
+
+.attachments-wrapper {
+  box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+}
+
+h3.documents-group-title {
+  margin-top: 1.2em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  background: #efefef;
+}
+
+#comments .comment {
+  box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  margin: 2px 4px 8px;
+}
+
+#comments .comment .wiki {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  padding-top: 0.2em;
+}
+
+#comments .comment .contextual {
+  padding: 0 4px 4px;
+}
+
+.documents .document,
+.version-article,
+.news-article {
+  box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  margin: 2px 4px 8px;
+}
+
+div#roadmap .related-issues {
+  margin-bottom: 0;
+}
+
 /**
   #################################################
   #################################################
@@ -1604,5 +1652,9 @@ fieldset {
 
   .splitcontent {
     width: auto;
+  }
+
+  .autoscroll {
+    overflow-x: auto;
   }
 }

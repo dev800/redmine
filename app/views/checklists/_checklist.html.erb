@@ -1,4 +1,4 @@
-<li class="checklist clearfix" data-checklist-id="<%= checklist.id %>" style="border-left-color: #<%= checklist.priority.try(:color) || '999999' %>; background-color: #<%= checklist.status.try(:background_color) || 'fff' %>">
+<li class="checklist ui-sortable-handle clearfix" data-checklist-id="<%= checklist.id %>" style="border-left-color: #<%= checklist.priority.try(:color) || '999999' %>; background-color: #<%= checklist.status.try(:background_color) || 'fff' %>">
   <div class="checklist-info">
     <div class="checklist-row">
       <span class="checklist-author _unit"><%= checklist.author ? link_to_user(checklist.author) : "?" %></span>

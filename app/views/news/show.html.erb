@@ -35,6 +35,7 @@
   <p><%= toggle_link l(:label_comment_add), "add_comment_form", :focus => "comment_comments", :scroll => "comment_comments" %></p>
 <% end %>
 <% @comments.each do |comment| %>
+  <div class="comment">
     <% next if comment.new_record? %>
     <div class="contextual">
     <%= link_to_if_authorized l(:button_delete), {:controller => 'comments', :action => 'destroy', :id => @news, :comment_id => comment},
@@ -46,6 +47,7 @@
     <div class="wiki">
     <%= textilizable(comment.comments) %>
     </div>
+  </div>
 <% end if @comments.any? %>
 </div>
 

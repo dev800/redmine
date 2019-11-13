@@ -19,8 +19,10 @@
 <% if @grouped.empty? %><p class="nodata"><%= l(:label_no_data) %></p><% end %>
 
 <% @grouped.keys.sort.__send__(@sort_by == 'date' ? :reverse_each : :each) do |group| %>
-    <h3><%= group %></h3>
-    <%= render :partial => 'documents/document', :collection => @grouped[group] %>
+    <h3 class="documents-group-title"><%= group %></h3>
+    <div class="documents">
+      <%= render :partial => 'documents/document', :collection => @grouped[group] %>
+    </div>
 <% end %>
 
 <% content_for :sidebar do %>
