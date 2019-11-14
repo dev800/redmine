@@ -3,13 +3,12 @@ class ChecklistsController < ApplicationController
   default_search_scope :checklist
 
   before_action :find_checklist, :only => [:show, :edit, :update]
-  before_action :find_checklists, :only => [:destroy]
   before_action :find_optional_project, :only => [:index, :new, :create]
-  before_action :authorize, :except => [:index, :show, :edit, :new, :create]
+  before_action :authorize, :except => [:index, :show, :edit, :new, :create, :sort]
   before_action :find_issue, :only => [:new, :create]
   before_action :build_new_checklist_from_params, :only => [:new, :create]
   accept_rss_auth :index, :show
-  accept_api_auth :index, :show, :create, :update, :destroy
+  accept_api_auth :index, :show, :create, :update, :destroy, :sort
   menu_item :checklists
 
   rescue_from Query::StatementInvalid, :with => :query_statement_invalid
@@ -83,7 +82,29 @@ class ChecklistsController < ApplicationController
   end
 
   def destroy
+  end
 
+  def sort
+    params_checklists = (params[:checklists] || {}).values
+
+    ids = params_checklists.map do |checklist|
+      checklist['id'].to_i
+    end
+
+    checklists = Checklist.find(ids)
+    checklist_positions = checklists.map(&:position).sort
+    index = 0
+
+    checklists.sort do |checklist1, checklist2|
+      ids.index(checklist1.id) <=> ids.index(checklist2.id)
+    end.map do |checklist|
+      position = (checklist_positions[index] || checklist.position).to_i
+      index += 1
+
+      if position != checklist.position
+        checklist.update_columns(position: position)
+      end
+    end
   end
 
   protected

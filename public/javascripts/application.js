@@ -1143,8 +1143,23 @@ $(document).on('click', '[remote-href]', function(event) {
 $(function() {
   $( ".checklists.ui-sortable" ).sortable({
     stop: function() {
-      var $checklists = $(this);
-      debugger
+      var $checklists = $(this).find(".checklist[data-checklist-id]");
+      var paramsChecklists = [];
+
+      $.each($checklists, function() {
+        var $this = $(this);
+        var id = parseInt($this.attr('data-checklist-id'))
+        var position = parseInt($this.attr('data-checklist-position'))
+
+        paramsChecklists.push({
+          id: id,
+          position: position
+        })
+      })
+
+      $.post("/checklists/sort.js", {
+        checklists: paramsChecklists
+      })
     }
   });
 })
