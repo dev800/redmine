@@ -209,8 +209,10 @@ issue_list_default_columns:
   default:
   - tracker
   - status
-  - priority
   - subject
+  - priority
+  - importance
+  - parent
   - assigned_to
   - updated_on
 issue_list_default_totals:

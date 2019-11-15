@@ -4,6 +4,7 @@ class ChangeUpgradeColumns < ActiveRecord::Migration[5.2]
     add_column :issues, :agile_visible, :boolean, :default => true, :null => false
     add_column :issues, :agile_position, :integer, :default => 0, :null => false
     add_column :issues, :liable_id, :integer
+    add_column :issues, :deadline_date, :date
 
     add_column :issue_statuses, :agile_status, :integer, :default => 0, :null => false
     add_column :issue_statuses, :agile_color, :string, default: "000000", null: false

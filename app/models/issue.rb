@@ -58,7 +58,7 @@ class Issue < ActiveRecord::Base
                             :author_key => :author_id
 
   DONE_RATIO_OPTIONS = %w(issue_field issue_status)
-  IMPORTANCE_VALUES = [1, 2, 3, 4]
+  IMPORTANCE_VALUES = [5, 4, 3, 2]
 
   attr_writer :deleted_attachment_ids
   delegate :notes, :notes=, :private_notes, :private_notes=, :to => :current_journal, :allow_nil => true

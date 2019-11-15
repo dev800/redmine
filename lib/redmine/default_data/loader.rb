@@ -58,6 +58,13 @@ module Redmine
                                                       :view_checklists,
                                                       :add_checklists,
                                                       :edit_checklists,
+                                                      :edit_own_checklists,
+                                                      :set_checklists_private,
+                                                      :set_own_checklists_private,
+                                                      :add_checklist_notes,
+                                                      :edit_checklist_notes,
+                                                      :edit_own_checklist_notes,
+                                                      :delete_checklists,
                                                       :view_issues,
                                                       :add_issues,
                                                       :edit_issues,
@@ -74,6 +81,9 @@ module Redmine
                                                       :view_news,
                                                       :comment_news,
                                                       :view_documents,
+                                                      :add_documents,
+                                                      :edit_documents,
+                                                      :delete_documents,
                                                       :view_wiki_pages,
                                                       :view_wiki_edits,
                                                       :edit_wiki_pages,
@@ -95,6 +105,13 @@ module Redmine
                                                     :add_issue_notes,
                                                     :view_checklists,
                                                     :add_checklists,
+                                                    :edit_own_checklists,
+                                                    :set_checklists_private,
+                                                    :set_own_checklists_private,
+                                                    :add_checklist_notes,
+                                                    :edit_checklist_notes,
+                                                    :edit_own_checklist_notes,
+                                                    :delete_checklists,
                                                     :save_queries,
                                                     :view_gantt,
                                                     :view_calendar,
@@ -146,18 +163,202 @@ module Redmine
                                                            :view_changesets]
 
             # Issue statuses
-            new       = IssueStatus.create!(:name => l(:default_issue_status_new), :is_closed => false, :position => 1, :flag_value => 'new')
-            solving  = IssueStatus.create!(:name => l(:default_issue_status_solving), :is_closed => false, :position => 2, :flag_value => 'solving')
-            resolved  = IssueStatus.create!(:name => l(:default_issue_status_resolved), :is_closed => false, :position => 3, :flag_value => 'resolved')
-            feedback  = IssueStatus.create!(:name => l(:default_issue_status_feedback), :is_closed => false, :position => 4, :flag_value => 'feedback')
-            closed    = IssueStatus.create!(:name => l(:default_issue_status_closed), :is_closed => true, :position => 5, :flag_value => 'closed')
-            rejected  = IssueStatus.create!(:name => l(:default_issue_status_rejected), :is_closed => true, :position => 6, :flag_value => 'rejected')
+            requirement = IssueStatus.create!(
+              :name => l(:default_issue_status_requirement),
+              :is_closed => false,
+              :position => 1,
+              :color => '000000',
+              :background_color => 'ddeaf7',
+              :flag_color => '03a9f4',
+              :flag_value => 'requirement'
+            )
+
+            pending = IssueStatus.create!(
+              :name => l(:default_issue_status_pending),
+              :is_closed => false,
+              :position => 2,
+              :color => '000000',
+              :background_color => 'f7e2d6',
+              :flag_color => 'ff9800',
+              :flag_value => 'pending'
+            )
+
+            rejected = IssueStatus.create!(
+              :name => l(:default_issue_status_rejected),
+              :is_closed => false,
+              :position => 3,
+              :color => '000000',
+              :background_color => 'ffcca7',
+              :flag_color => 'ff9800',
+              :flag_value => 'rejected'
+            )
+
+            unsolved = IssueStatus.create!(
+              :name => l(:default_issue_status_unsolved),
+              :is_closed => false,
+              :position => 4,
+              :color => '000000',
+              :background_color => 'ffeadc',
+              :flag_color => 'ff9800',
+              :flag_value => 'unsolved'
+            )
+
+            solving = IssueStatus.create!(
+              :name => l(:default_issue_status_solving),
+              :is_closed => false,
+              :position => 5,
+              :color => '000000',
+              :background_color => 'e1efda',
+              :flag_color => '4caf50',
+              :flag_value => 'solving'
+            )
+
+            alpha = IssueStatus.create!(
+              :name => l(:default_issue_status_alpha),
+              :is_closed => false,
+              :position => 6,
+              :color => '000000',
+              :background_color => 'ebf3e5',
+              :flag_color => '4caf50',
+              :flag_value => 'alpha'
+            )
+
+            bate = IssueStatus.create!(
+              :name => l(:default_issue_status_bate),
+              :is_closed => false,
+              :position => 7,
+              :color => '000000',
+              :background_color => 'ecffde',
+              :flag_color => '4caf50',
+              :flag_value => 'bate'
+            )
+
+            qualified = IssueStatus.create!(
+              :name => l(:default_issue_status_qualified),
+              :is_closed => false,
+              :position => 8,
+              :color => '000000',
+              :background_color => 'f3e4ff',
+              :flag_color => '9c27b0',
+              :flag_value => 'qualified'
+            )
+
+            released = IssueStatus.create!(
+              :name => l(:default_issue_status_released),
+              :is_closed => false,
+              :position => 9,
+              :color => '000000',
+              :background_color => 'efd9ff',
+              :flag_color => '9c27b0',
+              :flag_value => 'released'
+            )
+
+            finished = IssueStatus.create!(
+              :name => l(:default_issue_status_finished),
+              :is_closed => true,
+              :position => 10,
+              :color => '000000',
+              :background_color => 'e3ffd0',
+              :flag_color => '009688',
+              :flag_value => 'finished'
+            )
+
+            cancel = IssueStatus.create!(
+              :name => l(:default_issue_status_cancel),
+              :is_closed => true,
+              :position => 11,
+              :color => '000000',
+              :background_color => 'e8e8e8',
+              :flag_color => '9e9e9e',
+              :flag_value => 'cancel'
+            )
 
             # Trackers
-            Tracker.create!(:name => l(:default_tracker_bug),     :default_status_id => new.id, :is_in_chlog => true,  :is_in_roadmap => false, :position => 1, :flag_value => 'bug')
-            Tracker.create!(:name => l(:default_tracker_feature), :default_status_id => new.id, :is_in_chlog => true,  :is_in_roadmap => true,  :position => 2, :flag_value => 'feature')
-            Tracker.create!(:name => l(:default_tracker_support), :default_status_id => new.id, :is_in_chlog => false, :is_in_roadmap => false, :position => 3, :flag_value => 'support')
+            Tracker.create!(
+              :name => l(:default_tracker_feature),
+              :default_status_id => requirement.id,
+              :is_in_chlog => true,
+              :is_in_roadmap => true,
+              :position => 1,
+              :color => '8bc34a',
+              :background_color => 'c6dfb4',
+              :flag_color => 'c6dfb4',
+              :flag_value => 'feature'
+            )
 
+            Tracker.create!(
+              :name => l(:default_tracker_task),
+              :default_status_id => pending.id,
+              :is_in_chlog => true,
+              :is_in_roadmap => true,
+              :position => 2,
+              :color => '03a9f4',
+              :background_color => 'b4c6e7',
+              :flag_color => 'b4c6e7',
+              :flag_value => 'task'
+            )
+
+            Tracker.create!(
+              :name => l(:default_tracker_support),
+              :default_status_id => pending.id,
+              :is_in_chlog => false,
+              :is_in_roadmap => false,
+              :position => 3,
+              :color => '00bcd4',
+              :background_color => '9bc2e6',
+              :flag_color => '9bc2e6',
+              :flag_value => 'support'
+            )
+
+            Tracker.create!(
+              :name => l(:default_tracker_bug),
+              :default_status_id => pending.id,
+              :is_in_chlog => true,
+              :is_in_roadmap => false,
+              :position => 4,
+              :color => 'ff5722',
+              :background_color => 'ffc7ce',
+              :flag_color => 'ffc7ce',
+              :flag_value => 'bug'
+            )
+
+            Tracker.create!(
+              :name => l(:default_tracker_checklist),
+              :default_status_id => pending.id,
+              :is_in_chlog => true,
+              :is_in_roadmap => false,
+              :position => 5,
+              :color => 'ffc107',
+              :background_color => 'ffeb9c',
+              :flag_color => 'ffc107',
+              :flag_value => 'checklist'
+            )
+
+            Tracker.create!(
+              :name => l(:default_tracker_cases),
+              :default_status_id => pending.id,
+              :is_in_chlog => true,
+              :is_in_roadmap => false,
+              :position => 6,
+              :color => '3dc506',
+              :background_color => 'c6dfb4',
+              :flag_color => 'c6dfb4',
+              :flag_value => 'cases'
+            )
+
+            Tracker.create!(
+              :name => l(:default_tracker_release),
+              :default_status_id => pending.id,
+              :is_in_chlog => true,
+              :is_in_roadmap => false,
+              :position => 7,
+              :color => '9c27b0',
+              :background_color => 'c49ee1',
+              :flag_color => 'c49ee1',
+              :flag_value => 'release'
+            )
+
+            # requirement, pending, rejected, unsolved, solving, alpha, bate, qualified, released, finished, cancel
             if workflow
               # Workflow
               Tracker.all.each { |t|
@@ -169,35 +370,82 @@ module Redmine
               }
 
               Tracker.all.each { |t|
-                [new, solving, resolved, feedback].each { |os|
-                  [solving, resolved, feedback, closed].each { |ns|
+                IssueStatus.all.each { |os|
+                  IssueStatus.all.each { |ns|
                     WorkflowTransition.create!(:tracker_id => t.id, :role_id => developer.id, :old_status_id => os.id, :new_status_id => ns.id) unless os == ns
                   }
                 }
               }
 
               Tracker.all.each { |t|
-                [new, solving, resolved, feedback].each { |os|
-                  [closed].each { |ns|
+                IssueStatus.all.each { |os|
+                  IssueStatus.all.each { |ns|
                     WorkflowTransition.create!(:tracker_id => t.id, :role_id => reporter.id, :old_status_id => os.id, :new_status_id => ns.id) unless os == ns
                   }
                 }
-                WorkflowTransition.create!(:tracker_id => t.id, :role_id => reporter.id, :old_status_id => resolved.id, :new_status_id => feedback.id)
               }
             end
 
             # Enumerations
-            IssuePriority.create!(:name => l(:default_priority_low), :position => 1)
-            IssuePriority.create!(:name => l(:default_priority_normal), :position => 2, :is_default => true)
-            IssuePriority.create!(:name => l(:default_priority_high), :position => 3)
-            IssuePriority.create!(:name => l(:default_priority_urgent), :position => 4)
-            IssuePriority.create!(:name => l(:default_priority_immediate), :position => 5)
+            IssuePriority.create!(
+              :name => l(:default_priority_low),
+              :color => '00EEEE',
+              :background_color => '97FFFF',
+              :flag_color => '97FFFF',
+              :flag_value => 'low',
+              :position => 1
+            )
 
-            DocumentCategory.create!(:name => l(:default_doc_category_user), :position => 1)
-            DocumentCategory.create!(:name => l(:default_doc_category_tech), :position => 2)
+            IssuePriority.create!(
+              :name => l(:default_priority_normal),
+              :color => '00CD66',
+              :background_color => '43CD80',
+              :flag_color => '43CD80',
+              :flag_value => 'normal',
+              :position => 2,
+              :is_default => true
+            )
 
-            TimeEntryActivity.create!(:name => l(:default_activity_design), :position => 1)
-            TimeEntryActivity.create!(:name => l(:default_activity_development), :position => 2)
+            IssuePriority.create!(
+              :name => l(:default_priority_high),
+              :color => 'EEB422',
+              :background_color => 'EEB422',
+              :flag_color => 'EEB422',
+              :flag_value => 'high',
+              :position => 3
+            )
+
+            IssuePriority.create!(
+              :name => l(:default_priority_urgent),
+              :color => 'FA8072',
+              :background_color => 'FA8072',
+              :flag_color => 'FA8072',
+              :flag_value => 'urgent',
+              :position => 4
+            )
+
+            IssuePriority.create!(
+              :name => l(:default_priority_immediate),
+              :color => 'FF4500',
+              :background_color => 'FF4500',
+              :flag_color => 'FF4500',
+              :flag_value => 'immediate',
+              :position => 5
+            )
+
+            DocumentCategory.create!(:name => l(:default_doc_category_user), :position => 1, :flag_value => 'user')
+            DocumentCategory.create!(:name => l(:default_doc_category_tech), :position => 2, :flag_value => 'tech')
+            DocumentCategory.create!(:name => l(:default_doc_category_requirement), :position => 3, :flag_value => 'requirement')
+
+            TimeEntryActivity.create!(:name => l(:default_activity_requirement), :position => 1, :flag_value => 'requirement')
+            TimeEntryActivity.create!(:name => l(:default_activity_analysis), :position => 2, :flag_value => 'analysis')
+            TimeEntryActivity.create!(:name => l(:default_activity_design), :position => 3, :flag_value => 'design')
+            TimeEntryActivity.create!(:name => l(:default_activity_development), :position => 4, :flag_value => 'development')
+            TimeEntryActivity.create!(:name => l(:default_activity_test), :position => 5, :flag_value => 'test')
+            TimeEntryActivity.create!(:name => l(:default_activity_replease), :position => 6, :flag_value => 'replease')
+            TimeEntryActivity.create!(:name => l(:default_activity_report), :position => 7, :flag_value => 'report')
+            TimeEntryActivity.create!(:name => l(:default_activity_study), :position => 8, :flag_value => 'study')
+            TimeEntryActivity.create!(:name => l(:default_activity_meeting), :position => 9, :flag_value => 'meeting')
           end
           true
         end

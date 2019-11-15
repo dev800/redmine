@@ -231,6 +231,8 @@ module QueriesHelper
       item.description? ? content_tag('div', textilizable(item, :description), :class => "wiki") : ''
     when :last_notes
       item.last_notes.present? ? content_tag('div', textilizable(item, :last_notes), :class => "wiki") : ''
+    when :importance
+      item.importance_human
     when :done_ratio
       progress_bar(value)
     when :relations

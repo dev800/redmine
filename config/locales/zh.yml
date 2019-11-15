@@ -318,7 +318,7 @@ zh:
   field_watcher: 关注者
   field_identity_url: OpenID URL
   field_content: 内容
-  field_group_by: 根据此条件分组
+  field_group_by: 分组
   field_sharing: 共享
   field_parent_issue: 父任务
   field_member_of_group: 用户组的成员
@@ -451,10 +451,11 @@ zh:
   project_module_calendar: 日历
   project_module_gantt: 甘特图
 
-  label_importance_1: '非常重要'
-  label_importance_2: '重要'
+  label_importance_5: '很重要'
+  label_importance_4: '重要'
   label_importance_3: '一般'
-  label_importance_4: '不重要'
+  label_importance_2: '不重要'
+  label_importance_1: '可有可无'
   label_user: 用户
   label_user_plural: 用户
   label_user_new: 新建用户
@@ -918,24 +919,48 @@ zh:
   default_role_manager: 管理人员
   default_role_developer: 开发人员
   default_role_reporter: 报告人员
-  default_tracker_bug: 错误
+
   default_tracker_feature: 功能
+  default_tracker_task: 任务
   default_tracker_support: 支持
-  default_issue_status_new: 新建
-  default_issue_status_solving: 进行中
-  default_issue_status_resolved: 已解决
-  default_issue_status_feedback: 反馈
-  default_issue_status_closed: 已关闭
+  default_tracker_bug: Bug
+  default_tracker_checklist: 清单
+  default_tracker_cases: 用例
+  default_tracker_release: 部署
+
+  default_issue_status_requirement: 需求中
+  default_issue_status_analysis: 分析中
+  default_issue_status_plan: 计划中
+  default_issue_status_pending: 等待中
   default_issue_status_rejected: 已拒绝
+  default_issue_status_unsolved: 未解决
+  default_issue_status_solving: 执行中
+  default_issue_status_alpha: alpha
+  default_issue_status_bate: bate
+  default_issue_status_qualified: 待上线
+  default_issue_status_released: 已上线
+  default_issue_status_finished: 已完成
+  default_issue_status_cancel: 已放弃
+
   default_doc_category_user: 用户文档
   default_doc_category_tech: 技术文档
+  default_doc_category_requirement: 需求文档
+
   default_priority_low: 低
   default_priority_normal: 普通
   default_priority_high: 高
   default_priority_urgent: 紧急
   default_priority_immediate: 立刻
+
+  default_activity_requirement: 需求分析
+  default_activity_analysis: 分析
   default_activity_design: 设计
   default_activity_development: 开发
+  default_activity_test: 测试
+  default_activity_replease: 部署
+  default_activity_report: 报告
+  default_activity_study: 学习
+  default_activity_meeting: 会议
 
   enumeration_issue_priorities: 问题优先级
   enumeration_doc_categories: 文档类别

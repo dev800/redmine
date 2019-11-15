@@ -1084,6 +1084,7 @@ h6,
 
 #header h1 {
   margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 #header h1 .breadcrumbs {
@@ -1187,7 +1188,7 @@ select#checklist_done_ratio { width: 95px; }
 
 #main .checklists .checklist a.checklist-edit {
   font-weight: normal;
-  color: #999999;
+  color: #666666;
 }
 
 #main .checklists .checklist a.checklist-edit:hover {
@@ -1215,7 +1216,7 @@ select#checklist_done_ratio { width: 95px; }
 
 #main .checklists .checklist a.checklist-content .checklist-subject.is-closed {
   text-decoration: line-through;
-  color: #999999;
+  color: #666666;
 }
 
 #main .checklists .checklist a.checklist-content .checklist-subject.is-closed:hover {
@@ -1234,13 +1235,13 @@ select#checklist_done_ratio { width: 95px; }
 .checklists .checklist .checklist-flag,
 .checklists .checklist .checklist-id {
   font-size: 12px;
-  color: #999999;
+  color: #666666;
 }
 
 .checklists .checklist .checklist-tracker,
 .checklists .checklist .checklist-status {
   font-size: 10px;
-  color: #999999;
+  color: #666666;
 }
 
 .checklists .checklist:hover {
@@ -1252,11 +1253,11 @@ select#checklist_done_ratio { width: 95px; }
 }
 
 .checklists .checklist-arrow {
-  color: #999999;
+  color: #666666;
 }
 
 #main .checklists .checklist-author a {
-  color: #999999;
+  color: #666666;
 }
 
 #main .checklists .checklist-author a:hover {
@@ -1396,6 +1397,18 @@ div.issue .attributes .attribute .label {
   margin-bottom: 0.6em;
 }
 
+#list-definition tr td:first-child {
+  width: 20%;
+  text-align: right;
+  vertical-align: top;
+  padding-right: 0.4em;
+  font-weight: bolder;
+}
+
+#list-definition tr td label.inline {
+  padding-right: 0.8em;
+}
+
 table.list td {
   padding: 4px 6px;
 }
@@ -1403,10 +1416,11 @@ table.list td {
 tr.time-entry td.issue a,
 tr.time-entry td.subject a,
 tr.issue td.subject a {
-  min-width: 120px;
+  min-width: 150px;
   display: block;
 }
 
+tr.issue td.parent,
 tr.issue td.assigned_to,
 tr.issue td.last_updated_by {
   white-space: nowrap;
@@ -1459,7 +1473,7 @@ tr.issue td.last_updated_by {
 
 #main .journal h4.note-header {
   border-bottom: dotted 1px #c0c0c0;
-  padding: 0.45em 0.8em;
+  padding: 0.58em 0.8em;
   margin-bottom: 0;
 }
 
