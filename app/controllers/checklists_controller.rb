@@ -35,9 +35,6 @@ class ChecklistsController < ApplicationController
         tracker: params[:checklists_tracker],
         status: params[:checklists_status]
       )
-
-      pp '========>'
-      pp @checklists
     else
       render_404
     end
@@ -48,9 +45,8 @@ class ChecklistsController < ApplicationController
 
   def new
     @project = @issue.project
-
-    @allowed_statuses = @issue.new_statuses_allowed_to(User.current)
     @priorities = IssuePriority.active
+    @allowed_statuses = IssueStatus.for_checklists_enable
 
     render :action => 'new', :layout => !request.xhr?
   end
@@ -80,8 +76,8 @@ class ChecklistsController < ApplicationController
 
   def edit
     @project = @issue.project
-    @allowed_statuses = @issue.new_statuses_allowed_to(User.current)
     @priorities = IssuePriority.active
+    @allowed_statuses = IssueStatus.for_checklists_enable
 
     render :action => 'edit', :layout => !request.xhr?
   end
@@ -178,7 +174,7 @@ class ChecklistsController < ApplicationController
     end
 
     @priorities = IssuePriority.active
-    @allowed_statuses = @checklist.new_statuses_allowed_to(User.current)
+    @allowed_statuses = IssueStatus.for_checklists_enable
   end
 
   def update_checklist_from_params
@@ -208,7 +204,8 @@ class ChecklistsController < ApplicationController
 
     @checklist.safe_attributes = checklist_attributes
     @priorities = IssuePriority.active
-    @allowed_statuses = @issue.new_statuses_allowed_to(User.current)
+    @allowed_statuses = IssueStatus.for_checklists_enable
+
     true
   end
 

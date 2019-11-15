@@ -49,8 +49,13 @@ class IssueStatus < ActiveRecord::Base
     'color',
     'background_color',
     'is_closed',
+    'checklists_enable',
     'position',
     'default_done_ratio')
+
+  def self.for_checklists_enable
+    self.where(:checklists_enable => true).order(:position => :asc).all
+  end
 
   # Update all the +Issues+ setting their done_ratio to the value of their +IssueStatus+
   def self.update_issue_done_ratios

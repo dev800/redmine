@@ -9,6 +9,7 @@ class ChangeUpgradeColumns < ActiveRecord::Migration[5.2]
     add_column :issue_statuses, :agile_status, :integer, :default => 0, :null => false
     add_column :issue_statuses, :agile_color, :string, default: "000000", null: false
     add_column :issue_statuses, :agile_background_color, :string, default: "ffffff", null: false
+    add_column :issue_statuses, :checklists_enable, :boolean, :default => true, :null => false
 
     add_column :roles, :checklists_visibility, :string, :limit => 30, :default => 'default', :null => false
 

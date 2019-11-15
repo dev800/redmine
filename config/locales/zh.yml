@@ -929,8 +929,6 @@ zh:
   default_tracker_release: 部署
 
   default_issue_status_requirement: 需求中
-  default_issue_status_analysis: 分析中
-  default_issue_status_plan: 计划中
   default_issue_status_pending: 等待中
   default_issue_status_rejected: 已拒绝
   default_issue_status_unsolved: 未解决
