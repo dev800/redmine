@@ -77,25 +77,9 @@ RUN set -eux; \
 	chown redmine:redmine "$HOME"; \
 	chmod 1777 "$HOME"
 
-RUN set -eux; \
-  if [ ! -d ./redmine ] ; then git clone --verbose https://github.com/dev800/redmine.git redmine ; else cd redmine && git checkout feature/new && git pull origin feature/new  ; fi; \
-	rm -rf files/delete.me log/delete.me; \
-	mkdir -p log public/plugin_assets sqlite tmp/pdf tmp/pids; \
-	chown -R redmine:redmine ./; \
-# log to STDOUT (https://github.com/docker-library/redmine/issues/108)
-	echo 'config.logger = Logger.new(STDOUT)' > config/additional_environment.rb; \
-# fix permissions for running as an arbitrary user
-	chmod -R ugo=rwX config db sqlite; \
-	find log tmp -type d -exec chmod 1777 '{}' +
-
-# ENV REDMINE_VERSION 4.0.5
-# ENV REDMINE_DOWNLOAD_MD5 d25649272a9c347e4368cdd50e039e86
-
 # RUN set -eux; \
-# 	wget -O redmine.tar.gz "https://www.redmine.org/releases/redmine-${REDMINE_VERSION}.tar.gz"; \
-# 	echo "$REDMINE_DOWNLOAD_MD5 *redmine.tar.gz" | md5sum -c -; \
-# 	tar -xf redmine.tar.gz --strip-components=1; \
-# 	rm redmine.tar.gz files/delete.me log/delete.me; \
+#   if [ ! -d ./redmine ] ; then git clone --verbose https://github.com/dev800/redmine.git redmine ; else cd redmine && git checkout feature/new && git pull origin feature/new  ; fi; \
+# 	rm -rf files/delete.me log/delete.me; \
 # 	mkdir -p log public/plugin_assets sqlite tmp/pdf tmp/pids; \
 # 	chown -R redmine:redmine ./; \
 # # log to STDOUT (https://github.com/docker-library/redmine/issues/108)
@@ -103,6 +87,22 @@ RUN set -eux; \
 # # fix permissions for running as an arbitrary user
 # 	chmod -R ugo=rwX config db sqlite; \
 # 	find log tmp -type d -exec chmod 1777 '{}' +
+
+ENV REDMINE_VERSION 4.0.6
+ENV REDMINE_DOWNLOAD_MD5 be6ea2826de650b91a642521f22809bf
+
+RUN set -eux; \
+	wget -O redmine.tar.gz "https://github.com/dev800/redmine/archive/v${REDMINE_VERSION}.tar.gz"; \
+	echo "$REDMINE_DOWNLOAD_MD5 *redmine.tar.gz" | md5sum -c -; \
+	tar -xf redmine.tar.gz --strip-components=1; \
+	rm redmine.tar.gz files/delete.me log/delete.me; \
+	mkdir -p log public/plugin_assets sqlite tmp/pdf tmp/pids; \
+	chown -R redmine:redmine ./; \
+# log to STDOUT (https://github.com/docker-library/redmine/issues/108)
+	echo 'config.logger = Logger.new(STDOUT)' > config/additional_environment.rb; \
+# fix permissions for running as an arbitrary user
+	chmod -R ugo=rwX config db sqlite; \
+	find log tmp -type d -exec chmod 1777 '{}' +
 
 RUN set -eux; \
 	\
