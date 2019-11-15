@@ -1,4 +1,4 @@
-<h2><%=l(:label_attachment_new)%></h2>
+<h2 class="content-title"><%=l(:label_attachment_new)%></h2>
 
 <%= error_messages_for 'attachment' %>
 <%= form_tag(project_files_path(@project), :multipart => true, :class => "tabular") do %>

@@ -1,4 +1,4 @@
-<h2><%= l(:label_board_new) %></h2>
+<h2 class="content-title"><%= l(:label_board_new) %></h2>
 
 <%= labelled_form_for @board, :url => project_boards_path(@project) do |f| %>
   <%= render :partial => 'form', :locals => {:f => f} %>

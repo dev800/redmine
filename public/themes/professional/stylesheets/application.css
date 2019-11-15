@@ -1113,7 +1113,19 @@ table.list td {
   padding-left: 10px;
 }
 
- #checklist_is_private_wrap {float:right; margin-right:1em;}
+#main h2.content-title {
+  margin-bottom: 0.18em;
+}
+
+h1, h2, h3, h4 {
+  font-family: inherit;
+}
+
+h2, h3, h4, #main .wiki h1, #main .wiki h2, #main .wiki h3 {
+  font-family: inherit;
+}
+
+#checklist_is_private_wrap {float:right; margin-right:1em;}
 input#checklist_subject { width: 99%; }
 select#checklist_done_ratio { width: 95px; }
 
@@ -1139,11 +1151,13 @@ select#checklist_done_ratio { width: 95px; }
   list-style: none;
   padding-left: 0;
   padding-right: 0;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .checklists .checklist {
   line-height: 1.6em;
-  padding: 2px 4px;
+  padding: 2px 8px 2px 4px;
   border-bottom: 2px solid #dedede;
   border-left-width: 8px;
   border-left-style: solid;
@@ -1233,6 +1247,22 @@ select#checklist_done_ratio { width: 95px; }
   background: #EFEFEF;
 }
 
+.checklists .checklist-author {
+  font-size: 12px;
+}
+
+.checklists .checklist-arrow {
+  color: #999999;
+}
+
+#main .checklists .checklist-author a {
+  color: #999999;
+}
+
+#main .checklists .checklist-author a:hover {
+  color: #2a5a8a;
+}
+
 .syntaxhl .err { color: #FF0000 } /* Error */
 
 #content {
@@ -1249,16 +1279,16 @@ select#checklist_done_ratio { width: 95px; }
   outline: none;
 }
 
-.modal-overflow-hidden {
+/* .modal-overflow-hidden {
   overflow: hidden;
-}
+} */
 
 #dialog-modal-wrapper {
   z-index: 92;
   position: fixed;
   height: 100vh;
   width: 100vw;
-  max-width: 720px;
+  max-width: 860px;
   top: 0px;
   right: 0px;
   bottom: 0px;
@@ -1366,18 +1396,6 @@ div.issue .attributes .attribute .label {
   margin-bottom: 0.6em;
 }
 
-/* tr.issue td.subject,
-tr.issue td.category,
-tr.issue td.assigned_to,
-tr.issue td.last_updated_by,
-tr.issue td.string,
-tr.issue td.text,
-tr.issue td.list,
-tr.issue td.relations,
-tr.issue td.parent {
-  white-space: nowrap;
-} */
-
 table.list td {
   padding: 4px 6px;
 }
@@ -1421,15 +1439,22 @@ tr.issue td.last_updated_by {
 
 #main .journal .wiki {
   padding: 0.4em;
+  margin-bottom: 0;
 }
 
 #main .contextual {
+  text-align: right;
   float: right;
   white-space: nowrap;
   line-height: 1.4em;
   margin: 0;
   padding: 8px;
   font-size: 0.9em;
+}
+
+#main .issue .contextual {
+  top: -6px;
+  position: relative;
 }
 
 #main .journal h4.note-header {
@@ -1536,6 +1561,74 @@ div#roadmap .related-issues {
   margin-bottom: 0;
 }
 
+#main .subject .issue-title h3 {
+  font-size: 1.28em;
+}
+
+#main .subject .issue-ancestor .issue-title h3 {
+  padding-top: 0.32em;
+  margin-bottom: 0;
+}
+
+#main .checklists-simple .simple-hide {
+  display: none;
+}
+
+#main .issue .checklists-simple .checklists-title {
+  margin-bottom: 0;
+}
+
+#main .issue .checklists-simple .contextual {
+  padding-bottom: 0;
+}
+
+#main .issue .checklists-simple .checklists {
+  margin-top: 0.2em;
+  margin-bottom: 0;
+}
+
+#main .issue .checklists-simple .checklists-empty {
+  display: none;
+}
+
+fieldset.tabular {
+  position: relative;
+}
+
+#checklist_is_private_wrap {
+  position: absolute;
+  right: 0.6em;
+  top: 1.6em;
+  padding: 0;
+}
+
+#checklist_is_private_wrap label {
+  display: inline-block;
+}
+
+.checklists-filter .checklists-filter-selects {
+  display: inline-block;
+}
+
+.checklists-filter .checklists-filter-selects select {
+  margin-left: 0.58em;
+}
+
+.checklists-empty {
+  color: #999999;
+  padding: 2em;
+  text-align: center;
+}
+
+div.issue p.author {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+div.issue .attributes {
+  margin-top: 1em;
+}
+
 /**
   #################################################
   #################################################
@@ -1600,7 +1693,7 @@ div#roadmap .related-issues {
   #content > .contextual > a,
   #content > .contextual .drdn,
   p.buttons a {
-    margin: 5px 6px !important;
+    margin: 5px 2px !important;
   }
 
   #main {
@@ -1644,6 +1737,11 @@ div#roadmap .related-issues {
 
   .checklists .checklist .checklist-subject {
     font-size: 1em !important;
+  }
+
+  .checklists-filter {
+    padding-top: 0.6em;
+    display: block;
   }
 
   .tabular .attributes p {

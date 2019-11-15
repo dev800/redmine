@@ -1,0 +1,113 @@
+<%
+  request_url ||= request.url
+
+  # locals: { checklists, issue }
+
+  ######################### tracker #################################
+  tracker_params = {:format => "js"}
+
+  if params[:checklists_status]
+    tracker_params.merge!(checklists_status: params[:checklists_status])
+  end
+
+  checklist_tracker_options = issue.queried_checklists(
+    status: params[:checklists_status],
+    tracker: 'tracker:all'
+  ).map(&:tracker).sort do |t1, t2|
+    t1.position <=> t2.position
+  end.map do |tracker|
+    [
+      tracker.name,
+      "id:#{tracker.id}",
+      {
+        href: generate_replace_href(request_url, checklists_tracker: "id:#{tracker.id}"),
+        "data-href": checklists_url(tracker_params.merge(issue_id: issue.id, checklists_tracker: "id:#{tracker.id}"))
+      }
+    ]
+  end.uniq
+
+  default_checklist_tracker_options = [
+    [
+      l(:label_all),
+      'tracker:all',
+      {
+        href: generate_replace_href(request_url, checklists_tracker: 'tracker:all'),
+        "data-href": checklists_url(tracker_params.merge(issue_id: issue.id, checklists_tracker: 'tracker:all'))
+      }
+    ]
+  ]
+
+  checklist_tracker_options = if checklist_tracker_options.any?
+    default_checklist_tracker_options + [['- - - -', { disabled: true }]] + checklist_tracker_options
+  else
+    default_checklist_tracker_options
+  end
+
+  ######################### status #################################
+  status_params = {:format => "js"}
+
+  if params[:checklists_tracker]
+    status_params.merge!(checklists_tracker: params[:checklists_tracker])
+  end
+
+  checklist_status_options = issue.queried_checklists(
+    :status => "status:all",
+    :tracker => params[:checklists_tracker]
+  ).map(&:status).sort do |s1, s2|
+    s1.position <=> s2.position
+  end.map do |status|
+    [
+      status.name,
+      "id:#{status.id}",
+      {
+        href: generate_replace_href(request_url, checklists_status: "id:#{status.id}"),
+        "data-href": checklists_url(status_params.merge(issue_id: issue.id, checklists_status: "id:#{status.id}"))
+      }
+    ]
+  end.uniq
+
+  default_checklist_status_options = [
+    [
+      l(:label_all),
+      'status:all',
+      {
+        href: generate_replace_href(request_url, checklists_status: 'status:all'),
+        "data-href": checklists_url(status_params.merge(issue_id: issue.id, checklists_status: 'status:all'))
+      }
+    ],
+    [
+      l(:label_open_issues),
+      'status:open',
+      {
+        href: generate_replace_href(request_url, checklists_status: 'status:open'),
+        "data-href": checklists_url(status_params.merge(issue_id: issue.id, checklists_status: 'status:open'))
+      }
+    ],
+    [
+      l(:label_closed_issues),
+      'status:closed',
+      {
+        href: generate_replace_href(request_url, checklists_status: 'status:closed'),
+        "data-href": checklists_url(status_params.merge(issue_id: issue.id, checklists_status: 'status:closed'))
+      }
+    ]
+  ]
+
+  checklist_status_options = if checklist_status_options.any?
+    default_checklist_status_options + [['- - - -', { disabled: true }]] + checklist_status_options
+  else
+    default_checklist_status_options
+  end
+%>
+
+<div class="checklists-filter" data-issue-id="<%= issue.id %>">
+  <%= link_to l(:label_checklist_new), "javascript:;",
+    :class => 'icon icon-add new-checklist',
+    'remote-href' => checklist_new_path(issue_id: issue.id, checklists_status: params[:checklists_status], checklists_tracker: params[:checklists_tracker])
+  %>
+
+  <div class="checklists-filter-selects">
+    <%= select_tag :checklists_tracker, options_for_select(checklist_tracker_options, params[:checklists_tracker]), :class => "filter-trigger" %>
+    <%= select_tag :checklists_status, options_for_select(checklist_status_options, params[:checklists_status]), :class => "filter-trigger" %>
+  </div>
+</div>

@@ -79,9 +79,9 @@ module IssuesHelper
     s = +''
     ancestors = issue.root? ? [] : issue.ancestors.visible.to_a
     ancestors.each do |ancestor|
-      s << '<div>' + content_tag('p', link_to_issue(ancestor, :project => (issue.project_id != ancestor.project_id)))
+      s << '<div class="issue-ancestor">' + content_tag('p', link_to_issue(ancestor, :project => (issue.project_id != ancestor.project_id)))
     end
-    s << '<div>'
+    s << '<div class="issue-title">'
     subject = h(issue.subject)
     if issue.is_private?
       subject = subject + ' ' + content_tag('span', l(:field_is_private), :class => 'badge badge-private private')
@@ -471,6 +471,10 @@ module IssuesHelper
       when 'estimated_hours'
         value = l_hours_short(detail.value.to_f) unless detail.value.blank?
         old_value = l_hours_short(detail.old_value.to_f) unless detail.old_value.blank?
+
+      when 'importance'
+        value = Issue.importance_human(detail.value) unless detail.value.blank?
+        old_value = Issue.importance_human(detail.old_value) unless detail.old_value.blank?
 
       when 'parent_id'
         label = l(:field_parent_issue)

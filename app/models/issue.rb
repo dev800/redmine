@@ -58,6 +58,7 @@ class Issue < ActiveRecord::Base
                             :author_key => :author_id
 
   DONE_RATIO_OPTIONS = %w(issue_field issue_status)
+  IMPORTANCE_VALUES = [1, 2, 3, 4]
 
   attr_writer :deleted_attachment_ids
   delegate :notes, :notes=, :private_notes, :private_notes=, :to => :current_journal, :allow_nil => true
@@ -152,10 +153,54 @@ class Issue < ActiveRecord::Base
     end
   end
 
-  def queried_checklists
-    @queried_checklists ||= self.checklists
+  DEFAULT_IMPORTANCE = 3
+
+  def self.importance_human(value)
+    l("label_importance_#{value}")
+  end
+
+  def importance_human
+    self.class.importance_human(importance)
+  end
+
+  def importance_select_options
+    importance = (new_record? ? DEFAULT_IMPORTANCE : self.importance) || DEFAULT_IMPORTANCE
+
+    IMPORTANCE_VALUES.map do |value|
+      [self.class.importance_human(value), value]
+    end
+  end
+
+  def queried_checklists(options = {})
+    checklists_status = options[:status].present? ? options[:status] : 'status:open'
+    checklists_tracker = options[:tracker].present? ? options[:tracker] : nil
+
+    checklists = self.checklists
+      .joins(:status)
+      .joins(:tracker)
       .preload(:project, :status, :tracker, :priority, :author, :assigned_to, {:custom_values => :custom_field})
       .order(:position => :asc, :id => :asc)
+
+    if checklists_status === 'status:open'
+      checklists = checklists.where({IssueStatus.table_name => {is_closed: false}})
+    elsif checklists_status === 'status:closed'
+      checklists = checklists.where({IssueStatus.table_name => {is_closed: true}})
+    elsif checklists_status && checklists_status.starts_with?('id:')
+      id = checklists_status.sub('id:', '').strip().to_i
+      checklists = checklists.where({IssueStatus.table_name => {id: id}})
+    end
+
+    if checklists_tracker && checklists_tracker.starts_with?('id:')
+      id = checklists_tracker.sub('id:', '').strip().to_i
+      checklists = checklists.where({Tracker.table_name => {id: id}})
+    end
+
+    pp '---------->'
+    pp options
+    pp checklists.to_sql
+    pp '<----------'
+
+    checklists
   end
 
   # Returns true if usr or current user is allowed to view the issue
@@ -481,6 +526,10 @@ class Issue < ActiveRecord::Base
     'custom_fields',
     'lock_version',
     'notes',
+    'importance',
+    'agile_visible',
+    'agile_position',
+    'liable_id',
     :if => lambda {|issue, user| issue.new_record? || issue.attributes_editable?(user)})
   safe_attributes(
     'notes',

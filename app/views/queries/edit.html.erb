@@ -1,4 +1,4 @@
-<h2><%= l(:label_query) %></h2>
+<h2 class="content-title"><%= l(:label_query) %></h2>
 
 <%= form_tag(query_path(@query), :method => :put, :id => "query-form") do %>
   <%= render :partial => 'form', :locals => {:query => @query} %>

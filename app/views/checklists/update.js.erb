@@ -8,6 +8,16 @@
     image: ''
   });
 
+  $('.checklists-filter[data-issue-id="<%= @checklist.issue_id %>"]').replaceWith(
+    '<%= escape_javascript(render :partial => "checklists/filter", :locals => {
+      :issue => @issue,
+      :checklists => @issue.queried_checklists(
+        tracker: params[:checklists_tracker],
+        status: params[:checklists_status]
+      )
+    }) %>'
+  );
+
   $('.checklists[data-issue-id="<%= @checklist.issue_id %>"] .checklist[data-checklist-id="<%= @checklist.id %>"]').replaceWith(
     '<%= escape_javascript(render :partial => "checklists/checklist", :locals => { :checklist => @checklist }) %>'
   );

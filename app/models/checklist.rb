@@ -418,6 +418,7 @@ class Checklist < ActiveRecord::Base
     'custom_fields',
     'lock_version',
     'notes',
+    'importance',
     :if => lambda {|checklist, user|
       checklist.new_record? || checklist.attributes_editable?(user)
     }
@@ -466,6 +467,18 @@ class Checklist < ActiveRecord::Base
     end
 
     names
+  end
+
+  def importance_human
+    Issue.importance_human(importance)
+  end
+
+  def importance_select_options
+    importance = (new_record? ? Issue::DEFAULT_IMPORTANCE : self.importance) || Issue::DEFAULT_IMPORTANCE
+
+    Issue::IMPORTANCE_VALUES.map do |value|
+      [Issue.importance_human(value), value]
+    end
   end
 
   # Safely sets attributes

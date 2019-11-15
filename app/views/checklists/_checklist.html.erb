@@ -1,11 +1,11 @@
-<li class="checklist ui-sortable-handle clearfix" data-checklist-position="<%= checklist.position %>" data-checklist-id="<%= checklist.id %>" style="border-left-color: #<%= checklist.priority.try(:color) || '999999' %>; background-color: #<%= checklist.status.try(:background_color) || 'fff' %>">
+<li class="checklist ui-sortable-handle clearfix" data-status="<%= checklist.status.is_closed ? 'closed' : 'open' %>" data-status-id="<%= checklist.status_id %>" data-tracker-id="<%= checklist.tracker_id %>" data-checklist-position="<%= checklist.position %>" data-checklist-id="<%= checklist.id %>" style="border-left-color: #<%= checklist.priority.try(:color) || '999999' %>; background-color: #<%= checklist.status.try(:background_color) || 'fff' %>">
   <div class="checklist-info">
     <div class="checklist-row">
       <span class="checklist-author _unit"><%= checklist.author ? link_to_user(checklist.author) : "?" %></span>
       <span class="checklist-arrow _unit">➤</span>
       <span class="checklist-assigned-to _unit"><%= checklist.assigned_to ? link_to_user(checklist.assigned_to) : "?" %></span>
     </div>
-    <div class="checklist-row">
+    <div class="checklist-row simple-hide">
       <span class="checklist-start-date _unit"><%= format_date(checklist.start_date) %></span>
       <span class="checklist-arrow _unit">~</span>
       <span class="checklist-due-date _unit"><%= format_date(checklist.due_date) %></span>
@@ -14,13 +14,13 @@
   <div class="checklist-body">
     <%= link_to checklist_path(checklist), :class => "checklist-row checklist-content" do %>
       <span class="checklist-tracker" style="color: #<%= checklist.tracker.try(:flag_color) || '999999' %>"><%= checklist.tracker.try(:name) %></span>
+      <span class="checklist-status _unit"><%= checklist.status.try(:name) %></span>
       <span class="checklist-id _unit"><i class="checklist-flag">$</i><%= checklist.id %></span>
       <span class="checklist-subject _unit<%= ' is-closed' if checklist.status.is_closed %>"><%= checklist.subject %></span>
     <% end %>
-    <div class="checklist-row">
+    <div class="checklist-row simple-hide">
       <div class="checklist-actions">
         <span class="checklist-priority _unit" style="color: #<%= checklist.priority.try(:color) || '999999' %>"><%= checklist.priority.try(:name) %></span>
-        <span class="checklist-status _unit"><%= checklist.status.try(:name) %></span>
         <%= link_to l(:button_edit), "javascript:;",
           :class => 'checklist-edit _unit',
           'remote-href' => checklist_edit_path(checklist)

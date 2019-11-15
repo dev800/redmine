@@ -1,5 +1,5 @@
 <% if @journal.journalized_type === 'Checklist' %>
-  <h2><%= @checklist.issue.tracker %> #<%= @checklist.issue.id %> - <%= @checklist.issue.subject %></h2>
+  <h2 class="content-title"><%= @checklist.issue.tracker %> #<%= @checklist.issue.id %> - <%= @checklist.issue.subject %></h2>
   <h3><%= @checklist.tracker %> $<%= @checklist.id %> - <%= @checklist.subject %></h2>
   <p><%= authoring @journal.created_on, @journal.user, :label => :label_updated_time_by %></p>
 
@@ -12,7 +12,7 @@
 
   <% html_title "#{@checklist.tracker.name} $#{@checklist.id}: #{@checklist.subject}" %>
 <% else %>
-  <h2><%= @issue.tracker %> #<%= @issue.id %></h2>
+  <h2 class="content-title"><%= @issue.tracker %> #<%= @issue.id %></h2>
   <p><%= authoring @journal.created_on, @journal.user, :label => :label_updated_time_by %></p>
 
   <pre class="text-diff"><%= @diff.to_html %></pre>

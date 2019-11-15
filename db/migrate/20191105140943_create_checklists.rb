@@ -1,6 +1,8 @@
 class CreateChecklists < ActiveRecord::Migration[5.2]
   def change
     create_table :checklists do |t|
+      # 重要度
+      t.integer :importance, default: 1, :null => false
       # 排序值
       t.integer :position, default: 0, :limit => 8
       # 问题ID

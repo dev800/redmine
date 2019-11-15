@@ -27,7 +27,23 @@ class ChecklistsController < ApplicationController
   helper :timelog
 
   def index
+    if params[:issue_id]
+      find_issue()
+      @project = @issue.project
 
+      @checklists = @issue.queried_checklists(
+        tracker: params[:checklists_tracker],
+        status: params[:checklists_status]
+      )
+
+      pp '========>'
+      pp @checklists
+    else
+      render_404
+    end
+
+  rescue ActiveRecord::RecordNotFound
+    render_404
   end
 
   def new
@@ -202,6 +218,7 @@ class ChecklistsController < ApplicationController
     @issue = Issue.find(params[:issue_id])
     raise Unauthorized unless @issue.visible?
     @project = @issue.project
+    @issue
   rescue ActiveRecord::RecordNotFound
     render_404
   end

@@ -10,6 +10,13 @@
 <p><label><%= l(:field_status) %></label> <%= @issue.status %></p>
 <% end %>
 
+<% if @issue.safe_attribute?('importance') %>
+  <p>
+    <%= f.select :importance, @issue.importance_select_options,
+      {:required => @issue.required_attribute?('importance')} %>
+  </p>
+<% end %>
+
 <% if @issue.safe_attribute? 'priority_id' %>
 <p><%= f.select :priority_id, (@priorities.collect {|p| [p.name, p.id]}), {:required => true} %></p>
 <% end %>

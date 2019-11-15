@@ -1,4 +1,4 @@
-<h2><%= import_title %></h2>
+<h2 class="content-title"><%= import_title %></h2>
 
 <%= form_tag(imports_path, :multipart => true) do %>
   <%= hidden_field_tag 'type', @import.type %>

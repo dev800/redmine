@@ -7,7 +7,7 @@
 </div>
 
 <div id="add-news" style="display:none;">
-<h2><%=l(:label_news_new)%></h2>
+<h2 class="content-title"><%=l(:label_news_new)%></h2>
 <%= labelled_form_for @news, :url => project_news_index_path(@project),
                                            :html => { :id => 'news-form', :multipart => true } do |f| %>
 <%= render :partial => 'news/form', :locals => { :f => f } %>
@@ -16,7 +16,7 @@
 <% end if @project %>
 </div>
 
-<h2><%=l(:label_news_plural)%></h2>
+<h2 class="content-title"><%=l(:label_news_plural)%></h2>
 
 <% if @newss.empty? %>
 <p class="nodata"><%= l(:label_no_data) %></p>

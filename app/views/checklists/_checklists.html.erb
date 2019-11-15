@@ -3,6 +3,3 @@
     <%= render :partial => "checklists/checklist", :locals => { :checklist => checklist } %>
   <% end %>
 </ul>
-<div class="checklists-empty" style="<%= 'display: none' if checklists.to_a.any? %>" data-issue-id="<%= issue.id %>">
-  <%= l(:label_checklists_empty) %>
-</div>

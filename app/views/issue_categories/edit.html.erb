@@ -1,4 +1,4 @@
-<h2><%=l(:label_issue_category)%></h2>
+<h2 class="content-title"><%=l(:label_issue_category)%></h2>
 
 <%= labelled_form_for @category, :as => :issue_category,
                      :url => issue_category_path(@category), :html => {:method => :put} do |f| %>

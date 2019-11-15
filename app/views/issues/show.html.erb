@@ -1,6 +1,6 @@
 <%= render :partial => 'action_menu' %>
 
-<h2><%= issue_heading(@issue) %></h2>
+<h2 class="content-title"><%= issue_heading(@issue) %></h2>
 
 <div class="<%= @issue.css_classes %> details">
   <% if @prev_issue_id || @next_issue_id %>
@@ -43,6 +43,7 @@
 <div class="attributes">
 <%= issue_fields_rows do |rows|
   rows.left l(:field_status), @issue.status.name, :class => 'status'
+  rows.left l(:field_importance), @issue.importance_human, :class => 'importance'
   rows.left l(:field_priority), @issue.priority.name, :class => 'priority'
 
   unless @issue.disabled_core_fields.include?('assigned_to_id')
@@ -97,6 +98,27 @@ end %>
 <%= render_full_width_custom_fields_rows(@issue) %>
 
 <%= call_hook(:view_issues_show_description_bottom, :issue => @issue) %>
+
+<% if @checklists %>
+  <hr />
+  <div id="checklists" class="checklists-wrapper checklists-simple">
+    <div class="clearfix">
+      <div class="contextual">
+        <%= render :partial => "checklists/filter", :locals => { request_url: request.url, :issue => @issue, :checklists => @checklists } %>
+      </div>
+      <p class="checklists-title">
+        <strong>
+          <%= link_to l(:label_checklists), issue_checklists_path(@issue),
+            :class => 'icon icon-checklist', :accesskey => accesskey(:edit) %>
+        </strong>
+      </p>
+    </div>
+    <%= render :partial => "checklists/checklists", :locals => {
+      :checklists => @checklists,
+      :issue => @issue
+    } %>
+  </div>
+<% end %>
 
 <% if !@issue.leaf? || User.current.allowed_to?(:manage_subtasks, @project) %>
 <hr />

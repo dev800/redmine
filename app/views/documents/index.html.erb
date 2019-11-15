@@ -4,7 +4,7 @@
 </div>
 
 <div id="add-document" style="display:none;">
-<h2><%=l(:label_document_new)%></h2>
+<h2 class="content-title"><%=l(:label_document_new)%></h2>
 <%= labelled_form_for @document, :url => project_documents_path(@project), :html => {:multipart => true} do |f| %>
 <%= render :partial => 'form', :locals => {:f => f} %>
 <p class="form-actions">
@@ -14,7 +14,7 @@
 <% end %>
 </div>
 
-<h2><%=l(:label_document_plural)%></h2>
+<h2 class="content-title"><%=l(:label_document_plural)%></h2>
 
 <% if @grouped.empty? %><p class="nodata"><%= l(:label_no_data) %></p><% end %>
 

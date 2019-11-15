@@ -32,6 +32,13 @@ module ApplicationHelper
   extend Forwardable
   def_delegators :wiki_helper, :wikitoolbar_for, :heads_for_wiki_formatter
 
+  def generate_replace_href(url, new_params = {})
+    uri = URI.parse(url)
+    base_url = url.split("?").first
+    new_query = Rack::Utils.parse_query(uri.query).merge(new_params.stringify_keys).to_query
+    "#{base_url}#{'?' if new_query.present?}#{new_query}"
+  end
+
   # Return true if user is authorized for controller/action, otherwise false
   def authorize_for(controller, action)
     User.current.allowed_to?({:controller => controller, :action => action}, @project)

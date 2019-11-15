@@ -2,6 +2,8 @@
   <%= call_hook(:view_checklists_form_details_top, { :checklist => checklist, :form => f }) %>
   <%= hidden_field_tag 'form_update_triggered_by', '' %>
   <%= hidden_field_tag 'back_url', params[:back_url], :id => nil if params[:back_url].present? %>
+  <%= hidden_field_tag 'checklists_status', params[:checklists_status] %>
+  <%= hidden_field_tag 'checklists_tracker', params[:checklists_tracker] %>
   <% if issue %>
     <%= hidden_field_tag 'issue_id', issue.id, :id => nil %>
   <% end %>
@@ -26,11 +28,10 @@
   <% if checklist.safe_attribute? 'description' %>
     <p>
       <%= f.label_for_field :description, :required => checklist.required_attribute?('description') %>
-      <%= link_to_function content_tag(:span, l(:button_edit), :class => 'icon icon-edit'), '$(this).hide(); $("#checklist_description_and_toolbar").show()' unless checklist.new_record? %>
-      <%= content_tag 'span', :id => "checklist_description_and_toolbar", :style => (checklist.new_record? ? nil : 'display:none') do %>
+      <%= content_tag 'span', :id => "checklist_description_and_toolbar" do %>
         <%= f.text_area :description, :cols => 60, :accesskey => accesskey(:edit),
           :class => 'wiki-edit',
-          :rows => [[10, checklist.description.to_s.length / 50].max, 20].min,
+          :rows => [[4, checklist.description.to_s.length / 50].max, 20].min,
           :data => {
             :auto_complete => true,
             :issues_url => auto_complete_issues_path(:project_id => issue.project, :q => '')

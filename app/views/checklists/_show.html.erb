@@ -1,5 +1,5 @@
 <div class="checklist-show" data-checklist-id="<%= checklist.id %>">
-  <h2><%= link_to issue_heading(issue), issue %> - <%= issue.subject %></h2>
+  <h2 class="content-title"><%= link_to issue_heading(issue), issue %> - <%= issue.subject %></h2>
   <div class="checklist-info" style="background: #<%= checklist.status.try(:background_color) || 'ffffff' %>">
     <div class="content">
       <div class="contextual">
@@ -24,6 +24,7 @@
     <div class="attributes">
       <%= checklist_fields_rows do |rows|
         rows.left l(:field_status), @checklist.status.name, :class => 'status'
+        rows.left l(:field_importance), @checklist.importance_human, :class => 'importance'
         rows.left l(:field_priority), @checklist.priority.name, :class => 'priority'
 
         unless @checklist.disabled_core_fields.include?('assigned_to_id')

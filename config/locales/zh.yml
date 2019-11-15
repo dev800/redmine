@@ -248,6 +248,7 @@ zh:
   field_max_length: 最大长度
   field_value: 值
   field_category: 类别
+  field_importance: 重要度
   field_title: 标题
   field_project: 项目
   field_issue: 问题
@@ -450,6 +451,10 @@ zh:
   project_module_calendar: 日历
   project_module_gantt: 甘特图
 
+  label_importance_1: '非常重要'
+  label_importance_2: '重要'
+  label_importance_3: '一般'
+  label_importance_4: '不重要'
   label_user: 用户
   label_user_plural: 用户
   label_user_new: 新建用户

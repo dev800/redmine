@@ -409,6 +409,25 @@ function getRemoteTab(name, remote_url, url, load_always) {
   return false;
 }
 
+$(document).on('change', '.checklists-filter .filter-trigger', function() {
+  var $this = $(this);
+  var $option = $this.find('option[value="' + $this.val() + '"]');
+  var href = $option.attr("href");
+  var dataHref = $option.attr("data-href");
+
+  replaceInHistory(href)
+
+  $.ajax({
+    method: "GET",
+    url: dataHref,
+    headers: {
+      "X-Request-URL": window.location.href
+    }
+  }).success(function(res) {
+
+  })
+})
+
 //replaces current URL with the "href" attribute of the current link
 //(only triggered if supported by browser)
 function replaceInHistory(url) {
@@ -1140,7 +1159,7 @@ $(document).on('click', '[remote-href]', function(event) {
     }).complete(function() { })
 });
 
-$(function() {
+function bindChecklistSortable() {
   $( ".checklists.ui-sortable" ).sortable({
     stop: function() {
       var $checklists = $(this).find(".checklist[data-checklist-id]");
@@ -1162,6 +1181,10 @@ $(function() {
       })
     }
   });
+}
+
+$(function() {
+  bindChecklistSortable()
 })
 
 $(document).on('click', '.ui-widget-overlay', function() {

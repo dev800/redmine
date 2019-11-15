@@ -42,32 +42,16 @@ class IssuesController < ApplicationController
   helper :timelog
 
   def checklists
-    @journals = @issue.visible_journals_with_index
     @project = @issue.project
-    @checklists = @issue.queried_checklists
+
+    @checklists = @issue.queried_checklists(
+      tracker: params[:checklists_tracker],
+      status: params[:checklists_status]
+    )
 
     respond_to do |format|
       format.html {
-        @allowed_statuses = @issue.new_statuses_allowed_to(User.current)
-        @priorities = IssuePriority.active
-        @time_entry = TimeEntry.new(:issue => @issue, :project => @issue.project)
-        @time_entries = @issue.time_entries.visible.preload(:activity, :user)
-        @relation = IssueRelation.new
-
         render :template => 'issues/checklists'
-      }
-
-      format.api {
-        @changesets = @issue.changesets.visible.preload(:repository, :user).to_a
-        @changesets.reverse! if User.current.wants_comments_in_reverse_order?
-      }
-
-      format.atom {
-        render :template => 'journals/index', :layout => false, :content_type => 'application/atom+xml'
-      }
-
-      format.pdf  {
-        send_file_headers! :type => 'application/pdf', :filename => "#{@project.identifier}-#{@issue.id}-checklists.pdf"
       }
     end
   rescue ActiveRecord::RecordNotFound
@@ -121,6 +105,11 @@ class IssuesController < ApplicationController
     @journals = @issue.visible_journals_with_index
     @has_changesets = @issue.changesets.visible.preload(:repository, :user).exists?
     @relations = @issue.relations.select {|r| r.other_issue(@issue) && r.other_issue(@issue).visible? }
+
+    @checklists = @issue.queried_checklists(
+      tracker: params[:checklists_tracker],
+      status: params[:checklists_status]
+    )
 
     @journals.reverse! if User.current.wants_comments_in_reverse_order?
 

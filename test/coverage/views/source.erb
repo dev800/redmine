@@ -31,7 +31,7 @@ div.source {border:1px solid #e2e2e2;}
   Generated on <%= now %> (<%= revision_link %>).
   More information about this environment at <a href='http://www.redmine.org/projects/redmine/wiki/Continuous_integration'>redmine.org</a>.
 </p>
-<h2><%= shortened_filename source_file %> (<%= "%.1f" % source_file.covered_percent %> %)</h2>
+<h2 class="content-title"><%= shortened_filename source_file %> (<%= "%.1f" % source_file.covered_percent %> %)</h2>
 
 <div class="source">
 <% source_file.lines.each_with_index do |line, i| %>
