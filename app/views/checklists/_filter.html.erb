@@ -107,7 +107,7 @@
   %>
 
   <div class="checklists-filter-selects">
-    <%= select_tag :checklists_tracker, options_for_select(checklist_tracker_options, params[:checklists_tracker]), :class => "filter-trigger" %>
-    <%= select_tag :checklists_status, options_for_select(checklist_status_options, params[:checklists_status]), :class => "filter-trigger" %>
+    <%= select_tag :checklists_tracker, options_for_select(checklist_tracker_options, params[:checklists_tracker] || Issue::DEFAULT_CHECKLISTS_TRACKER), :class => "filter-trigger" %>
+    <%= select_tag :checklists_status, options_for_select(checklist_status_options, params[:checklists_status] || Issue::DEFAULT_CHECKLISTS_STATUS), :class => "filter-trigger" %>
   </div>
 </div>

@@ -1629,6 +1629,19 @@ div.issue .attributes {
   margin-top: 1em;
 }
 
+#main a.user.active {
+  color: #00bcd4;
+}
+
+#main a.user.active:hover {
+  color: #009cd4;
+}
+
+div#activity dd,
+#search-results dd {
+  margin-top: 0.2em;
+}
+
 /**
   #################################################
   #################################################

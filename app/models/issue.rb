@@ -171,9 +171,12 @@ class Issue < ActiveRecord::Base
     end
   end
 
+  DEFAULT_CHECKLISTS_STATUS = 'status:open'
+  DEFAULT_CHECKLISTS_TRACKER = nil
+
   def queried_checklists(options = {})
-    checklists_status = options[:status].present? ? options[:status] : 'status:open'
-    checklists_tracker = options[:tracker].present? ? options[:tracker] : nil
+    checklists_status = options[:status].present? ? options[:status] : DEFAULT_CHECKLISTS_STATUS
+    checklists_tracker = options[:tracker].present? ? options[:tracker] : DEFAULT_CHECKLISTS_TRACKER
 
     checklists = self.checklists
       .joins(:status)
@@ -194,11 +197,6 @@ class Issue < ActiveRecord::Base
       id = checklists_tracker.sub('id:', '').strip().to_i
       checklists = checklists.where({Tracker.table_name => {id: id}})
     end
-
-    pp '---------->'
-    pp options
-    pp checklists.to_sql
-    pp '<----------'
 
     checklists
   end
