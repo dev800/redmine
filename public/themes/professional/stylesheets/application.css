@@ -1594,6 +1594,9 @@ div#roadmap .related-issues {
 
 #main .issue .checklists-simple .contextual {
   padding-bottom: 0;
+  padding-top: 0;
+  position: relative;
+  top: -2px;
 }
 
 #main .issue .checklists-simple .checklists {
