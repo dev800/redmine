@@ -1575,12 +1575,16 @@ div#roadmap .related-issues {
   margin-bottom: 0;
 }
 
+#main .wiki blockquote {
+  font-size: 14px;
+}
+
 #main .subject .issue-title h3 {
-  font-size: 1.28em;
+  font-size: 1.68em;
 }
 
 #main .subject .issue-ancestor .issue-title h3 {
-  padding-top: 0.32em;
+  padding-top: 0.38em;
   margin-bottom: 0;
 }
 

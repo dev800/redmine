@@ -412,7 +412,7 @@ class User < Principal
   end
 
   def wants_comments_in_reverse_order?
-    self.pref[:comments_sorting] == 'asc'
+    self.pref[:comments_sorting] == 'desc'
   end
 
   # Return user's RSS key (a 40 chars long string), used to access feeds
