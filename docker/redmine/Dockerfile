@@ -65,6 +65,7 @@ RUN set -eux; \
 	[ -z "$savedAptMark" ] || apt-mark manual $savedAptMark; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
 
+ENV TIME_ZONE $TIME_ZONE
 ENV RAILS_ENV production
 WORKDIR /usr/src/redmine
 
@@ -148,6 +149,7 @@ RUN set -eux; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
 
 VOLUME /usr/src/redmine/files
+VOLUME /usr/src/redmine/log
 
 COPY docker-entrypoint.sh /
 RUN ["chmod", "+x", "/docker-entrypoint.sh"] /
