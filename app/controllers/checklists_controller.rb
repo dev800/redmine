@@ -47,6 +47,7 @@ class ChecklistsController < ApplicationController
     @project = @issue.project
     @priorities = IssuePriority.active
     @allowed_statuses = IssueStatus.for_checklists_enable
+    @checklist.importance = Issue::DEFAULT_IMPORTANCE
 
     render :action => 'new', :layout => !request.xhr?
   end

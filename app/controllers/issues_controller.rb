@@ -140,6 +140,8 @@ class IssuesController < ApplicationController
   end
 
   def new
+    @issue.importance = Issue::DEFAULT_IMPORTANCE
+
     respond_to do |format|
       format.html { render :action => 'new', :layout => !request.xhr? }
       format.js

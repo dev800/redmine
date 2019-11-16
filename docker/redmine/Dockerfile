@@ -88,8 +88,8 @@ RUN set -eux; \
 # 	chmod -R ugo=rwX config db sqlite; \
 # 	find log tmp -type d -exec chmod 1777 '{}' +
 
-ENV REDMINE_VERSION 4.0.7
-ENV REDMINE_DOWNLOAD_MD5 0c771db6baac53a52427767318752f80
+ENV REDMINE_VERSION 4.0.8
+ENV REDMINE_DOWNLOAD_MD5 c6d255121965659fb3eb44fcc7fa1be8
 
 RUN set -eux; \
 	wget -O redmine.tar.gz "https://github.com/dev800/redmine/archive/v${REDMINE_VERSION}.tar.gz"; \
@@ -150,6 +150,7 @@ RUN set -eux; \
 VOLUME /usr/src/redmine/files
 
 COPY docker-entrypoint.sh /
+RUN ["chmod", "+x", "/docker-entrypoint.sh"] /
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 EXPOSE 3000
