@@ -88,8 +88,8 @@ RUN set -eux; \
 # 	chmod -R ugo=rwX config db sqlite; \
 # 	find log tmp -type d -exec chmod 1777 '{}' +
 
-ENV REDMINE_VERSION 4.0.8
-ENV REDMINE_DOWNLOAD_MD5 c6d255121965659fb3eb44fcc7fa1be8
+ENV REDMINE_VERSION 4.0.9
+ENV REDMINE_DOWNLOAD_MD5 7331840c5edb17268bded258345bebae
 
 RUN set -eux; \
 	wget -O redmine.tar.gz "https://github.com/dev800/redmine/archive/v${REDMINE_VERSION}.tar.gz"; \
