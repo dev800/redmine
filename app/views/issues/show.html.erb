@@ -101,7 +101,12 @@ end %>
 
 <% if @checklists %>
   <hr />
-  <div id="checklists" class="checklists-wrapper checklists-simple">
+  <div id="checklists" class="checklists-wrapper checklists-simple" data-sync-url="<%= checklists_url(
+    format: 'js',
+    issue_id: @issue.id,
+    checklists_tracker: params[:checklists_tracker],
+    checklists_status: params[:checklists_status]
+  ) %>">
     <div class="clearfix">
       <div class="contextual">
         <%= render :partial => "checklists/filter", :locals => { request_url: request.url, :issue => @issue, :checklists => @checklists } %>

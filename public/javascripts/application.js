@@ -420,12 +420,11 @@ $(document).on('change', '.checklists-filter .filter-trigger', function() {
   $.ajax({
     method: "GET",
     url: dataHref,
+    data: {_t: (new Date()).valueOf()},
     headers: {
       "X-Request-URL": window.location.href
     }
-  }).success(function(res) {
-
-  })
+  }).success(function(res) { })
 })
 
 //replaces current URL with the "href" attribute of the current link
@@ -1159,6 +1158,19 @@ $(document).on('click', '[remote-href]', function(event) {
     }).complete(function() { })
 });
 
+function syncData() {
+  $.each($("[data-sync-url]"), function() {
+    $.ajax({
+      method: "GET",
+      url: $(this).attr('data-sync-url'),
+      data: {_t: (new Date()).valueOf()},
+      headers: {
+        "X-Request-URL": window.location.href
+      }
+    }).success(function(res) { })
+  })
+}
+
 function bindChecklistSortable() {
   $( ".checklists.ui-sortable" ).sortable({
     stop: function() {
@@ -1184,7 +1196,8 @@ function bindChecklistSortable() {
 }
 
 $(function() {
-  bindChecklistSortable()
+  syncData();
+  bindChecklistSortable();
 })
 
 $(document).on('click', '.ui-widget-overlay', function() {

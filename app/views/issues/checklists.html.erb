@@ -1,5 +1,10 @@
 <h2 class="content-title"><%= link_to issue_heading(@issue), @issue %> - <%= @issue.subject %></h2>
-<div class="checklists-wrapper">
+<div class="checklists-wrapper" data-sync-url="<%= checklists_url(
+  format: 'js',
+  issue_id: @issue.id,
+  checklists_tracker: params[:checklists_tracker],
+  checklists_status: params[:checklists_status]
+) %>">
   <div class="content clearfix">
     <div class="contextual">
       <%= render :partial => "checklists/filter", :locals => { request_url: request.url, :issue => @issue, :checklists => @checklists } %>

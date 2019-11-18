@@ -33,7 +33,7 @@ module Redmine
             text[0..2] = "<input type=\"checkbox\" disabled>"
           end
 
-          "<li>#{text}</li>"
+          "<li class=\"task-list-item\">#{text}</li>"
         end
 
         def link(link, title, content)

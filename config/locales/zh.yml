@@ -950,7 +950,7 @@ zh:
   default_priority_urgent: 紧急
   default_priority_immediate: 立刻
 
-  default_activity_requirement: 需求分析
+  default_activity_requirement: 需求
   default_activity_analysis: 分析
   default_activity_design: 设计
   default_activity_development: 开发

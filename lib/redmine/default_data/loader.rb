@@ -389,7 +389,7 @@ module Redmine
             # Enumerations
             IssuePriority.create!(
               :name => l(:default_priority_low),
-              :color => '00EEEE',
+              :color => 'e6e8e8',
               :background_color => '97FFFF',
               :flag_color => '97FFFF',
               :flag_value => 'low',

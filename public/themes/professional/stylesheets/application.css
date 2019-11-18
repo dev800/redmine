@@ -709,6 +709,12 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
 #main .wiki ol,
 #main .wiki ul {
   padding-left: 2em;
+  margin-bottom: 1.2em;
+}
+
+#main .wiki ol:last-child,
+#main .wiki ul:last-child {
+  margin-bottom: 0;
 }
 
 #main .wiki ol ol,
@@ -720,7 +726,7 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
 }
 
 #main .wiki li {
-  word-wrap: break-all;
+  word-break: break-all;
 }
 
 #main .wiki li>p {
@@ -998,7 +1004,7 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
 }
 
 #main .wiki .task-list-item input {
-  margin: 0 .2em .25em -1.6em;
+  margin: 0 .2em 0 -1.6em;
   vertical-align: middle;
 }
 
@@ -1370,7 +1376,7 @@ select#checklist_done_ratio { width: 95px; }
 
 .checklist-show .checklist-info,
 div.issue {
-  padding: 4px 8px;
+  padding: 0.8em;
 }
 
 .checklist-show .checklist-info .attributes .attribute,
@@ -1471,10 +1477,18 @@ tr.issue td.last_updated_by {
   position: relative;
 }
 
+#main .journal.time_entry > h4,
 #main .journal h4.note-header {
   border-bottom: dotted 1px #c0c0c0;
   padding: 0.58em 0.8em;
   margin-bottom: 0;
+}
+
+#main .journal.time_entry > p {
+  padding-left: 0.4em;
+  padding-right: 0.4em;
+  margin-top: 0.4em;
+  margin-bottom: 0.4em;
 }
 
 #main .journal ul.details,
@@ -1663,6 +1677,10 @@ div#activity dd,
   margin-top: 0.2em;
 }
 
+#main .mobile-show {
+  display: hide;
+}
+
 /**
   #################################################
   #################################################
@@ -1671,6 +1689,14 @@ div#activity dd,
   #################################################
 */
 @media screen and (max-width: 899px) {
+  #main .mobile-hide {
+    display: hide;
+  }
+
+  #main .mobile-show {
+    display: initial;
+  }
+
   #content > .contextual > a,
   #content > .contextual .drdn,
   p.buttons a {
