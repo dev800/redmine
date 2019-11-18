@@ -23,6 +23,7 @@ class IssueCategory < ActiveRecord::Base
   belongs_to :assigned_to, :class_name => 'Principal'
   has_many :issues, :foreign_key => 'category_id', :dependent => :nullify
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:project_id]
   validates_length_of :name, :maximum => 60

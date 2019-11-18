@@ -20,6 +20,8 @@
 class WikiRedirect < ActiveRecord::Base
   belongs_to :wiki
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
+
   validates_presence_of :wiki_id, :title, :redirects_to
   validates_length_of :title, :redirects_to, :maximum => 255
 

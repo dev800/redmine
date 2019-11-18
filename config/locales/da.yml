@@ -686,7 +686,7 @@ da:
   default_tracker_feature: Funktion
   default_tracker_support: Support
   default_issue_status_new: Ny
-  default_issue_status_in_progress: Igangværende
+  default_issue_status_solving: Igangværende
   default_issue_status_resolved: Løst
   default_issue_status_feedback: Feedback
   default_issue_status_closed: Lukket

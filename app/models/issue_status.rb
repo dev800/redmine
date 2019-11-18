@@ -20,10 +20,13 @@
 class IssueStatus < ActiveRecord::Base
   include Redmine::SafeAttributes
 
+  COLOR_REGEX = /\A[a-fA-F0-9]{3}\z|\A[a-fA-F0-9]{6}\z/
+
   before_destroy :check_integrity
   has_many :workflows, :class_name => 'WorkflowTransition', :foreign_key => "old_status_id"
   has_many :workflow_transitions_as_new_status, :class_name => 'WorkflowTransition', :foreign_key => "new_status_id"
   acts_as_positioned
+  # acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
 
   after_update :handle_is_closed_change
   before_destroy :delete_workflow_rules
@@ -32,15 +35,27 @@ class IssueStatus < ActiveRecord::Base
   validates_uniqueness_of :name
   validates_length_of :name, :maximum => 30
   validates_inclusion_of :default_done_ratio, :in => 0..100, :allow_nil => true
+  validates :flag_color, format: {with: COLOR_REGEX, message: l(:wrong_rgb_value)}, presence: true
+  validates :color, format: {with: COLOR_REGEX, message: l(:wrong_rgb_value)}, presence: true
+  validates :background_color, format: {with: COLOR_REGEX, message: l(:wrong_rgb_value)}, presence: true
 
   scope :sorted, lambda { order(:position) }
   scope :named, lambda {|arg| where("LOWER(#{table_name}.name) = LOWER(?)", arg.to_s.strip)}
 
   safe_attributes(
     'name',
+    'flag_value',
+    'flag_color',
+    'color',
+    'background_color',
     'is_closed',
+    'checklists_enable',
     'position',
     'default_done_ratio')
+
+  def self.for_checklists_enable
+    self.where(:checklists_enable => true).order(:position => :asc).all
+  end
 
   # Update all the +Issues+ setting their done_ratio to the value of their +IssueStatus+
   def self.update_issue_done_ratios

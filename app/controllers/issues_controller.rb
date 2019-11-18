@@ -20,13 +20,13 @@
 class IssuesController < ApplicationController
   default_search_scope :issues
 
-  before_action :find_issue, :only => [:show, :edit, :update, :issue_tab]
+  before_action :find_issue, :only => [:show, :edit, :update, :issue_tab, :checklists]
   before_action :find_issues, :only => [:bulk_edit, :bulk_update, :destroy]
   before_action :authorize, :except => [:index, :new, :create]
   before_action :find_optional_project, :only => [:index, :new, :create]
   before_action :build_new_issue_from_params, :only => [:new, :create]
-  accept_rss_auth :index, :show
-  accept_api_auth :index, :show, :create, :update, :destroy
+  accept_rss_auth :index, :show, :checklists
+  accept_api_auth :index, :show, :create, :update, :destroy, :checklists
 
   rescue_from Query::StatementInvalid, :with => :query_statement_invalid
 
@@ -40,6 +40,23 @@ class IssuesController < ApplicationController
   include QueriesHelper
   helper :repositories
   helper :timelog
+
+  def checklists
+    @project = @issue.project
+
+    @checklists = @issue.queried_checklists(
+      tracker: params[:checklists_tracker],
+      status: params[:checklists_status]
+    )
+
+    respond_to do |format|
+      format.html {
+        render :template => 'issues/checklists'
+      }
+    end
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
 
   def index
     use_session = !request.format.csv?
@@ -89,6 +106,11 @@ class IssuesController < ApplicationController
     @has_changesets = @issue.changesets.visible.preload(:repository, :user).exists?
     @relations = @issue.relations.select {|r| r.other_issue(@issue) && r.other_issue(@issue).visible? }
 
+    @checklists = @issue.queried_checklists(
+      tracker: params[:checklists_tracker],
+      status: params[:checklists_status]
+    )
+
     @journals.reverse! if User.current.wants_comments_in_reverse_order?
 
     if User.current.allowed_to?(:view_time_entries, @project)
@@ -118,6 +140,8 @@ class IssuesController < ApplicationController
   end
 
   def new
+    @issue.importance = Issue::DEFAULT_IMPORTANCE
+
     respond_to do |format|
       format.html { render :action => 'new', :layout => !request.xhr? }
       format.js

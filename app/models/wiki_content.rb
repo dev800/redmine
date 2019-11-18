@@ -31,6 +31,8 @@ class WikiContent < ActiveRecord::Base
   after_create_commit :send_notification_create
   after_update_commit :send_notification_update
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
+
   scope :without_text, lambda {select(:id, :page_id, :version, :updated_on)}
 
   def initialize(*args)

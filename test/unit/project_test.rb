@@ -877,7 +877,7 @@ class ProjectTest < ActiveSupport::TestCase
 
   test "#start_date should be nil when issues have no start date" do
     project = Project.generate!
-    project.trackers << Tracker.generate!
+    project.trackers << Tracker.generate!(flag_value: "TrackerTMP")
     early = 7.days.ago.to_date
     Issue.generate!(:project => project, :start_date => nil)
 
@@ -886,7 +886,7 @@ class ProjectTest < ActiveSupport::TestCase
 
   test "#start_date should be the earliest start date of it's issues" do
     project = Project.generate!
-    project.trackers << Tracker.generate!
+    project.trackers << Tracker.generate!(flag_value: "TrackerTMP")
     early = 7.days.ago.to_date
     Issue.generate!(:project => project, :start_date => Date.today)
     Issue.generate!(:project => project, :start_date => early)
@@ -901,7 +901,7 @@ class ProjectTest < ActiveSupport::TestCase
 
   test "#due_date should be nil if there are no issues with due dates" do
     project = Project.generate!
-    project.trackers << Tracker.generate!
+    project.trackers << Tracker.generate!(flag_value: "TrackerTMP")
     Issue.generate!(:project => project, :due_date => nil)
 
     assert_nil project.due_date
@@ -909,7 +909,7 @@ class ProjectTest < ActiveSupport::TestCase
 
   test "#due_date should be the latest due date of it's issues" do
     project = Project.generate!
-    project.trackers << Tracker.generate!
+    project.trackers << Tracker.generate!(flag_value: "TrackerTMP")
     future = 7.days.from_now.to_date
     Issue.generate!(:project => project, :due_date => future)
     Issue.generate!(:project => project, :due_date => Date.today)
@@ -928,7 +928,7 @@ class ProjectTest < ActiveSupport::TestCase
 
   test "#due_date should pick the latest date from it's issues and versions" do
     project = Project.generate!
-    project.trackers << Tracker.generate!
+    project.trackers << Tracker.generate!(flag_value: "TrackerTMP")
     future = 7.days.from_now.to_date
     far_future = 14.days.from_now.to_date
     Issue.generate!(:project => project, :due_date => far_future)
@@ -952,7 +952,7 @@ class ProjectTest < ActiveSupport::TestCase
 
   test "#completed_percent with versions should return 100 if the version has only closed issues" do
     project = Project.generate!
-    project.trackers << Tracker.generate!
+    project.trackers << Tracker.generate!(flag_value: "TrackerTMP")
     v1 = Version.generate!(:project => project)
     Issue.generate!(:project => project, :status => IssueStatus.find_by_name('Closed'), :fixed_version => v1)
     v2 = Version.generate!(:project => project)
@@ -963,7 +963,7 @@ class ProjectTest < ActiveSupport::TestCase
 
   test "#completed_percent with versions should return the averaged completed percent of the versions (not weighted)" do
     project = Project.generate!
-    project.trackers << Tracker.generate!
+    project.trackers << Tracker.generate!(flag_value: "TrackerTMP")
     v1 = Version.generate!(:project => project)
     Issue.generate!(:project => project, :status => IssueStatus.find_by_name('New'), :estimated_hours => 10, :done_ratio => 50, :fixed_version => v1)
     v2 = Version.generate!(:project => project)

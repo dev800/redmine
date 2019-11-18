@@ -1,4 +1,4 @@
-<h2><%= @copy ? l(:button_copy) : l(:label_bulk_edit_selected_issues) %></h2>
+<h2 class="content-title"><%= @copy ? l(:button_copy) : l(:label_bulk_edit_selected_issues) %></h2>
 
 <% if @saved_issues && @unsaved_issues.present? %>
 <div id="errorExplanation">
@@ -194,7 +194,7 @@
 
 <fieldset>
 <legend><%= l(:field_notes) %></legend>
-<%= text_area_tag 'notes', @notes, :cols => 60, :rows => 10, :class => 'wiki-edit',
+<%= text_area_tag 'notes', @notes, :cols => 60, :rows => 5, :class => 'wiki-edit',
                   :data => {
                       :auto_complete => true,
                       :issues_url => auto_complete_issues_path(:project_id => @project, :q => '')

@@ -27,6 +27,7 @@ class News < ActiveRecord::Base
   validates_length_of :title, :maximum => 60
   validates_length_of :summary, :maximum => 255
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   acts_as_attachable :edit_permission => :manage_news,
                      :delete_permission => :manage_news
   acts_as_searchable :columns => ['title', 'summary', "#{table_name}.description"],

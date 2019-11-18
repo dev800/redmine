@@ -2,7 +2,7 @@
 <%= link_to(l(:label_attachment_new), new_project_file_path(@project), :class => 'icon icon-add') if User.current.allowed_to?(:manage_files, @project) %>
 </div>
 
-<h2><%=l(:label_attachment_plural)%></h2>
+<h2 class="content-title"><%=l(:label_attachment_plural)%></h2>
 
 <% delete_allowed = User.current.allowed_to?(:manage_files, @project) %>
 

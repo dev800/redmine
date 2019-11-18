@@ -33,6 +33,8 @@ class AuthSource < ActiveRecord::Base
   validates_uniqueness_of :name
   validates_length_of :name, :maximum => 60
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
+
   safe_attributes(
     'name',
     'host',

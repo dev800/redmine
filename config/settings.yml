@@ -209,8 +209,10 @@ issue_list_default_columns:
   default:
   - tracker
   - status
-  - priority
   - subject
+  - priority
+  - importance
+  - parent
   - assigned_to
   - updated_on
 issue_list_default_totals:
@@ -237,6 +239,8 @@ project_list_defaults:
     - name
     - identifier
     - short_description
+checklist_done_ratio:
+  default: 'checklist_field'
 issue_done_ratio:
   default: 'issue_field'
 default_projects_public:
@@ -246,6 +250,7 @@ default_projects_modules:
   default:
   - issue_tracking
   - time_tracking
+  - checklists
   - news
   - documents
   - files

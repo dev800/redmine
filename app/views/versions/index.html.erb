@@ -6,7 +6,7 @@
               :class => 'icon icon-settings' if User.current.allowed_to?(:manage_versions, @project) %>
 </div>
 
-<h2><%=l(:label_roadmap)%></h2>
+<h2 class="content-title"><%=l(:label_roadmap)%></h2>
 
 <% if @versions.empty? %>
   <p class="nodata"><%= l(:label_no_data) %></p>

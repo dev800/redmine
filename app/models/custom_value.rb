@@ -21,6 +21,7 @@ class CustomValue < ActiveRecord::Base
   belongs_to :custom_field
   belongs_to :customized, :polymorphic => true
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   after_save :custom_field_after_save_custom_value
 
   def initialize(attributes=nil, *args)

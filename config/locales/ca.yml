@@ -886,7 +886,7 @@ ca:
   default_tracker_feature: "Característica"
   default_tracker_support: "Suport"
   default_issue_status_new: "Nou"
-  default_issue_status_in_progress: "En Progrés"
+  default_issue_status_solving: "En Progrés"
   default_issue_status_resolved: "Resolt"
   default_issue_status_feedback: "Comentaris"
   default_issue_status_closed: "Tancat"

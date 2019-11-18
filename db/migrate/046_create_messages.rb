@@ -10,6 +10,7 @@ class CreateMessages < ActiveRecord::Migration[4.2]
       t.column :last_reply_id, :integer
       t.column :created_on, :datetime, :null => false
       t.column :updated_on, :datetime, :null => false
+      t.column :deleted_at, :timestamp
     end
     add_index :messages, [:board_id], :name => :messages_board_id
     add_index :messages, [:parent_id], :name => :messages_parent_id

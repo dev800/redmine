@@ -894,7 +894,7 @@ he:
   default_tracker_feature: יכולת
   default_tracker_support: תמיכה
   default_issue_status_new: חדש
-  default_issue_status_in_progress: בעבודה
+  default_issue_status_solving: בעבודה
   default_issue_status_resolved: נפתר
   default_issue_status_feedback: משוב
   default_issue_status_closed: סגור

@@ -20,6 +20,7 @@
 class CustomFieldEnumeration < ActiveRecord::Base
   belongs_to :custom_field
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   validates_presence_of :name, :position, :custom_field_id
   validates_length_of :name, :maximum => 60
   validates_numericality_of :position, :only_integer => true

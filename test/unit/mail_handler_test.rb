@@ -534,7 +534,7 @@ class MailHandlerTest < ActiveSupport::TestCase
   end
 
   def test_add_issue_with_japanese_keywords
-    tracker = Tracker.generate!(:name => '開発')
+    tracker = Tracker.generate!(:name => '開発', flag_value: "TrackerTMP")
     Project.find(1).trackers << tracker
     issue = submit_email(
               'japanese_keywords_iso_2022_jp.eml',

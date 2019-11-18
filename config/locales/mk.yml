@@ -882,7 +882,7 @@ mk:
   default_tracker_feature: Функционалност
   default_tracker_support: Поддршка
   default_issue_status_new: Нова
-  default_issue_status_in_progress: Во прогрес
+  default_issue_status_solving: Во прогрес
   default_issue_status_resolved: Разрешена
   default_issue_status_feedback: Feedback
   default_issue_status_closed: Затворена

@@ -24,6 +24,7 @@ class Enumeration < ActiveRecord::Base
 
   belongs_to :project
 
+  # acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   acts_as_positioned :scope => :parent_id
   acts_as_customizable
   acts_as_tree
@@ -34,6 +35,9 @@ class Enumeration < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:type, :project_id]
   validates_length_of :name, :maximum => 30
+  validates :flag_color, format: {with: ::IssueStatus::COLOR_REGEX, message: l(:wrong_rgb_value)}, presence: true
+  validates :color, format: {with: ::IssueStatus::COLOR_REGEX, message: l(:wrong_rgb_value)}, presence: true
+  validates :background_color, format: {with: ::IssueStatus::COLOR_REGEX, message: l(:wrong_rgb_value)}, presence: true
 
   scope :shared, lambda { where(:project_id => nil) }
   scope :sorted, lambda { order(:position) }

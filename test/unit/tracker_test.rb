@@ -51,7 +51,7 @@ class TrackerTest < ActiveSupport::TestCase
     rules_count = source.workflow_rules.count
     assert rules_count > 0
 
-    target = Tracker.new(:name => 'Target', :default_status_id => 1)
+    target = Tracker.new(:name => 'Target', :default_status_id => 1, :flag_value => "target")
     assert target.save
     target.copy_workflow_rules(source)
     target.reload

@@ -1,0 +1,24 @@
+<% if @issue %>
+  $('.checklists-filter[data-issue-id="<%= @issue.id %>"]').replaceWith(
+    '<%= escape_javascript(render :partial => "checklists/filter", :locals => {
+      :issue => @issue,
+      :checklists => @checklists,
+      :request_url => request.headers['x-request-url'] || params[:request_url] || request.url
+    }) %>'
+  );
+
+  $('.checklists[data-issue-id="<%= @issue.id %>"]').replaceWith(
+    '<%= escape_javascript(render :partial => "checklists/checklists", :locals => {
+      :checklists => @checklists,
+      :issue => @issue
+    }) %>'
+  )
+
+  bindChecklistSortable();
+
+  if ($('.checklists[data-issue-id="<%= @issue.id %>"] > .checklist').length > 0) {
+    $('.checklists-empty[data-issue-id="<%= @issue.id %>"]').hide();
+  } else {
+    $('.checklists-empty[data-issue-id="<%= @issue.id %>"]').show();
+  }
+<% end %>

@@ -21,6 +21,7 @@ class Watcher < ActiveRecord::Base
   belongs_to :watchable, :polymorphic => true
   belongs_to :user
 
+  # acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   validates_presence_of :user
   validates_uniqueness_of :user_id, :scope => [:watchable_type, :watchable_id]
   validate :validate_user

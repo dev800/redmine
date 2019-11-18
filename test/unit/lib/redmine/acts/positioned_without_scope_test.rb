@@ -23,14 +23,14 @@ class Redmine::Acts::PositionedWithoutScopeTest < ActiveSupport::TestCase
   fixtures :trackers, :issue_statuses
 
   def test_create_should_default_to_last_position
-    t = Tracker.generate
+    t = Tracker.generate(flag_value: "TrackerTMP")
     t.save!
 
     assert_equal 4, t.reload.position
   end
 
   def test_create_should_insert_at_given_position
-    t = Tracker.generate
+    t = Tracker.generate(flag_value: "TrackerTMP")
     t.position = 2
     t.save!
 
@@ -39,15 +39,14 @@ class Redmine::Acts::PositionedWithoutScopeTest < ActiveSupport::TestCase
   end
 
   def test_destroy_should_remove_position
-    t = Tracker.generate!
-    Tracker.generate!
+    t = Tracker.generate!(flag_value: "TrackerTMP")
     t.destroy
 
     assert_equal [1, 2, 3, 4], Tracker.order(:id).pluck(:position)
   end
 
   def test_update_should_update_positions
-    t = Tracker.generate!
+    t = Tracker.generate!(flag_value: "TrackerTMP")
     assert_equal 4, t.position
 
     t.position = 2

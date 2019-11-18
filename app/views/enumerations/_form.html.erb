@@ -4,6 +4,9 @@
   <p><%= f.text_field :name %></p>
   <p><%= f.check_box :active %></p>
   <p><%= f.check_box :is_default %></p>
+  <p><%= f.text_field :flag_color, :required => true %></p>
+  <p><%= f.text_field :color, :required => true %></p>
+  <p><%= f.text_field :background_color, :required => true %></p>
 
   <% @enumeration.custom_field_values.each do |value| %>
     <p><%= custom_field_tag_with_label :enumeration, value %></p>

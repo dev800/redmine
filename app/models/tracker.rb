@@ -33,12 +33,16 @@ class Tracker < ActiveRecord::Base
   has_and_belongs_to_many :projects
   has_and_belongs_to_many :custom_fields, :class_name => 'IssueCustomField', :join_table => "#{table_name_prefix}custom_fields_trackers#{table_name_suffix}", :association_foreign_key => 'custom_field_id'
   acts_as_positioned
+  # acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
 
   validates_presence_of :default_status
   validates_presence_of :name
   validates_uniqueness_of :name
   validates_length_of :name, :maximum => 30
   validates_length_of :description, :maximum => 255
+  validates :flag_color, format: {with: ::IssueStatus::COLOR_REGEX, message: l(:wrong_rgb_value)}, presence: true
+  validates :color, format: {with: ::IssueStatus::COLOR_REGEX, message: l(:wrong_rgb_value)}, presence: true
+  validates :background_color, format: {with: ::IssueStatus::COLOR_REGEX, message: l(:wrong_rgb_value)}, presence: true
 
   scope :sorted, lambda { order(:position) }
   scope :named, lambda {|arg| where("LOWER(#{table_name}.name) = LOWER(?)", arg.to_s.strip)}
@@ -68,6 +72,10 @@ class Tracker < ActiveRecord::Base
 
   safe_attributes(
     'name',
+    'flag_value',
+    'flag_color',
+    'color',
+    'background_color',
     'default_status_id',
     'is_in_roadmap',
     'core_fields',

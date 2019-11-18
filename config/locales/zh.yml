@@ -167,6 +167,9 @@ zh:
   notice_successful_create: 创建成功
   notice_successful_update: 更新成功
   notice_successful_delete: 删除成功
+  notice_fail_create: 创建失败
+  notice_fail_update: 更新失败
+  notice_fail_delete: 删除失败
   notice_successful_connection: 连接成功
   notice_file_not_found: 您访问的页面不存在或已被删除。
   notice_locking_conflict: 数据已被另一位用户更新
@@ -221,6 +224,9 @@ zh:
   mail_body_wiki_content_updated: "'%{id}' wiki页面已由 %{author} 更新。"
 
 
+  field_flag_value: 标识
+  field_flag_color: 标识颜色
+  field_background_color: 背景颜色
   field_name: 名称
   field_description: 描述
   field_summary: 摘要
@@ -242,6 +248,7 @@ zh:
   field_max_length: 最大长度
   field_value: 值
   field_category: 类别
+  field_importance: 重要度
   field_title: 标题
   field_project: 项目
   field_issue: 问题
@@ -311,7 +318,7 @@ zh:
   field_watcher: 关注者
   field_identity_url: OpenID URL
   field_content: 内容
-  field_group_by: 根据此条件分组
+  field_group_by: 分组
   field_sharing: 共享
   field_parent_issue: 父任务
   field_member_of_group: 用户组的成员
@@ -362,7 +369,7 @@ zh:
   setting_repository_log_display_limit: 在文件变更记录页面上显示的最大修订版本数量
   setting_openid: 允许使用OpenID登录和注册
   setting_password_min_length: 最短密码长度
-  setting_new_project_user_role_id: 非管理员用户新建项目时将被赋予的（在该项目中的）角色
+  setting_new_project_user_role_id: 非管理员用户新建项目时将被赋予的角色
   setting_default_projects_modules: 新建项目默认启用的模块
   setting_issue_done_ratio: 计算问题完成度：
   setting_issue_done_ratio_issue_field: 使用问题（的完成度）属性
@@ -386,6 +393,9 @@ zh:
   permission_view_issues: 查看问题
   permission_add_issues: 新建问题
   permission_edit_issues: 更新问题
+  permission_view_checklists: 查看检查列表
+  permission_add_checklists: 新建检查项
+  permission_edit_checklists: 更新检查项
   permission_manage_issue_relations: 管理问题关联
   permission_add_issue_notes: 添加说明
   permission_edit_issue_notes: 编辑说明
@@ -429,6 +439,7 @@ zh:
   permission_export_wiki_pages: 导出 wiki 页面
   permission_manage_subtasks: 管理子任务
 
+  project_module_checklist_tracking: 检查列表
   project_module_issue_tracking: 问题跟踪
   project_module_time_tracking: 时间跟踪
   project_module_news: 新闻
@@ -440,6 +451,11 @@ zh:
   project_module_calendar: 日历
   project_module_gantt: 甘特图
 
+  label_importance_5: '很重要'
+  label_importance_4: '重要'
+  label_importance_3: '一般'
+  label_importance_2: '不重要'
+  label_importance_1: '可有可无'
   label_user: 用户
   label_user_plural: 用户
   label_user_new: 新建用户
@@ -453,6 +469,9 @@ zh:
     other: "%{count} 个项目"
   label_project_all: 所有的项目
   label_project_latest: 最近的项目
+  label_checklist_new: 新建检查项
+  label_checklist_edit: 编辑检查项
+  label_checklist_plural: 检查列表
   label_issue: 问题
   label_issue_new: 新建问题
   label_issue_plural: 问题
@@ -642,7 +661,7 @@ zh:
   label_sort_lower: 下移
   label_sort_lowest: 置底
   label_roadmap: 路线图
-  label_roadmap_due_in: "截止日期到  %{value}"
+  label_roadmap_due_in: "截止日期到第 %{value}"
   label_roadmap_overdue: "%{value} 延期"
   label_roadmap_no_issues: 该版本没有问题
   label_search: 搜索
@@ -659,6 +678,7 @@ zh:
   label_preview: 预览
   label_feed_plural: Feeds
   label_changes_details: 所有变更的详情
+  label_checklist_tracking: 检查列表
   label_issue_tracking: 问题跟踪
   label_spent_time: 耗时
   label_overall_spent_time: 总体耗时
@@ -899,24 +919,46 @@ zh:
   default_role_manager: 管理人员
   default_role_developer: 开发人员
   default_role_reporter: 报告人员
-  default_tracker_bug: 错误
+
   default_tracker_feature: 功能
+  default_tracker_task: 任务
   default_tracker_support: 支持
-  default_issue_status_new: 新建
-  default_issue_status_in_progress: 进行中
-  default_issue_status_resolved: 已解决
-  default_issue_status_feedback: 反馈
-  default_issue_status_closed: 已关闭
+  default_tracker_bug: Bug
+  default_tracker_checklist: 清单
+  default_tracker_cases: 用例
+  default_tracker_release: 部署
+
+  default_issue_status_requirement: 需求中
+  default_issue_status_pending: 等待中
   default_issue_status_rejected: 已拒绝
+  default_issue_status_unsolved: 未解决
+  default_issue_status_solving: 执行中
+  default_issue_status_alpha: alpha
+  default_issue_status_bate: bate
+  default_issue_status_qualified: 待上线
+  default_issue_status_released: 已上线
+  default_issue_status_finished: 已完成
+  default_issue_status_cancel: 已放弃
+
   default_doc_category_user: 用户文档
   default_doc_category_tech: 技术文档
+  default_doc_category_requirement: 需求文档
+
   default_priority_low: 低
   default_priority_normal: 普通
   default_priority_high: 高
   default_priority_urgent: 紧急
   default_priority_immediate: 立刻
+
+  default_activity_requirement: 需求
+  default_activity_analysis: 分析
   default_activity_design: 设计
   default_activity_development: 开发
+  default_activity_test: 测试
+  default_activity_replease: 部署
+  default_activity_report: 报告
+  default_activity_study: 学习
+  default_activity_meeting: 会议
 
   enumeration_issue_priorities: 问题优先级
   enumeration_doc_categories: 文档类别
@@ -1222,20 +1264,16 @@ zh:
   setting_timelog_accept_0_hours: 允许计入0小时工时
   setting_timelog_max_hours_per_day: 每用户每天最大可计入工时上限
   label_x_revisions: "%{count} 修订"
-  error_can_not_delete_auth_source: This authentication mode is in use and cannot be
-    deleted.
-  button_actions: Actions
-  mail_body_lost_password_validity: Please be aware that you may change the password
-    only once using this link.
+  error_can_not_delete_auth_source: 此身份验证模式正在使用中，无法删除。
+  button_actions: 操作
+  mail_body_lost_password_validity: 请注意，您只能使用此链接更改一次密码。
   text_login_required_html: When not requiring authentication, public projects and their
     contents are openly available on the network. You can <a href="%{anonymous_role_path}">edit
     the applicable permissions</a>.
-  label_login_required_yes: 'Yes'
-  label_login_required_no: No, allow anonymous access to public projects
-  text_project_is_public_non_member: Public projects and their contents are available
-    to all logged-in users.
-  text_project_is_public_anonymous: Public projects and their contents are openly available
-    on the network.
+  label_login_required_yes: '是'
+  label_login_required_no: 不，允许匿名访问公共项目
+  text_project_is_public_non_member: 所有登录用户都可以使用公共项目及其内容。
+  text_project_is_public_anonymous: 公共项目及其内容在网络上是公开的。
   label_version_and_files: Versions (%{count}) and Files
   label_ldap: LDAP
   label_ldaps_verify_none: LDAPS (without certificate check)
@@ -1275,15 +1313,15 @@ zh:
   label_import_notifications: Send email notifications during the import
   text_gs_available: ImageMagick PDF support available (optional)
   field_recently_used_projects: Number of recently used projects in jump box
-  label_optgroup_bookmarks: Bookmarks
+  label_optgroup_bookmarks: 收藏
   label_optgroup_others: Other projects
-  label_optgroup_recents: Recently used
-  button_project_bookmark: Add bookmark
-  button_project_bookmark_delete: Remove bookmark
+  label_optgroup_recents: 最近使用
+  button_project_bookmark: 添加收藏
+  button_project_bookmark_delete: 移除收藏
   field_history_default_tab: Issue's history default tab
-  label_issue_history_properties: Property changes
-  label_issue_history_notes: Notes
-  label_last_tab_visited: Last visited tab
+  label_issue_history_properties: 变更
+  label_issue_history_notes: 记录
+  label_last_tab_visited: 最后访问标签
   field_unique_id: Unique ID
   text_no_subject: no subject
   setting_password_required_char_classes: Required character classes for passwords
@@ -1292,12 +1330,18 @@ zh:
   label_password_char_class_digits: digits
   label_password_char_class_special_chars: special characters
   text_characters_must_contain: Must contain %{character_classes}.
-  label_starts_with: starts with
-  label_ends_with: ends with
+  label_starts_with: 开始于
+  label_ends_with: 截止于
   label_issue_fixed_version_updated: Target version updated
   setting_project_list_defaults: Projects list defaults
-  label_display_type: Display results as
-  label_display_type_list: List
-  label_display_type_board: Board
-  label_my_bookmarks: My bookmarks
-  label_import_time_entries: Import time entries
+  label_display_type: 显示方式
+  label_display_type_list: 列表
+  label_display_type_board: 面板
+  label_my_bookmarks: 我的收藏
+  label_import_time_entries: 导入工时
+  field_checklists: 检查列表
+  field_checklist_new: 新建检查项
+  field_checklist_edit: 编辑检查项
+  label_checklists: 检查列表
+  label_checklists_empty: 检查列表为空
+  wrong_rgb_value: 错误的颜色值

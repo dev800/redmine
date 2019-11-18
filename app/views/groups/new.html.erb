@@ -2,7 +2,7 @@
 
 <%= labelled_form_for @group, :html => {:multipart => true} do |f| %>
 <%= render :partial => 'form', :locals => { :f => f } %>
-<p>
+<p class="form-actions">
   <%= f.submit l(:button_create) %>
   <%= f.submit l(:button_create_and_continue), :name => 'continue' %>
 </p>

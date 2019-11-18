@@ -1,0 +1,45 @@
+<% if @checklist.save %>
+  closeHTMLDialog();
+
+  $.Toast.showToast({
+    title: '<%= l(:notice_successful_update) %>',
+    duration: 800,
+    icon: 'success',
+    image: ''
+  });
+
+  $('.checklists-filter[data-issue-id="<%= @checklist.issue_id %>"]').replaceWith(
+    '<%= escape_javascript(render :partial => "checklists/filter", :locals => {
+      :issue => @issue,
+      :checklists => @issue.queried_checklists(
+        tracker: params[:checklists_tracker],
+        status: params[:checklists_status]
+      )
+    }) %>'
+  );
+
+  $('.checklists[data-issue-id="<%= @checklist.issue_id %>"] .checklist[data-checklist-id="<%= @checklist.id %>"]').replaceWith(
+    '<%= escape_javascript(render :partial => "checklists/checklist", :locals => { :checklist => @checklist }) %>'
+  );
+
+  $('.checklist-show[data-checklist-id="<%= @checklist.id %>"]').replaceWith(
+    '<%= escape_javascript(render :partial => "checklists/show", :locals => {
+      :issue => @checklist.issue,
+      :project => @checklist.project,
+      :checklist => @checklist,
+      :allowed_statuses => @checklist.issue.new_statuses_allowed_to(User.current),
+      :priorities => IssuePriority.active,
+      :journals => @checklist.visible_journals_with_index
+    }) %>'
+  )
+
+  $('textarea').removeData('changed');
+
+  if ($('.checklists[data-issue-id="<%= @checklist.issue_id %>"] > .checklist').length > 0) {
+    $('.checklists-empty[data-issue-id="<%= @checklist.issue_id %>"]').hide();
+  } else {
+    $('.checklists-empty[data-issue-id="<%= @checklist.issue_id %>"]').show();
+  }
+<% else %>
+  showErrorMessages(<%= raw @checklist.errors.full_messages.to_json %>, { title: '<%= l(:notice_fail_update) %>' })
+<% end %>

@@ -1,0 +1,16 @@
+<li class="checklist clearfix" data-status="<%= checklist.status.is_closed ? 'closed' : 'open' %>" data-status-id="<%= checklist.status_id %>" data-tracker-id="<%= checklist.tracker_id %>" data-checklist-position="<%= checklist.position %>" data-checklist-id="<%= checklist.id %>" style="border-left-color: #<%= checklist.priority.try(:color) || '999999' %>; background-color: #<%= checklist.status.try(:background_color) || 'fff' %>">
+  <div class="checklist-info mobile-hide">
+    <%= render :partial => "checklists/checklist_info", :locals => { :checklist => checklist } %>
+  </div>
+  <div class="checklist-body">
+    <%= link_to checklist_path(checklist), :class => "checklist-row checklist-content" do %>
+      <span class="checklist-tracker" style="color: #<%= checklist.tracker.try(:color) || '666' %>"><%= checklist.tracker.try(:name) %></span>
+      <span class="checklist-status _unit"><%= checklist.status.try(:name) %></span>
+      <span class="checklist-id _unit"><i class="checklist-flag">$</i><%= checklist.id %></span>
+      <span class="checklist-subject _unit<%= ' is-closed' if checklist.status.is_closed %>"><%= checklist.subject %></span>
+    <% end %>
+  </div>
+  <div class="checklist-info mobile-show">
+    <%= render :partial => "checklists/checklist_info", :locals => { :checklist => checklist } %>
+  </div>
+</li>

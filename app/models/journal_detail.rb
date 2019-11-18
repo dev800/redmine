@@ -19,6 +19,7 @@
 
 class JournalDetail < ActiveRecord::Base
   belongs_to :journal
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
 
   def custom_field
     if property == 'cf'

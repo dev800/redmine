@@ -26,6 +26,7 @@ class WikiPage < ActiveRecord::Base
   has_one :content, :class_name => 'WikiContent', :foreign_key => 'page_id', :dependent => :destroy
   has_one :content_without_text, lambda {without_text.readonly}, :class_name => 'WikiContent', :foreign_key => 'page_id'
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   acts_as_attachable :delete_permission => :delete_wiki_pages_attachments
   acts_as_tree :dependent => :nullify, :order => 'title'
 

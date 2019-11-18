@@ -34,6 +34,7 @@ class Issue < ActiveRecord::Base
   belongs_to :category, :class_name => 'IssueCategory'
 
   has_many :journals, :as => :journalized, :dependent => :destroy, :inverse_of => :journalized
+  has_many :checklists, :dependent => :destroy
   has_many :time_entries, :dependent => :destroy
   has_and_belongs_to_many :changesets, lambda {order("#{Changeset.table_name}.committed_on ASC, #{Changeset.table_name}.id ASC")}
 
@@ -51,10 +52,13 @@ class Issue < ActiveRecord::Base
                 :url => Proc.new {|o| {:controller => 'issues', :action => 'show', :id => o.id}},
                 :type => Proc.new {|o| 'issue' + (o.closed? ? '-closed' : '') }
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
+
   acts_as_activity_provider :scope => preload(:project, :author, :tracker, :status),
                             :author_key => :author_id
 
   DONE_RATIO_OPTIONS = %w(issue_field issue_status)
+  IMPORTANCE_VALUES = [5, 4, 3, 2]
 
   attr_writer :deleted_attachment_ids
   delegate :notes, :notes=, :private_notes, :private_notes=, :to => :current_journal, :allow_nil => true
@@ -147,6 +151,54 @@ class Issue < ActiveRecord::Base
       end
       sql
     end
+  end
+
+  DEFAULT_IMPORTANCE = 3
+
+  def self.importance_human(value)
+    l("label_importance_#{value}")
+  end
+
+  def importance_human
+    self.class.importance_human(importance)
+  end
+
+  def importance_select_options
+    importance = (new_record? ? DEFAULT_IMPORTANCE : self.importance) || DEFAULT_IMPORTANCE
+
+    IMPORTANCE_VALUES.map do |value|
+      [self.class.importance_human(value), value]
+    end
+  end
+
+  DEFAULT_CHECKLISTS_STATUS = 'status:open'
+  DEFAULT_CHECKLISTS_TRACKER = nil
+
+  def queried_checklists(options = {})
+    checklists_status = options[:status].present? ? options[:status] : DEFAULT_CHECKLISTS_STATUS
+    checklists_tracker = options[:tracker].present? ? options[:tracker] : DEFAULT_CHECKLISTS_TRACKER
+
+    checklists = self.checklists
+      .joins(:status)
+      .joins(:tracker)
+      .preload(:project, :status, :tracker, :priority, :author, :assigned_to, {:custom_values => :custom_field})
+      .order(:position => :asc, :id => :asc)
+
+    if checklists_status === 'status:open'
+      checklists = checklists.where({IssueStatus.table_name => {is_closed: false}})
+    elsif checklists_status === 'status:closed'
+      checklists = checklists.where({IssueStatus.table_name => {is_closed: true}})
+    elsif checklists_status && checklists_status.starts_with?('id:')
+      id = checklists_status.sub('id:', '').strip().to_i
+      checklists = checklists.where({IssueStatus.table_name => {id: id}})
+    end
+
+    if checklists_tracker && checklists_tracker.starts_with?('id:')
+      id = checklists_tracker.sub('id:', '').strip().to_i
+      checklists = checklists.where({Tracker.table_name => {id: id}})
+    end
+
+    checklists
   end
 
   # Returns true if usr or current user is allowed to view the issue
@@ -472,6 +524,10 @@ class Issue < ActiveRecord::Base
     'custom_fields',
     'lock_version',
     'notes',
+    'importance',
+    'agile_visible',
+    'agile_position',
+    'liable_id',
     :if => lambda {|issue, user| issue.new_record? || issue.attributes_editable?(user)})
   safe_attributes(
     'notes',

@@ -36,6 +36,7 @@ class Principal < ActiveRecord::Base
   has_many :projects, :through => :memberships
   has_many :issue_categories, :foreign_key => 'assigned_to_id', :dependent => :nullify
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   validate :validate_status
 
   # Groups and active users

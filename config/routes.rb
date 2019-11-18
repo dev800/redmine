@@ -125,6 +125,7 @@ Rails.application.routes.draw do
     end
 
     resource :enumerations, :controller => 'project_enumerations', :only => [:update, :destroy]
+    resources :checklists, :only => [:index]
 
     get 'issues/:copy_from/copy', :to => 'issues#new', :as => 'copy_issue'
     resources :issues, :only => [:index, :new, :create]
@@ -360,6 +361,17 @@ Rails.application.routes.draw do
   match 'sys/fetch_changesets', :to => 'sys#fetch_changesets', :via => [:get, :post]
 
   match 'uploads', :to => 'attachments#upload', :via => :post
+
+  get 'issues/:id/checklists', :to => 'issues#checklists', :as => :issue_checklists
+  get 'checklists', :to => 'checklists#index', :as => :checklists
+  post 'checklists', :to => 'checklists#create', :as => :checklist_create
+  get '(issues/:issue_id/)checklists/new', :to => 'checklists#new', :as => :checklist_new
+  post 'checklists/preview', :to => 'previews#checklist', :as => :checklist_preview
+  post 'checklists/sort', :to => 'checklists#sort', :as => :checklist_sort
+  get 'checklists/:id', :to => 'checklists#show', :as => :checklist
+  put 'checklists/:id', :to => 'checklists#update', :as => :checklist_update
+  delete 'checklists/:id', :to => 'checklists#destroy', :as => :checklist_delete
+  get 'checklists/:id/edit', :to => 'checklists#edit', :as => :checklist_edit
 
   get 'robots', :to => 'welcome#robots'
 

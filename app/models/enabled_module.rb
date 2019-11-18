@@ -23,6 +23,7 @@ class EnabledModule < ActiveRecord::Base
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :project_id
+  # acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
 
   after_create :module_enabled
 

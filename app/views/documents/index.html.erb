@@ -4,23 +4,25 @@
 </div>
 
 <div id="add-document" style="display:none;">
-<h2><%=l(:label_document_new)%></h2>
+<h2 class="content-title"><%=l(:label_document_new)%></h2>
 <%= labelled_form_for @document, :url => project_documents_path(@project), :html => {:multipart => true} do |f| %>
 <%= render :partial => 'form', :locals => {:f => f} %>
-<p>
+<p class="form-actions">
   <%= submit_tag l(:button_create) %>
   <%= link_to l(:button_cancel), "#", :onclick => '$("#add-document").hide(); return false;' %>
 </p>
 <% end %>
 </div>
 
-<h2><%=l(:label_document_plural)%></h2>
+<h2 class="content-title"><%=l(:label_document_plural)%></h2>
 
 <% if @grouped.empty? %><p class="nodata"><%= l(:label_no_data) %></p><% end %>
 
 <% @grouped.keys.sort.__send__(@sort_by == 'date' ? :reverse_each : :each) do |group| %>
-    <h3><%= group %></h3>
-    <%= render :partial => 'documents/document', :collection => @grouped[group] %>
+    <h3 class="documents-group-title"><%= group %></h3>
+    <div class="documents">
+      <%= render :partial => 'documents/document', :collection => @grouped[group] %>
+    </div>
 <% end %>
 
 <% content_for :sidebar do %>

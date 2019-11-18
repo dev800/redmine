@@ -3,6 +3,7 @@ class CreateMemberRoles < ActiveRecord::Migration[4.2]
     create_table :member_roles do |t|
       t.column :member_id, :integer, :null => false
       t.column :role_id, :integer, :null => false
+      t.column :deleted_at, :timestamp
     end
   end
 

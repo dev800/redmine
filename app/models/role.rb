@@ -37,6 +37,12 @@ class Role < ActiveRecord::Base
   BUILTIN_NON_MEMBER = 1
   BUILTIN_ANONYMOUS  = 2
 
+  CHECKLISTS_VISIBILITY_OPTIONS = [
+    ['all', :label_checklists_visibility_all],
+    ['default', :label_checklists_visibility_public],
+    ['own', :label_checklists_visibility_own]
+  ]
+
   ISSUES_VISIBILITY_OPTIONS = [
     ['all', :label_issues_visibility_all],
     ['default', :label_issues_visibility_public],
@@ -71,6 +77,7 @@ class Role < ActiveRecord::Base
   has_many :member_roles, :dependent => :destroy
   has_many :members, :through => :member_roles
   acts_as_positioned :scope => :builtin
+  # acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
 
   serialize :permissions, ::Role::PermissionsAttributeCoder
   store :settings, :accessors => [:permissions_all_trackers, :permissions_tracker_ids]
@@ -78,6 +85,11 @@ class Role < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name
   validates_length_of :name, :maximum => 255
+
+  validates_inclusion_of(
+    :checklists_visibility,
+    :in => ISSUES_VISIBILITY_OPTIONS.collect(&:first),
+    :if => lambda {|role| role.respond_to?(:checklists_visibility) && role.checklists_visibility_changed?})
   validates_inclusion_of(
     :issues_visibility,
     :in => ISSUES_VISIBILITY_OPTIONS.collect(&:first),
@@ -95,6 +107,7 @@ class Role < ActiveRecord::Base
       'name',
       'assignable',
       'position',
+      'checklists_visibility',
       'issues_visibility',
       'users_visibility',
       'time_entries_visibility',

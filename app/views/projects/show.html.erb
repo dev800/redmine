@@ -16,7 +16,7 @@
 
 </div>
 
-<h2><%=l(:label_overview)%></h2>
+<h2 class="content-title"><%=l(:label_overview)%></h2>
 
 <% unless @project.active? %>
   <p class="warning"><span class="icon icon-lock"><%= l(:text_project_closed) %></span></p>
@@ -25,7 +25,7 @@
 <div class="splitcontent">
 <div class="splitcontentleft">
   <% if @project.description.present? %>
-  <div class="wiki">
+  <div class="wiki box">
     <%= textilizable @project.description %>
   </div>
   <% end %>
@@ -132,7 +132,7 @@
 	<ul class="subprojects">
 	  <% @subprojects.each do |project| %>
 	  <li><%= link_to(project.name, project_path(project), :class => project.css_classes).html_safe %></li>
-	  <% end %> 
+	  <% end %>
     </ul>
   </div>
   <% end %>

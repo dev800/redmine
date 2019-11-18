@@ -18,6 +18,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class Changeset < ActiveRecord::Base
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   belongs_to :repository
   belongs_to :user
   has_many :filechanges, :class_name => 'Change', :dependent => :delete_all

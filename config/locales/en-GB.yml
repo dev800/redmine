@@ -918,7 +918,7 @@ en-GB:
   default_tracker_feature: Feature
   default_tracker_support: Support
   default_issue_status_new: New
-  default_issue_status_in_progress: In Progress
+  default_issue_status_solving: In Progress
   default_issue_status_resolved: Resolved
   default_issue_status_feedback: Feedback
   default_issue_status_closed: Closed

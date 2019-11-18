@@ -30,7 +30,7 @@
     display: inline-block;
     vertical-align: bottom;
     line-height: 19px;
-  border-bottom: 1px solid transparent;
+    border-bottom: 1px solid transparent;
 }
 .jstElements {
     display: inline-block;
@@ -132,4 +132,8 @@
 }
 .jstb_help {
     background-image: url(../images/help.png);
+}
+
+.jstEditor textarea, .jstEditor iframe {
+    padding: 4px;
 }

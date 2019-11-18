@@ -1,4 +1,5 @@
-source 'https://rubygems.org'
+# source 'https://rubygems.org'
+source 'https://gems.ruby-china.com'
 
 gem "bundler", ">= 1.5.0"
 
@@ -14,6 +15,7 @@ gem "csv", "~> 3.1.1"
 gem "nokogiri", "~> 1.10.0"
 gem "i18n", "~> 1.6.0"
 gem "rbpdf", "~> 1.20.0"
+gem "acts_as_paranoid"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :x64_mingw, :mswin]
