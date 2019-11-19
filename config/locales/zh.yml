@@ -1302,10 +1302,10 @@ zh:
   label_open_trackers_description: View all trackers description
   label_preferred_body_part_text: Text
   label_preferred_body_part_html: HTML (experimental)
-  field_parent_issue_subject: Parent task subject
+  field_parent_issue_subject: 父任务的主题
   permission_edit_own_issues: 更新自己的问题
-  text_select_apply_tracker: Select tracker
-  label_updated_issues: Updated issues
+  text_select_apply_tracker: 选择跟踪类型
+  label_updated_issues: 更新的问题
   text_avatar_server_config_html: The current avatar server is <a href="%{url}">%{url}</a>.
     You can configure it in config/configuration.yml.
   setting_gantt_months_limit: Maximum number of months displayed on the gantt chart
