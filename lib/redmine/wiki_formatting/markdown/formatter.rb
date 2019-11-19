@@ -27,13 +27,19 @@ module Redmine
         include Redmine::Helpers::URL
 
         def list_item(text, list_type)
+          is_task_item = text.start_with?("[x]", "[X]", "[ ]")
+
           if text.start_with?("[x]", "[X]")
             text[0..2] = "<input type=\"checkbox\" disabled checked=\"checked\">"
           elsif text.start_with?("[ ]")
             text[0..2] = "<input type=\"checkbox\" disabled>"
           end
 
-          "<li class=\"task-list-item\">#{text}</li>"
+          if is_task_item
+            "<li class=\"task-list-item\">#{text}</li>"
+          else
+            "<li>#{text}</li>"
+          end
         end
 
         def link(link, title, content)

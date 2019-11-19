@@ -1004,7 +1004,7 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
 }
 
 #main .wiki .task-list-item input {
-  margin: 0 .2em 0 -1.6em;
+  margin: 0 .2em 0.28em -1.6em;
   vertical-align: middle;
 }
 
