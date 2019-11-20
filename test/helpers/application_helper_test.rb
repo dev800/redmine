@@ -596,7 +596,7 @@ class ApplicationHelperTest < Redmine::HelperTest
   def test_link_to_issue_subject
     issue = Issue.generate!(:subject => "01234567890123456789")
     str = link_to_issue(issue, :truncate => 10)
-    result = link_to("Bug ##{issue.id}", "/issues/#{issue.id}", :class => issue.css_classes)
+    result = link_to("Bug ##{issue.id}: 0123456...", "/issues/#{issue.id}", :class => issue.css_classes)
     assert_equal "#{result}: 0123456...", str
 
     issue = Issue.generate!(:subject => "<&>")
@@ -1188,10 +1188,11 @@ class ApplicationHelperTest < Redmine::HelperTest
     result1 = link_to("CookBook documentation",
                       "/projects/ecookbook/wiki/CookBook_documentation",
                       :class => "wiki-page")
-    result2 = link_to('#1',
+    result2 = link_to('Bug #1',
                       "/issues/1",
                       :class => Issue.find(1).css_classes,
-                      :title => "Bug: Cannot print recipes (New)")
+                      :title => "Bug #1: Cannot print recipes (New)")
+
     expected = <<~EXPECTED
       <p>#{result1}</p>
       <p>#{result2}</p>

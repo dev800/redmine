@@ -31,12 +31,17 @@ module RedmineApp
     # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
 
     config.active_record.store_full_sti_class = true
-    config.active_record.default_timezone = :utc
 
-    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
-    # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    # config.time_zone = 'Central Time (US & Canada)'
-    config.time_zone = ENV['TIME_ZONE'] || 'UTC'
+    if Rails.env === 'test'
+      config.active_record.default_timezone = :local
+    else
+      config.active_record.default_timezone = :utc
+
+      # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
+      # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
+      # config.time_zone = 'Central Time (US & Canada)'
+      config.time_zone = ENV['TIME_ZONE'] || 'UTC'
+    end
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]

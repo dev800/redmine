@@ -5619,7 +5619,7 @@ class IssuesControllerTest < Redmine::ControllerTest
 
     assert_select 'ul#bulk-selection' do
       assert_select 'li', 2
-      assert_select 'li a', :text => 'Bug #1'
+      assert_select 'li a', :text => 'Bug #1: Cannot print recipes'
     end
 
     assert_select 'form#bulk_edit_form[action=?]', '/issues/bulk_update' do
