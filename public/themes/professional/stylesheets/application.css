@@ -1632,6 +1632,11 @@ div#roadmap .related-issues {
   display: none;
 }
 
+#main .tabular input,
+#main .tabular select {
+  min-width: 140px;
+}
+
 fieldset.tabular {
   position: relative;
 }

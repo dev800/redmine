@@ -142,7 +142,7 @@ class MailerTest < ActiveSupport::TestCase
     Mailer.deliver_issue_edit(journal)
     assert_not_nil last_email
     assert_select_email do
-      assert_select 'a[href=?]', 'http://localhost:3000/issues/2', :text => 'Feature request #2'
+      assert_select 'a[href=?]', 'http://localhost:3000/issues/2', :text => 'Feature request #2: Add ingredients categories'
     end
   end
 

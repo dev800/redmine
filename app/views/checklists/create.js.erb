@@ -1,5 +1,12 @@
 <% if @checklist.save %>
-  closeHTMLDialog();
+  <% if params[:continue] %>
+    var $form = $('form[data-form-name="' + "<%= params[:form_name] %>" + '"]');
+
+    $form.find('[name="checklist[description]"]').val('');
+    $form.find('[name="checklist[subject]"]').val('').focus();
+  <% else %>
+    closeHTMLDialog();
+  <% end %>
 
   $.Toast.showToast({
     title: '<%= l(:notice_successful_create) %>',

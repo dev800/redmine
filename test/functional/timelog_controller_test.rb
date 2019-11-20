@@ -1428,7 +1428,7 @@ class TimelogControllerTest < Redmine::ControllerTest
 
     assert_select 'tr.group span.name' do |elements|
       target_element = elements[1]
-      assert_equal "Bug #1: Cannot print recipes", target_element.text
+      assert_equal "Bug #3: Error 281 when updating a recipe", target_element.text
       assert_select target_element, '+ span.count', :text => '2'
     end
   end

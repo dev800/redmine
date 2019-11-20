@@ -22,7 +22,7 @@
   <% end %>
 
   <% if checklist.safe_attribute? 'subject' %>
-    <p><%= f.text_field :subject, :size => 80, :maxlength => 255, :required => true %></p>
+    <p><%= f.text_field :subject, :size => 80, :maxlength => 255, :required => true, :autocomplete => 'off' %></p>
   <% end %>
 
   <% if checklist.safe_attribute? 'description' %>
