@@ -24,6 +24,7 @@ module Redmine
     CORE_GROUPS = ['top', 'left', 'right']
 
     CORE_BLOCKS = {
+        # 'checklistssassignedtome' => {:label => :label_assigned_to_me_checklists},
         'issuesassignedtome' => {:label => :label_assigned_to_me_issues},
         'issuesreportedbyme' => {:label => :label_reported_issues},
         'issuesupdatedbyme' => {:label => :label_updated_issues},
@@ -87,8 +88,8 @@ module Redmine
     # Returns the default layout for My Page
     def self.default_layout
       {
-        'left' => ['issuesassignedtome'],
-        'right' => ['issuesreportedbyme']
+        'left' => ['issuesassignedtome', 'issuesreportedbyme', 'timelog'],
+        'right' => ['issuesupdatedbyme', 'issueswatched']
       }
     end
   end

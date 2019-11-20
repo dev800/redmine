@@ -93,6 +93,17 @@ module MyHelper
     render :partial => 'my/blocks/documents', :locals => {:block => block, :documents => documents}
   end
 
+  def render_checklistssassignedtome_block(block, settings)
+    # query = IssueQuery.new(:name => l(:label_assigned_to_me_checklists), :user => User.current)
+    # query.add_filter 'assigned_to_id', '=', ['me']
+    # query.add_filter 'project.status', '=', ["#{Project::STATUS_ACTIVE}"]
+    # query.column_names = settings[:columns].presence || ['project', 'tracker', 'status', 'subject']
+    # query.sort_criteria = settings[:sort].presence || [['priority', 'desc'], ['updated_on', 'desc']]
+    # issues = query.issues(:limit => 10)
+
+    # render :partial => 'my/blocks/checklists', :locals => {:query => query, :issues => issues, :block => block}
+  end
+
   def render_issuesassignedtome_block(block, settings)
     query = IssueQuery.new(:name => l(:label_assigned_to_me_issues), :user => User.current)
     query.add_filter 'assigned_to_id', '=', ['me']
