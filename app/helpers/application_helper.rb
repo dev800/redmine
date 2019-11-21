@@ -1348,7 +1348,8 @@ module ApplicationHelper
         div_class = +'toc'
         div_class << ' right' if right_align
         div_class << ' left' if left_align
-        out = +"<ul class=\"#{div_class}\"><li><strong>#{l :label_table_of_contents}</strong></li><li>"
+        out = +"<a name=\"table-of-contents\"></a>"
+        out << "<ul class=\"#{div_class}\"><li><strong>#{l :label_table_of_contents}</strong></li><li>"
         root = headings.map(&:first).min
         current = root
         started = false

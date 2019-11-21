@@ -585,7 +585,7 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
 #main .wiki pre,
 #main .wiki table,
 #main .wiki ul {
-  margin-bottom: 6px;
+  margin-bottom: 0.58em;
   margin-top: 0;
   margin-left: 0;
   margin-right: 0;
@@ -1073,6 +1073,18 @@ h6,
   margin-bottom: 0.48em;
 }
 
+#main .wiki h1,
+#main .wiki h2,
+#main .wiki h3,
+#main .wiki h4,
+#main .wiki h5,
+#main .wiki h6 {
+  padding-right: 0.48em;
+  padding-left: 0.48em;
+  padding-top: 0.48em;
+  margin-top: 0.48em;
+}
+
 #main .tabular .wiki-preview p {
   padding: 0.2em 0 !important;
 }
@@ -1558,12 +1570,42 @@ fieldset {
   padding: 8px;
 }
 
+.attachments-wrapper .wrapper-title:last-child {
+  padding-bottom: 0.12em;
+  margin-bottom: 0;
+}
+
+#main .wiki .toc {
+  width: 100%;
+  padding-left: 1em;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  padding-right: 1em;
+  line-height: 1.5em;
+}
+
+#main .wiki .toc ul {
+  padding-left: 1.6em;
+}
+
+#main .wiki .toc ul li {
+  margin-left: 0;
+}
+
+#main .wiki .toc > li > ul > li {
+  list-style-type: square;
+}
+
+#main .wiki .toc > li > ul > li > ul > li {
+  list-style-type: circle;
+}
+
 h3.documents-group-title {
-  margin-top: 1.2em;
   padding-top: 0.5em;
   padding-bottom: 0.5em;
   padding-left: 0.5em;
   padding-right: 0.5em;
+  margin-bottom: 0.8em;
   background: #efefef;
 }
 
@@ -1673,6 +1715,11 @@ div.issue p.author {
 
 div.issue .attributes {
   margin-top: 1em;
+}
+
+.tabular input,
+.tabular select {
+  min-width: 140px;
 }
 
 #main a.user.active {

@@ -140,6 +140,7 @@ module Redmine
         def formatter
           @@formatter ||= Redcarpet::Markdown.new(
             Redmine::WikiFormatting::Markdown::HTML.new(
+              :with_toc_data => true,
               :filter_html => true,
               :hard_wrap => true
             ),
