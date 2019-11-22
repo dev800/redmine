@@ -13,7 +13,6 @@ Layout/AlignArguments:
   Exclude:
     - 'config/application.rb'
     - 'lib/redmine/scm/adapters/bazaar_adapter.rb'
-    - 'lib/redmine/scm/adapters/subversion_adapter.rb'
     - 'test/functional/journals_controller_test.rb'
     - 'test/functional/my_controller_test.rb'
     - 'test/functional/roles_controller_test.rb'
@@ -39,13 +38,6 @@ Layout/AlignArguments:
 # SupportedLastArgumentHashStyles: always_inspect, always_ignore, ignore_implicit, ignore_explicit
 Layout/AlignHash:
   Enabled: false
-
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, IndentOneStep, IndentationWidth.
-# SupportedStyles: case, end
-Layout/CaseIndentation:
-  Exclude:
-    - 'config/initializers/10-patches.rb'
 
 # Cop supports --auto-correct.
 Layout/ClosingHeredocIndentation:
@@ -86,7 +78,27 @@ Layout/EmptyLinesAroundAccessModifier:
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: empty_lines, empty_lines_except_namespace, empty_lines_special, no_empty_lines, beginning_only, ending_only
 Layout/EmptyLinesAroundClassBody:
-  Enabled: false
+  Exclude:
+    - 'db/migrate/001_setup.rb'
+    - 'db/migrate/007_create_journals.rb'
+    - 'db/migrate/20110223180953_salt_user_passwords.rb'
+    - 'db/migrate/20131215104612_store_relation_type_in_journal_details.rb'
+    - 'db/migrate/20180923082945_change_sqlite_booleans_to_0_and_1.rb'
+    - 'lib/redmine/export/csv.rb'
+    - 'lib/redmine/notifiable.rb'
+    - 'lib/redmine/scm/adapters/bazaar_adapter.rb'
+    - 'lib/redmine/scm/adapters/cvs_adapter.rb'
+    - 'lib/redmine/scm/adapters/filesystem_adapter.rb'
+    - 'lib/redmine/scm/adapters/mercurial_adapter.rb'
+    - 'lib/redmine/wiki_formatting/html_parser.rb'
+    - 'lib/redmine/wiki_formatting/markdown/html_parser.rb'
+    - 'lib/redmine/wiki_formatting/textile/html_parser.rb'
+    - 'test/integration/api_test/api_routing_test.rb'
+    - 'test/integration/lib/redmine/themes_test.rb'
+    - 'test/integration/routing/activities_test.rb'
+    - 'test/integration/routing/repositories_test.rb'
+    - 'test/unit/lib/redmine/ciphering_test.rb'
+    - 'test/unit/lib/redmine/field_format/link_format_test.rb'
 
 # Cop supports --auto-correct.
 Layout/EmptyLinesAroundExceptionHandlingKeywords:
@@ -114,7 +126,27 @@ Layout/EmptyLinesAroundMethodBody:
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: empty_lines, empty_lines_except_namespace, empty_lines_special, no_empty_lines
 Layout/EmptyLinesAroundModuleBody:
-  Enabled: false
+  Exclude:
+    - 'app/helpers/attachments_helper.rb'
+    - 'app/helpers/custom_fields_helper.rb'
+    - 'app/helpers/email_addresses_helper.rb'
+    - 'app/helpers/gantt_helper.rb'
+    - 'app/helpers/issues_helper.rb'
+    - 'app/helpers/journals_helper.rb'
+    - 'app/helpers/reports_helper.rb'
+    - 'app/helpers/routes_helper.rb'
+    - 'app/helpers/timelog_helper.rb'
+    - 'app/helpers/trackers_helper.rb'
+    - 'app/helpers/versions_helper.rb'
+    - 'app/helpers/watchers_helper.rb'
+    - 'lib/redmine/access_control.rb'
+    - 'lib/redmine/activity.rb'
+    - 'lib/redmine/codeset_util.rb'
+    - 'lib/redmine/configuration.rb'
+    - 'lib/redmine/helpers/calendar.rb'
+    - 'lib/redmine/mime_type.rb'
+    - 'lib/redmine/plugin.rb'
+    - 'lib/redmine/search.rb'
 
 # Cop supports --auto-correct.
 # Configuration parameters: AllowForAlignment, AllowBeforeTrailingComments, ForceEqualSignAlignment.
@@ -145,7 +177,6 @@ Layout/IndentFirstArrayElement:
     - 'test/unit/lib/redmine/scm/adapters/git_adapter_test.rb'
     - 'test/unit/lib/redmine/scm/adapters/mercurial_adapter_test.rb'
     - 'test/unit/project_test.rb'
-    - 'test/unit/repository_git_test.rb'
     - 'test/unit/version_test.rb'
 
 # Cop supports --auto-correct.
@@ -885,7 +916,27 @@ Security/YAMLLoad:
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: inline, group
 Style/AccessModifierDeclarations:
-  Enabled: false
+  Exclude:
+    - 'app/controllers/application_controller.rb'
+    - 'app/controllers/repositories_controller.rb'
+    - 'app/models/group_builtin.rb'
+    - 'app/models/issue.rb'
+    - 'app/models/query.rb'
+    - 'app/models/repository.rb'
+    - 'app/models/repository/bazaar.rb'
+    - 'app/models/repository/cvs.rb'
+    - 'app/models/repository/git.rb'
+    - 'app/models/repository/mercurial.rb'
+    - 'app/models/user.rb'
+    - 'app/models/user_preference.rb'
+    - 'app/models/wiki_page.rb'
+    - 'lib/redmine/field_format.rb'
+    - 'lib/redmine/plugin.rb'
+    - 'lib/redmine/scm/adapters/bazaar_adapter.rb'
+    - 'lib/redmine/scm/adapters/cvs_adapter.rb'
+    - 'lib/redmine/scm/adapters/mercurial_adapter.rb'
+    - 'test/functional/issues_controller_test.rb'
+    - 'test/unit/lib/redmine/helpers/gantt_test.rb'
 
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
@@ -1061,10 +1112,7 @@ Style/EmptyCaseCondition:
 # SupportedStyles: empty, nil, both
 Style/EmptyElse:
   Exclude:
-    - 'app/helpers/avatars_helper.rb'
-    - 'app/models/import.rb'
     - 'app/models/mail_handler.rb'
-    - 'app/models/query.rb'
 
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
@@ -1573,12 +1621,6 @@ Style/SymbolProc:
 # Configuration parameters: EnforcedStyle, AllowSafeAssignment.
 # SupportedStyles: require_parentheses, require_no_parentheses, require_parentheses_when_complex
 Style/TernaryParentheses:
-  Enabled: false
-
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleForMultiline.
-# SupportedStylesForMultiline: comma, consistent_comma, no_comma
-Style/TrailingCommaInHashLiteral:
   Enabled: false
 
 # Cop supports --auto-correct.

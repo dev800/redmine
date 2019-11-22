@@ -23,7 +23,6 @@ module Redmine
   module Scm
     module Adapters
       class GitAdapter < AbstractAdapter
-
         # Git executable name
         GIT_BIN = Redmine::Configuration['scm_git_command'] || "git"
 
@@ -358,12 +357,15 @@ module Redmine
             elsif line =~ /^author (.+)/
               authors_by_commit[identifier] = $1.strip
             elsif line =~ /^\t(.*)/
-              blame.add_line($1, Revision.new(
-                                    :identifier => identifier,
-                                    :revision   => identifier,
-                                    :scmid      => identifier,
-                                    :author     => authors_by_commit[identifier]
-                                    ))
+              blame.add_line(
+                $1,
+                Revision.new(
+                  :identifier => identifier,
+                  :revision   => identifier,
+                  :scmid      => identifier,
+                  :author     => authors_by_commit[identifier]
+                )
+              )
               identifier = ''
               author = ''
             end
@@ -395,6 +397,8 @@ module Redmine
           end
         end
 
+        private
+
         def git_cmd(args, options = {}, &block)
           repo_path = root_url || url
           full_args = ['--git-dir', repo_path]
@@ -403,17 +407,17 @@ module Redmine
             full_args << '-c' << 'log.decorate=no'
           end
           full_args += args
-          ret = shellout(
-                   self.class.sq_bin + ' ' + full_args.map { |e| shell_quote e.to_s }.join(' '),
-                   options,
-                   &block
-                   )
+          ret =
+            shellout(
+              self.class.sq_bin + ' ' + full_args.map { |e| shell_quote e.to_s }.join(' '),
+              options,
+              &block
+            )
           if $? && $?.exitstatus != 0
             raise ScmCommandAborted, "git exited with non-zero status: #{$?.exitstatus}"
           end
           ret
         end
-        private :git_cmd
       end
     end
   end
