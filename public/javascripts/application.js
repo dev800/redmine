@@ -1017,6 +1017,30 @@ function setupAttachmentDetail() {
   $(window).resize(setFilecontentContainerHeight);
 }
 
+$(document).ready(function() {
+  $(".wiki .toc").closest(".wiki").addClass("with-toc")
+
+  if ($(window).scrollTop() > 100) {
+    $("#goTop").show();
+  } else {
+    $("#goTop").hide();
+  }
+
+  $(function () {
+    $(window).scroll(function() {
+      if ($(window).scrollTop() > 100) {
+        $("#goTop").fadeIn();
+      } else {
+        $("#goTop").fadeOut();
+      }
+    });
+
+    $("#goTop").click(function() {
+      $('body,html').animate({scrollTop: 0}, 500);
+        return false;
+    });
+  });
+});
 
 $(function () {
     $('[title]').tooltip({
@@ -1028,8 +1052,6 @@ $(function () {
           at: "center top"
         }
     });
-
-  $(".wiki .toc").closest(".wiki").addClass("with-toc")
 });
 
 function inlineAutoComplete(element) {
