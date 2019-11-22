@@ -1018,7 +1018,7 @@ function setupAttachmentDetail() {
 }
 
 $(document).ready(function() {
-  $(".wiki .toc").closest(".wiki").addClass("with-toc")
+  $("#content .toc").closest("#content").addClass("with-toc")
 
   if ($(window).scrollTop() > 100) {
     $("#goTop").show();
