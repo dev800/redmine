@@ -1341,7 +1341,7 @@ module ApplicationHelper
     text.gsub!(TOC_RE) do
       left_align, right_align = $2, $3
       # Keep only the 4 first levels
-      headings = headings.select{|level, anchor, item| level <= 4}
+      headings = headings.select{|level, anchor, item| level <= 4 && level > 1}
       if headings.empty?
         ''
       else
@@ -1349,7 +1349,9 @@ module ApplicationHelper
         div_class << ' right' if right_align
         div_class << ' left' if left_align
         out = +"<a name=\"table-of-contents\"></a>"
-        out << "<ul class=\"#{div_class}\"><li><strong>#{l :label_table_of_contents}</strong></li><li>"
+        out << "<div class=\"#{div_class}\">"
+        out << "<h2 class=\"header\">#{l :label_table_of_contents}</h2>"
+        out << "<ul class=\"content\"><li>"
         root = headings.map(&:first).min
         current = root
         started = false
@@ -1367,6 +1369,7 @@ module ApplicationHelper
         end
         out << '</li></ul>' * (current - root)
         out << '</li></ul>'
+        out << '</div>'
       end
     end
   end

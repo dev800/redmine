@@ -589,6 +589,8 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
   margin-top: 0;
   margin-left: 0;
   margin-right: 0;
+  padding-left: 0.48em;
+  padding-right: 0.48em;
 }
 
 #main .wiki blockquote:last-child,
@@ -1135,6 +1137,7 @@ table.list td {
 
 #main h2.content-title {
   margin-bottom: 0.18em;
+  padding-top: 0.38em;
 }
 
 h1, h2, h3, h4 {
@@ -1565,6 +1568,11 @@ fieldset {
   overflow-x: initial;
 }
 
+.attachments {
+  margin-top: 2px;
+  margin-bottom: 4px;
+}
+
 .attachments-wrapper {
   box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.1);
   padding: 8px;
@@ -1575,29 +1583,91 @@ fieldset {
   margin-bottom: 0;
 }
 
+@media screen and (min-width: 899px) {
+  #main .document-page.with-toc,
+  #main .news-page.with-toc,
+  #main .wiki-page.with-toc {
+    padding-left: 252px;
+  }
+
+  #main .document-page .toc,
+  #main .news-page .toc,
+  #main .wiki-page .toc {
+    margin-bottom: 0;
+    position: fixed;
+    width: 240px;
+    max-height: calc(100vh - 168px);
+    min-height: 358px;
+    bottom: 12px;
+    left: 12px;
+    display: block;
+  }
+
+  #main .document-page .toc,
+  #main .news-page .toc {
+    max-height: calc(100vh - 236px);
+  }
+
+  #main .document-page .toc .content,
+  #main .news-page .toc .content,
+  #main .wiki-page .toc .content {
+    overflow-y: auto;
+    max-height: calc(100vh - 168px - 38px - 12px);
+    min-height: 320px;
+  }
+
+  #main .document-page .toc .content,
+  #main .news-page .toc .content {
+    max-height: calc(100vh - 236px - 38px - 12px);
+  }
+}
+
 #main .wiki .toc {
-  width: 100%;
+  border-radius: 8px;
+  padding-top: 0;
+  padding-bottom: 8px;
   padding-left: 1em;
-  padding-top: 1em;
-  padding-bottom: 1em;
-  padding-right: 1em;
+  padding-right: 0;
+  margin-bottom: 1em;
   line-height: 1.5em;
+  background-color: #fdfdf7;
+  box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.1);
+}
+
+#main .wiki .toc .header {
+  font-size: 16px;
+  margin-top: 4px;
+  margin-bottom: 0;
+  padding-top: 6px;
+  margin-right: 1em;
+  text-align: center;
+}
+
+#main .wiki .toc .content {
+  font-size: 12px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-right: 1em;
 }
 
 #main .wiki .toc ul {
   padding-left: 1.6em;
 }
 
-#main .wiki .toc ul li {
+#main .wiki .toc li {
   margin-left: 0;
 }
 
+#main .wiki .toc > li {
+  list-style-type: disc;
+}
+
 #main .wiki .toc > li > ul > li {
-  list-style-type: square;
+  list-style-type: circle;
 }
 
 #main .wiki .toc > li > ul > li > ul > li {
-  list-style-type: circle;
+  list-style-type: square;
 }
 
 h3.documents-group-title {
@@ -1738,6 +1808,16 @@ div#activity dd,
 #main .mobile-show {
   display: hide;
 }
+
+#sidebar {
+  padding-left: 12px;
+}
+@media screen and (min-width: 0px) and (max-width: 1089px) {#sidebar{width: 15%;}}
+@media screen and (min-width: 1090px) and (max-width: 1279px) {#sidebar{width: 240px;}}
+@media screen and (min-width: 1280px) and (max-width: 1599px) {#sidebar{width: 280px;}}
+@media screen and (min-width: 1600px) and (max-width: 1919px) {#sidebar{width: 320px;}}
+@media screen and (min-width: 1920px) and (max-width: 2559px) {#sidebar{width: 360px;}}
+@media screen and (min-width: 2560px) {#sidebar{width: 380px;}}
 
 /**
   #################################################

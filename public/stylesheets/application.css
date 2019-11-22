@@ -1220,7 +1220,7 @@ div.wiki *:not(pre)>code, div.wiki>code {
   border-radius: 0.1em;
 }
 
-div.wiki ul.toc {
+div.wiki .toc ul.content {
   background-color: #ffffdd;
   border: 1px solid #e4e4e4;
   padding: 4px;
@@ -1230,21 +1230,21 @@ div.wiki ul.toc {
   margin-left: 0;
   display: table
 }
-* html div.wiki ul.toc { width: 50%; } /* IE6 doesn't autosize div */
+* html div.wiki .toc ul.content { width: 50%; } /* IE6 doesn't autosize div */
 
-div.wiki ul.toc.right { float: right; margin-left: 12px; margin-right: 0; width: auto; }
-div.wiki ul.toc.left  { float: left; margin-right: 12px; margin-left: 0; width: auto; }
-div.wiki ul.toc ul { margin: 0; padding: 0; }
-div.wiki ul.toc li {list-style-type:none; margin: 0; font-size:12px;}
-div.wiki ul.toc>li:first-child {margin-bottom: .5em; color: #777;}
-div.wiki ul.toc li li {margin-left: 1.5em; font-size:10px;}
-div.wiki ul.toc a {
+div.wiki .toc ul.content.right { float: right; margin-left: 12px; margin-right: 0; width: auto; }
+div.wiki .toc ul.content.left  { float: left; margin-right: 12px; margin-left: 0; width: auto; }
+div.wiki .toc ul.content ul { margin: 0; padding: 0; }
+div.wiki .toc ul.content li {list-style-type:none; margin: 0; font-size:12px;}
+div.wiki .toc ul.content>li:first-child {margin-bottom: .5em; color: #777;}
+div.wiki .toc ul.content li li {margin-left: 1.5em; font-size:10px;}
+div.wiki .toc ul.content a {
   font-size: 0.9em;
   font-weight: normal;
   text-decoration: none;
   color: #606060;
 }
-div.wiki ul.toc a:hover { color: #c61a1a; text-decoration: underline;}
+div.wiki .toc ul.content a:hover { color: #c61a1a; text-decoration: underline;}
 
 a.wiki-anchor { display: none; margin-left: 6px; text-decoration: none; }
 a.wiki-anchor:hover { color: #aaa !important; text-decoration: none; }

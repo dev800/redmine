@@ -23,7 +23,7 @@
 
 <p><% unless @news.summary.blank? %><em><%= @news.summary %></em><br /><% end %>
 <span class="author"><%= authoring @news.created_on, @news.author %></span></p>
-<div class="wiki">
+<div class="wiki news-page">
 <%= textilizable(@news, :description) %>
 </div>
 <%= link_to_attachments @news %>

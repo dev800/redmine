@@ -1028,6 +1028,8 @@ $(function () {
           at: "center top"
         }
     });
+
+  $(".wiki .toc").closest(".wiki").addClass("with-toc")
 });
 
 function inlineAutoComplete(element) {

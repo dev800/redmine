@@ -30,7 +30,7 @@
         <p class="author"><%= authoring news.created_on, news.author %></p>
       </header>
       <div class="wiki">
-      <%= textilizable(news, :description) %>
+      <%= textilizable(truncate_lines(news.description)) %>
       </div>
     </article>
 <% end %>
