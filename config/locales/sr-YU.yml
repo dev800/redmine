@@ -296,7 +296,7 @@ sr-YU:
   field_delay: Kašnjenje
   field_assignable: Problem može biti dodeljen ovoj ulozi
   field_redirect_existing_links: Preusmeri postojeće veze
-  field_estimated_hours: Procenjeno vreme 
+  field_estimated_hours: Procenjeno vreme
   field_column_names: Kolone
   field_time_zone: Vremenska zona
   field_searchable: Može da se pretražuje
@@ -882,7 +882,7 @@ sr-YU:
   default_tracker_feature: Funkcionalnost
   default_tracker_support: Podrška
   default_issue_status_new: Novo
-  default_issue_status_in_progress: U toku
+  default_issue_status_solving: U toku
   default_issue_status_resolved: Rešeno
   default_issue_status_feedback: Povratna informacija
   default_issue_status_closed: Zatvoreno

@@ -23,6 +23,7 @@ class TimeEntry < ActiveRecord::Base
   # project association here allows easy loading of time entries at project level with one database trip
   belongs_to :project
   belongs_to :issue
+  belongs_to :checklist
   belongs_to :user
   belongs_to :author, :class_name => 'User'
   belongs_to :activity, :class_name => 'TimeEntryActivity'
@@ -39,6 +40,7 @@ class TimeEntry < ActiveRecord::Base
                 :group => :issue,
                 :description => :comments
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   acts_as_activity_provider :timestamp => "#{table_name}.created_on",
                             :author_key => :user_id,
                             :scope => joins(:project).preload(:project)

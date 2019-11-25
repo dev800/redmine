@@ -1,0 +1,13 @@
+<div class="checklist-row">
+  <span class="checklist-author _unit"><%= checklist.author ? link_to_user(checklist.author) : "?" %></span>
+  <span class="checklist-arrow _unit">➤</span>
+  <span class="checklist-assigned-to _unit"><%= checklist.assigned_to ? link_to_user(checklist.assigned_to) : "?" %></span>
+  <span class="checklist-start-date _unit"><%= format_date(checklist.start_date) %></span>
+  <span class="checklist-arrow _unit">~</span>
+  <span class="checklist-due-date _unit"><%= format_date(checklist.due_date) %></span>
+  <%= link_to l(:button_edit), "javascript:;",
+    :class => 'checklist-edit _unit',
+    'remote-href' => checklist_edit_path(checklist)
+  %>
+  <span class="icon-only icon-sort-handle sort-handle ui-sortable-handle mobile-hide" title="<%= l(:button_sort) %>"></span>
+</div>

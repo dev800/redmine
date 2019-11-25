@@ -28,6 +28,7 @@ class CustomField < ActiveRecord::Base
   has_many :custom_values, :dependent => :delete_all
   has_and_belongs_to_many :roles, :join_table => "#{table_name_prefix}custom_fields_roles#{table_name_suffix}", :foreign_key => "custom_field_id"
   acts_as_positioned
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   serialize :possible_values
   store :format_store
 

@@ -1,4 +1,4 @@
-<h2><%= l(:label_member_new) %></h2>
+<h2 class="content-title"><%= l(:label_member_new) %></h2>
 
 <%= form_for @member, :as => :membership, :url => project_memberships_path(@project), :method => :post do |f| %>
   <%= render :partial => 'new_form' %>

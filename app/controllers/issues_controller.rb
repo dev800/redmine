@@ -18,82 +18,106 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class IssuesController < ApplicationController
-  default_search_scope :issues
+default_search_scope :issues
 
-  before_action :find_issue, :only => [:show, :edit, :update, :issue_tab]
-  before_action :find_issues, :only => [:bulk_edit, :bulk_update, :destroy]
-  before_action :authorize, :except => [:index, :new, :create]
-  before_action :find_optional_project, :only => [:index, :new, :create]
-  before_action :build_new_issue_from_params, :only => [:new, :create]
-  accept_rss_auth :index, :show
-  accept_api_auth :index, :show, :create, :update, :destroy
+before_action :find_issue, :only => [:show, :edit, :update, :issue_tab, :checklists]
+before_action :find_issues, :only => [:bulk_edit, :bulk_update, :destroy]
+before_action :authorize, :except => [:index, :new, :create]
+before_action :find_optional_project, :only => [:index, :new, :create]
+before_action :build_new_issue_from_params, :only => [:new, :create]
+accept_rss_auth :index, :show, :checklists
+accept_api_auth :index, :show, :create, :update, :destroy, :checklists
 
-  rescue_from Query::StatementInvalid, :with => :query_statement_invalid
+rescue_from Query::StatementInvalid, :with => :query_statement_invalid
 
-  helper :journals
-  helper :projects
-  helper :custom_fields
-  helper :issue_relations
-  helper :watchers
-  helper :attachments
-  helper :queries
-  include QueriesHelper
-  helper :repositories
-  helper :timelog
+helper :journals
+helper :projects
+helper :custom_fields
+helper :issue_relations
+helper :watchers
+helper :attachments
+helper :queries
+include QueriesHelper
+helper :repositories
+helper :timelog
 
-  def index
-    use_session = !request.format.csv?
-    retrieve_query(IssueQuery, use_session)
+def checklists
+  @project = @issue.project
 
-    if @query.valid?
-      respond_to do |format|
-        format.html {
-          @issue_count = @query.issue_count
-          @issue_pages = Paginator.new @issue_count, per_page_option, params['page']
-          @issues = @query.issues(:offset => @issue_pages.offset, :limit => @issue_pages.per_page)
-          render :layout => !request.xhr?
-        }
-        format.api  {
-          @offset, @limit = api_offset_and_limit
-          @query.column_names = %w(author)
-          @issue_count = @query.issue_count
-          @issues = @query.issues(:offset => @offset, :limit => @limit)
-          Issue.load_visible_relations(@issues) if include_in_api_response?('relations')
-        }
-        format.atom {
-          @issues = @query.issues(:limit => Setting.feeds_limit.to_i)
-          render_feed(@issues,
-                      :title => "#{@project || Setting.app_title}: #{l(:label_issue_plural)}")
-        }
-        format.csv  {
-          @issues = @query.issues(:limit => Setting.issues_export_limit.to_i)
-          send_data(query_to_csv(@issues, @query, params[:csv]),
-                    :type => 'text/csv; header=present', :filename => 'issues.csv')
-        }
-        format.pdf  {
-          @issues = @query.issues(:limit => Setting.issues_export_limit.to_i)
-          send_file_headers! :type => 'application/pdf', :filename => 'issues.pdf'
-        }
-      end
-    else
-      respond_to do |format|
-        format.html { render :layout => !request.xhr? }
-        format.any(:atom, :csv, :pdf) { head 422 }
-        format.api { render_validation_errors(@query) }
-      end
-    end
-  rescue ActiveRecord::RecordNotFound
-    render_404
+  @checklists = @issue.queried_checklists(
+    tracker: params[:checklists_tracker],
+    status: params[:checklists_status]
+  )
+
+  respond_to do |format|
+    format.html {
+      render :template => 'issues/checklists'
+    }
   end
+rescue ActiveRecord::RecordNotFound
+  render_404
+end
+
+def index
+  use_session = !request.format.csv?
+  retrieve_query(IssueQuery, use_session)
+
+  if @query.valid?
+    respond_to do |format|
+      format.html {
+        @issue_count = @query.issue_count
+        @issue_pages = Paginator.new @issue_count, per_page_option, params['page']
+        @issues = @query.issues(:offset => @issue_pages.offset, :limit => @issue_pages.per_page)
+        render :layout => !request.xhr?
+      }
+      format.api  {
+        @offset, @limit = api_offset_and_limit
+        @query.column_names = %w(author)
+        @issue_count = @query.issue_count
+        @issues = @query.issues(:offset => @offset, :limit => @limit)
+        Issue.load_visible_relations(@issues) if include_in_api_response?('relations')
+      }
+      format.atom {
+        @issues = @query.issues(:limit => Setting.feeds_limit.to_i)
+        render_feed(@issues,
+                    :title => "#{@project || Setting.app_title}: #{l(:label_issue_plural)}")
+      }
+      format.csv  {
+        @issues = @query.issues(:limit => Setting.issues_export_limit.to_i)
+        send_data(query_to_csv(@issues, @query, params[:csv]),
+                  :type => 'text/csv; header=present', :filename => 'issues.csv')
+      }
+      format.pdf  {
+        @issues = @query.issues(:limit => Setting.issues_export_limit.to_i)
+        send_file_headers! :type => 'application/pdf', :filename => 'issues.pdf'
+      }
+    end
+  else
+    respond_to do |format|
+      format.html { render :layout => !request.xhr? }
+      format.any(:atom, :csv, :pdf) { head 422 }
+      format.api { render_validation_errors(@query) }
+    end
+  end
+rescue ActiveRecord::RecordNotFound
+  render_404
+end
 
   def show
     @journals = @issue.visible_journals_with_index
     @has_changesets = @issue.changesets.visible.preload(:repository, :user).exists?
+
     @relations =
       @issue.relations.
         select {|r|
           r.other_issue(@issue) && r.other_issue(@issue).visible?
         }
+
+    @checklists = @issue.queried_checklists(
+      tracker: params[:checklists_tracker],
+      status: params[:checklists_status]
+    )
+
     @journals.reverse! if User.current.wants_comments_in_reverse_order?
 
     if User.current.allowed_to?(:view_time_entries, @project)
@@ -127,6 +151,8 @@ class IssuesController < ApplicationController
   end
 
   def new
+    @issue.importance = Issue::DEFAULT_IMPORTANCE
+
     respond_to do |format|
       format.html { render :action => 'new', :layout => !request.xhr? }
       format.js

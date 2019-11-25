@@ -32,6 +32,13 @@ module ApplicationHelper
   extend Forwardable
   def_delegators :wiki_helper, :wikitoolbar_for, :heads_for_wiki_formatter
 
+  def generate_replace_href(url, new_params = {})
+    uri = URI.parse(url)
+    base_url = url.split("?").first
+    new_query = Rack::Utils.parse_query(uri.query).merge(new_params.stringify_keys).to_query
+    "#{base_url}#{'?' if new_query.present?}#{new_query}"
+  end
+
   # Return true if user is authorized for controller/action, otherwise false
   def authorize_for(controller, action)
     User.current.allowed_to?({:controller => controller, :action => action}, @project)
@@ -53,7 +60,7 @@ module ApplicationHelper
       name = h(user.name(options[:format]))
       if user.active? || (User.current.admin? && user.logged?)
         only_path = options[:only_path].nil? ? true : options[:only_path]
-        link_to name, user_url(user, :only_path => only_path), :class => user.css_classes
+        link_to "#{options[:name_prefix]}#{name}", user_url(user, :only_path => only_path), :class => user.css_classes
       else
         name
       end
@@ -98,9 +105,9 @@ module ApplicationHelper
       end
     end
     only_path = options[:only_path].nil? ? true : options[:only_path]
+    text = subject ? "#{text}: #{subject}" : text
     s = link_to(text, issue_url(issue, :only_path => only_path),
                 :class => issue.css_classes, :title => title)
-    s << h(": #{subject}") if subject
     s = h("#{issue.project} - ") + s if options[:project]
     s
   end
@@ -786,6 +793,7 @@ module ApplicationHelper
     @current_section = 0 if options[:edit_section_links]
 
     parse_sections(text, project, obj, attr, only_path, options)
+    parse_checklists(text, options)
     text = parse_non_pre_blocks(text, obj, macros, options) do |text|
       [:parse_inline_attachments, :parse_hires_images, :parse_wiki_links, :parse_redmine_links].each do |method_name|
         send method_name, text, project, obj, attr, only_path, options
@@ -798,6 +806,36 @@ module ApplicationHelper
     end
 
     text.html_safe
+  end
+
+  def parse_checklists(text, options = {})
+    text.gsub!(/(\$\$\d+)/).each do |match|
+      checklist_id = match.gsub(/\$/, '').to_i
+
+      if checklist = Checklist.find_by_id(checklist_id)
+        content = "#{checklist.tracker.name} $#{checklist.id}: #{checklist.subject.truncate(100)} (#{checklist.status.name})"
+        title = "#{checklist.tracker.name} $#{checklist.id}: #{checklist.subject.truncate(100)} (#{checklist.status.name})"
+        link_to(content, checklist_url(checklist), :title => title, :class => checklist.css_classes + ' inner-link')
+      else
+        match
+      end
+    end
+
+    text.gsub!(/(\$\d+)/).each do |match|
+      checklist_id = match.gsub(/\$/, '').to_i
+
+      if checklist = Checklist.find_by_id(checklist_id)
+        content = "#{checklist.tracker.name} $#{checklist.id}"
+        title = "#{checklist.tracker.name} $#{checklist.id}: #{checklist.subject.truncate(100)} (#{checklist.status.name})"
+        link_to(content, checklist_url(checklist), :title => title, :class => checklist.css_classes + ' inner-link')
+      else
+        match
+      end
+    end
+
+    text.gsub!(/(\$\\\d+)/).each do |match|
+      match.gsub!(/\\/, '')
+    end
   end
 
   def parse_non_pre_blocks(text, obj, macros, options={})
@@ -1037,15 +1075,13 @@ module ApplicationHelper
                 url = issue_url(issue, :only_path => only_path, :anchor => anchor)
                 link =
                   if sep == '##'
-                    link_to("#{issue.tracker.name} ##{oid}#{comment_suffix}",
-                            url,
-                            :class => issue.css_classes,
-                            :title => "#{issue.tracker.name}: #{issue.subject.truncate(100)} (#{issue.status.name})") + ": #{issue.subject}"
+                    content = "#{issue.tracker.name} ##{issue.id}: #{issue.subject.truncate(100)} (#{issue.status.name})"
+                    title = "#{issue.tracker.name} ##{issue.id}: #{issue.subject.truncate(100)} (#{issue.status.name})"
+                    link_to(content, url, :title => title, :class => issue.css_classes + " inner-link")
                   else
-                    link_to("##{oid}#{comment_suffix}",
-                            url,
-                            :class => issue.css_classes,
-                            :title => "#{issue.tracker.name}: #{issue.subject.truncate(100)} (#{issue.status.name})")
+                    content = "#{issue.tracker.name} ##{issue.id}"
+                    title = "#{issue.tracker.name} ##{issue.id}: #{issue.subject.truncate(100)} (#{issue.status.name})"
+                    link_to(content, url, :title => title, :class => issue.css_classes + " inner-link")
                   end
               elsif identifier == 'note'
                 link = link_to("#note-#{comment_id}", "#note-#{comment_id}")
@@ -1152,7 +1188,7 @@ module ApplicationHelper
           elsif sep == "@"
             name = remove_double_quotes(identifier)
             u = User.visible.find_by("LOWER(login) = :s AND type = 'User'", :s => name.downcase)
-            link = link_to_user(u, :only_path => only_path) if u
+            link = link_to_user(u, :only_path => only_path, :name_prefix => "@") if u
           end
         end
         (leading + (link || "#{project_prefix}#{prefix}#{repo_prefix}#{sep}#{identifier}#{comment_suffix}"))

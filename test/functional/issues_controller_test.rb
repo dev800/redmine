@@ -1069,13 +1069,13 @@ class IssuesControllerTest < Redmine::ControllerTest
 
     get :index, :params => {:sort => "spent_hours:desc", :c => ['subject','spent_hours']}
     assert_response :success
-    assert_equal ['4.00', '3.00', '0.00'], columns_values_in_list('spent_hours')[0..2]
+    assert_equal ['0.00', '4.00', '3.00'], columns_values_in_list('spent_hours')[0..2]
 
     Project.find(3).disable_module!(:time_tracking)
 
     get :index, :params => {:sort => "spent_hours:desc", :c => ['subject','spent_hours']}
     assert_response :success
-    assert_equal ['3.00', '0.00', '0.00'], columns_values_in_list('spent_hours')[0..2]
+    assert_equal ["0.00", "3.00", "0.00"], columns_values_in_list('spent_hours')[0..2]
   end
 
   def test_index_sort_by_total_spent_hours

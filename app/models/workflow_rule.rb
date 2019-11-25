@@ -25,6 +25,8 @@ class WorkflowRule < ActiveRecord::Base
   belongs_to :old_status, :class_name => 'IssueStatus'
   belongs_to :new_status, :class_name => 'IssueStatus'
 
+  # acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
+
   validates_presence_of :role, :tracker
 
   # Copies workflows from source to targets

@@ -113,7 +113,7 @@ class Redmine::Helpers::GanttHelperTest < Redmine::HelperTest
   def setup_subjects
     create_gantt
     @project.enabled_module_names = [:issue_tracking]
-    @tracker = Tracker.generate!
+    @tracker = Tracker.generate!(flag_value: 'trackerTMP')
     @project.trackers << @tracker
     @version = Version.generate!(:effective_date => (today + 7), :sharing => 'none')
     @project.versions << @version
@@ -215,7 +215,7 @@ class Redmine::Helpers::GanttHelperTest < Redmine::HelperTest
   test "#lines" do
     create_gantt
     @project.enabled_module_names = [:issue_tracking]
-    @tracker = Tracker.generate!
+    @tracker = Tracker.generate!(flag_value: "TrackerTMP")
     @project.trackers << @tracker
     @version = Version.generate!(:effective_date => (today + 7))
     @project.versions << @version

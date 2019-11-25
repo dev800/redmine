@@ -861,7 +861,7 @@ eu:
   default_tracker_feature: Eginbidea
   default_tracker_support: Laguntza
   default_issue_status_new: Berria
-  default_issue_status_in_progress: Lanean
+  default_issue_status_solving: Lanean
   default_issue_status_resolved: Ebatzita
   default_issue_status_feedback: Berrelikadura
   default_issue_status_closed: Itxita

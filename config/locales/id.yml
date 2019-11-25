@@ -831,7 +831,7 @@ id:
   default_tracker_feature: Fitur
   default_tracker_support: Dukungan
   default_issue_status_new: Baru
-  default_issue_status_in_progress: Dalam proses
+  default_issue_status_solving: Dalam proses
   default_issue_status_resolved: Resolved
   default_issue_status_feedback: Umpan balik
   default_issue_status_closed: Ditutup

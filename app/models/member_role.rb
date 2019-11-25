@@ -26,6 +26,7 @@ class MemberRole < ActiveRecord::Base
   after_create :add_role_to_group_users, :add_role_to_subprojects
   after_destroy :remove_inherited_roles
 
+  # acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   validates_presence_of :role
   validate :validate_role_member
 

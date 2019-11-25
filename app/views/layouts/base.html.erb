@@ -117,12 +117,14 @@
     </div>
 </div>
 <div id="footer">
-    Powered by <%= link_to Redmine::Info.app_name, Redmine::Info.url %> &copy; 2006-2019 Jean-Philippe Lang
+    Powered by <%= link_to Redmine::Info.app_name, Redmine::Info.url %> &copy; 2006-<%= Time.now.year %>
 </div>
 </div>
 
 <div id="ajax-indicator" style="display:none;"><span><%= l(:label_loading) %></span></div>
 <div id="ajax-modal" style="display:none;"></div>
+<div id="dialog-modal-wrapper" style="display:none"><div id="dialog-modal"></div></div>
+<div id="dialog-overlay" style="display: none"></div>
 
 </div>
 </div>

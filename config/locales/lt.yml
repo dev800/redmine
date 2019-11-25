@@ -1142,7 +1142,7 @@ lt:
   default_tracker_feature: Ypatybė
   default_tracker_support: Palaikymas
   default_issue_status_new: Naujas
-  default_issue_status_in_progress: Vykdomas
+  default_issue_status_solving: Vykdomas
   default_issue_status_resolved: Išspręstas
   default_issue_status_feedback: Grįžtamasis ryšys
   default_issue_status_closed: Uždarytas

@@ -31,6 +31,8 @@ class EmailAddress < ActiveRecord::Base
   after_update_commit :deliver_security_notification_update
   after_destroy_commit :deliver_security_notification_destroy
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
+
   validates_presence_of :address
   validates_format_of :address, :with => EMAIL_REGEXP, :allow_blank => true
   validates_length_of :address, :maximum => User::MAIL_LENGTH_LIMIT, :allow_nil => true

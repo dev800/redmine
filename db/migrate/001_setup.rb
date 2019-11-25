@@ -35,6 +35,7 @@ class Setup < ActiveRecord::Migration[4.2]
       t.column "downloads", :integer, :default => 0, :null => false
       t.column "author_id", :integer, :default => 0, :null => false
       t.column "created_on", :timestamp
+      t.column "deleted_at", :timestamp
     end
 
     create_table "auth_sources", :force => true do |t|
@@ -62,6 +63,7 @@ class Setup < ActiveRecord::Migration[4.2]
       t.column "max_length", :integer, :default => 0, :null => false
       t.column "is_required", :boolean, :default => false, :null => false
       t.column "is_for_all", :boolean, :default => false, :null => false
+      t.column "deleted_at", :timestamp
     end
 
     create_table "custom_fields_projects", :id => false, :force => true do |t|
@@ -79,6 +81,7 @@ class Setup < ActiveRecord::Migration[4.2]
       t.column "customized_id", :integer, :default => 0, :null => false
       t.column "custom_field_id", :integer, :default => 0, :null => false
       t.column "value", :text
+      t.column "deleted_at", :timestamp
     end
 
     create_table "documents", :force => true do |t|
@@ -94,6 +97,7 @@ class Setup < ActiveRecord::Migration[4.2]
     create_table "enumerations", :force => true do |t|
       t.column "opt", :string, :limit => 4, :default => "", :null => false
       t.column "name", :string, :limit => 30, :default => "", :null => false
+      t.column "deleted_at", :timestamp
     end
 
     create_table "issue_categories", :force => true do |t|
@@ -109,6 +113,7 @@ class Setup < ActiveRecord::Migration[4.2]
       t.column "author_id", :integer, :default => 0, :null => false
       t.column "notes", :text
       t.column "created_on", :timestamp
+      t.column "deleted_at", :timestamp
     end
 
     add_index "issue_histories", ["issue_id"], :name => "issue_histories_issue_id"
@@ -118,6 +123,7 @@ class Setup < ActiveRecord::Migration[4.2]
       t.column "is_closed", :boolean, :default => false, :null => false
       t.column "is_default", :boolean, :default => false, :null => false
       t.column "html_color", :string, :limit => 6, :default => "FFFFFF", :null => false
+      t.column "deleted_at", :timestamp
     end
 
     create_table "issues", :force => true do |t|
@@ -135,6 +141,7 @@ class Setup < ActiveRecord::Migration[4.2]
       t.column "lock_version", :integer, :default => 0, :null => false
       t.column "created_on", :timestamp
       t.column "updated_on", :timestamp
+      t.column "deleted_at", :timestamp
     end
 
     add_index "issues", ["project_id"], :name => "issues_project_id"
@@ -144,6 +151,7 @@ class Setup < ActiveRecord::Migration[4.2]
       t.column "project_id", :integer, :default => 0, :null => false
       t.column "role_id", :integer, :default => 0, :null => false
       t.column "created_on", :timestamp
+      t.column "deleted_at", :timestamp
     end
 
     create_table "news", :force => true do |t|
@@ -183,10 +191,12 @@ class Setup < ActiveRecord::Migration[4.2]
       t.column "projects_count", :integer, :default => 0
       t.column "created_on", :timestamp
       t.column "updated_on", :timestamp
+      t.column "deleted_at", :timestamp
     end
 
     create_table "roles", :force => true do |t|
       t.column "name", :string, :limit => 30, :default => "", :null => false
+      t.column "deleted_at", :timestamp
     end
 
     create_table "tokens", :force => true do |t|
@@ -194,11 +204,13 @@ class Setup < ActiveRecord::Migration[4.2]
       t.column "action", :string, :limit => 30, :default => "", :null => false
       t.column "value", :string, :limit => 40, :default => "", :null => false
       t.column "created_on", :datetime, :null => false
+      t.column "deleted_at", :timestamp
     end
 
     create_table "trackers", :force => true do |t|
       t.column "name", :string, :limit => 30, :default => "", :null => false
       t.column "is_in_chlog", :boolean, :default => false, :null => false
+      t.column "deleted_at", :timestamp
     end
 
     create_table "users", :force => true do |t|
@@ -215,6 +227,7 @@ class Setup < ActiveRecord::Migration[4.2]
       t.column "auth_source_id", :integer
       t.column "created_on", :timestamp
       t.column "updated_on", :timestamp
+      t.column "deleted_at", :timestamp
     end
 
     create_table "versions", :force => true do |t|
@@ -233,6 +246,7 @@ class Setup < ActiveRecord::Migration[4.2]
       t.column "old_status_id", :integer, :default => 0, :null => false
       t.column "new_status_id", :integer, :default => 0, :null => false
       t.column "role_id", :integer, :default => 0, :null => false
+      t.column "deleted_at", :timestamp
     end
 
     # project

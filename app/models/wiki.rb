@@ -23,6 +23,7 @@ class Wiki < ActiveRecord::Base
   has_many :pages, lambda {order('title')}, :class_name => 'WikiPage', :dependent => :destroy
   has_many :redirects, :class_name => 'WikiRedirect'
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   acts_as_watchable
 
   validates_presence_of :start_page

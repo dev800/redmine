@@ -103,7 +103,7 @@ class ApplicationController < ActionController::Base
   # and starts a session if needed
   def find_current_user
     user = nil
-    unless api_request?
+    # unless api_request?
       if session[:user_id]
         # existing session
         user = (User.active.find(session[:user_id]) rescue nil)
@@ -113,7 +113,7 @@ class ApplicationController < ActionController::Base
         # RSS key authentication does not start a session
         user = User.find_by_rss_key(params[:key])
       end
-    end
+    # end
     if user.nil? && Setting.rest_api_enabled? && accept_api_auth?
       if (key = api_key_from_request)
         # Use API key
@@ -333,6 +333,15 @@ class ApplicationController < ActionController::Base
 
   def self.model_object(model)
     self.model_object = model
+  end
+
+  def find_checklist
+    @checklist = Checklist.find(params[:id])
+    raise Unauthorized unless @checklist.visible?
+    @project = @checklist.project
+    @issue = @checklist.issue
+  rescue ActiveRecord::RecordNotFound
+    render_404
   end
 
   # Find the issue whose id is the :id parameter

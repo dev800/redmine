@@ -224,13 +224,15 @@ module QueriesHelper
     when :id
       link_to value, issue_path(item)
     when :subject
-      link_to value, issue_path(item)
+      link_to value.truncate(128), issue_path(item)
     when :parent
       value ? (value.visible? ? link_to_issue(value, :subject => false) : "##{value.id}") : ''
     when :description
       item.description? ? content_tag('div', textilizable(item, :description), :class => "wiki") : ''
     when :last_notes
       item.last_notes.present? ? content_tag('div', textilizable(item, :last_notes), :class => "wiki") : ''
+    when :importance
+      item.importance_human
     when :done_ratio
       progress_bar(value)
     when :relations

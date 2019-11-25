@@ -1,0 +1,1662 @@
+# frozen_string_literal: true
+class Checklist < ActiveRecord::Base
+  include Redmine::SafeAttributes
+  include Redmine::Utils::DateCalculation
+  include Redmine::I18n
+  before_save :set_parent_id
+  include Redmine::NestedSet::IssueNestedSet
+
+  belongs_to :project
+  belongs_to :tracker
+  belongs_to :issue
+  belongs_to :status, :class_name => 'IssueStatus'
+  belongs_to :author, :class_name => 'User'
+  belongs_to :assigned_to, :class_name => 'Principal'
+  belongs_to :fixed_version, :class_name => 'Version'
+  belongs_to :priority, :class_name => 'IssuePriority'
+  belongs_to :category, :class_name => 'IssueCategory'
+
+  has_many :time_entries, :dependent => :destroy
+  has_many :journals, class_name: "Journal", :as => :journalized, :dependent => :destroy, :inverse_of => :journalized
+  has_and_belongs_to_many :changesets, lambda {order("#{Changeset.table_name}.committed_on ASC, #{Changeset.table_name}.id ASC")}
+
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
+  acts_as_attachable :after_add => :attachment_added, :after_remove => :attachment_removed
+  acts_as_customizable
+  acts_as_watchable
+  acts_as_searchable :columns => ['subject', "#{table_name}.description"],
+    :preload => [:project, :status, :tracker],
+    :scope => lambda {|options| options[:open_checklists] ? self.open : self.all}
+
+  acts_as_event :title => Proc.new {|o| "#{o.tracker.name} $#{o.id} (#{o.status}): #{o.subject}"},
+    :url => Proc.new {|o| {:controller => 'checklists', :action => 'show', :id => o.id}},
+    :type => Proc.new {|o| 'checklist' + (o.closed? ? '-closed' : '') }
+
+  acts_as_activity_provider :scope => preload(:project, :author, :tracker, :status),
+                            :author_key => :author_id
+
+  DONE_RATIO_OPTIONS = %w(checklist_field checklist_status)
+
+  attr_writer :deleted_attachment_ids
+  delegate :notes, :notes=, :private_notes, :private_notes=, :to => :current_journal, :allow_nil => true
+
+  validates_presence_of :subject, :project, :tracker
+  validates_presence_of :priority, :if => Proc.new {|checklist| checklist.new_record? || checklist.priority_id_changed?}
+  validates_presence_of :status, :if => Proc.new {|checklist| checklist.new_record? || checklist.status_id_changed?}
+  validates_presence_of :author, :if => Proc.new {|checklist| checklist.new_record? || checklist.author_id_changed?}
+
+  validates_length_of :subject, :maximum => 255
+  validates_inclusion_of :done_ratio, :in => 0..100
+  validates :estimated_hours, :numericality => {:greater_than_or_equal_to => 0, :allow_nil => true, :message => :invalid}
+  validates :start_date, :date => true
+  validates :due_date, :date => true
+  validate :validate_checklist, :validate_required_fields, :validate_permissions
+
+  scope :visible, lambda {|*args|
+    joins(:project).
+    where(Checklist.visible_condition(args.shift || User.current, *args))
+  }
+
+  scope :open, lambda {|*args|
+    is_closed = !args.empty? ? !args.first : false
+    joins(:status).
+    where(:issue_statuses => {:is_closed => is_closed})
+  }
+
+  scope :recently_updated, lambda { order(:updated_on => :desc) }
+
+  scope :on_active_project, lambda {
+    joins(:project).
+    where(:projects => {:status => Project::STATUS_ACTIVE})
+  }
+
+  scope :fixed_version, lambda {|versions|
+    ids = [versions].flatten.compact.map {|v| v.is_a?(Version) ? v.id : v}
+    ids.any? ? where(:fixed_version_id => ids) : none
+  }
+
+  scope :assigned_to, lambda {|arg|
+    arg = Array(arg).uniq
+    ids = arg.map {|p| p.is_a?(Principal) ? p.id : p}
+    ids += arg.select {|p| p.is_a?(User)}.map(&:group_ids).flatten.uniq
+    ids.compact!
+    ids.any? ? where(:assigned_to_id => ids) : none
+  }
+
+  scope :like, lambda {|q|
+    q = q.to_s
+    if q.present?
+      where("LOWER(#{table_name}.subject) LIKE LOWER(?)", "%#{q}%")
+    end
+  }
+
+  before_validation :default_assign, on: :create
+  before_validation :clear_disabled_fields
+
+  before_save :update_done_ratio_from_checklist_status,
+    :force_updated_on_change, :update_closed_on
+
+  after_save {|checklist| checklist.send :after_project_change if !checklist.saved_change_to_id? && checklist.saved_change_to_project_id?}
+
+  after_save :update_nested_set_attributes,
+    :update_parent_attributes,
+    :delete_selected_attachments,
+    :create_journal
+
+  # Should be after_create but would be called before previous after_save callbacks
+  after_destroy :update_parent_attributes
+  after_create_commit :send_notification
+
+  after_create do |r|
+    r.position = r.id
+    r.save!
+  end
+
+  # Returns a SQL conditions string used to find all checklists visible by the specified user
+  def self.visible_condition(user, options={})
+    Project.allowed_to_condition(user, :view_checklists, options) do |role, user|
+      sql =
+        if user.id && user.logged?
+          case role.checklists_visibility
+          when 'all'
+            '1=1'
+          when 'default'
+            user_ids = [user.id] + user.groups.pluck(:id).compact
+            "(#{table_name}.is_private = #{connection.quoted_false} OR #{table_name}.author_id = #{user.id} OR #{table_name}.assigned_to_id IN (#{user_ids.join(',')}))"
+          when 'own'
+            user_ids = [user.id] + user.groups.pluck(:id).compact
+            "(#{table_name}.author_id = #{user.id} OR #{table_name}.assigned_to_id IN (#{user_ids.join(',')}))"
+          else
+              '1=0'
+          end
+        else
+          "(#{table_name}.is_private = #{connection.quoted_false})"
+        end
+      unless role.permissions_all_trackers?(:view_checklists)
+        tracker_ids = role.permissions_tracker_ids(:view_checklists)
+        if tracker_ids.any?
+          sql = "(#{sql} AND #{table_name}.tracker_id IN (#{tracker_ids.join(',')}))"
+        else
+          sql = '1=0'
+        end
+      end
+      sql
+    end
+  end
+
+  # Returns true if usr or current user is allowed to view the checklist
+  def visible?(usr=nil)
+    issue.visible?(usr)
+  end
+
+  # Returns true if user or current user is allowed to edit or add notes to the checklist
+  def editable?(user=User.current)
+    attributes_editable?(user) || notes_addable?(user)
+  end
+
+  # Returns true if user or current user is allowed to edit the checklist
+  def attributes_editable?(user=User.current)
+    user_tracker_permission?(user, :edit_checklists) || (
+      user_tracker_permission?(user, :edit_own_checklists) && author == user
+    )
+  end
+
+  # Overrides Redmine::Acts::Attachable::InstanceMethods#attachments_editable?
+  def attachments_editable?(user=User.current)
+    attributes_editable?(user)
+  end
+
+  # Returns true if user or current user is allowed to add notes to the checklist
+  def notes_addable?(user=User.current)
+    user_tracker_permission?(user, :add_checklist_notes)
+  end
+
+  # Returns true if user or current user is allowed to delete the checklist
+  def deletable?(user=User.current)
+    user_tracker_permission?(user, :delete_checklists)
+  end
+
+  def initialize(attributes=nil, *args)
+    super
+    if new_record?
+      # set default values for new records only
+      self.priority ||= IssuePriority.default
+    end
+  end
+
+  def create_or_update(*args)
+    super
+  ensure
+    @status_was = nil
+  end
+  private :create_or_update
+
+  # AR#Persistence#destroy would raise and RecordNotFound exception
+  # if the checklist was already deleted or updated (non matching lock_version).
+  # This is a problem when bulk deleting checklists or deleting a project
+  # (because an checklist may already be deleted if its parent was deleted
+  # first).
+  # The checklist is reloaded by the nested_set before being deleted so
+  # the lock_version condition should not be an checklist but we handle it.
+  def destroy
+    super
+  rescue ActiveRecord::StaleObjectError, ActiveRecord::RecordNotFound
+    # Stale or already deleted
+    begin
+      reload
+    rescue ActiveRecord::RecordNotFound
+      # The checklist was actually already deleted
+      @destroyed = true
+      return freeze
+    end
+    # The checklist was stale, retry to destroy
+    super
+  end
+
+  alias :base_reload :reload
+  def reload(*args)
+    @workflow_rule_by_attribute = nil
+    @assignable_versions = nil
+    @relations = nil
+    @spent_hours = nil
+    @total_spent_hours = nil
+    @total_estimated_hours = nil
+    @last_updated_by = nil
+    @last_notes = nil
+    base_reload(*args)
+  end
+
+  def visible_custom_field_values(user=nil)
+    user_real = user || User.current
+    custom_field_values.select do |value|
+      value.custom_field.visible_by?(project, user_real)
+    end
+  end
+
+  # Overrides Redmine::Acts::Customizable::InstanceMethods#set_custom_field_default?
+  def set_custom_field_default?(custom_value)
+    new_record? || project_id_changed?|| tracker_id_changed?
+  end
+
+  def status_id=(status_id)
+    if status_id.to_s != self.status_id.to_s
+      self.status = (status_id.present? ? IssueStatus.find_by_id(status_id) : nil)
+    end
+    self.status_id
+  end
+
+  # Sets the status.
+  def status=(status)
+    if status != self.status
+      @workflow_rule_by_attribute = nil
+    end
+    association(:status).writer(status)
+  end
+
+  def priority_id=(pid)
+    self.priority = nil
+    write_attribute(:priority_id, pid)
+  end
+
+  def category_id=(cid)
+    self.category = nil
+    write_attribute(:category_id, cid)
+  end
+
+  def fixed_version_id=(vid)
+    self.fixed_version = nil
+    write_attribute(:fixed_version_id, vid)
+  end
+
+  def tracker_id=(tracker_id)
+    if tracker_id.to_s != self.tracker_id.to_s
+      self.tracker = (tracker_id.present? ? Tracker.find_by_id(tracker_id) : nil)
+    end
+    self.tracker_id
+  end
+
+  # Sets the tracker.
+  # This will set the status to the default status of the new tracker if:
+  # * the status was the default for the previous tracker
+  # * or if the status was not part of the new tracker statuses
+  # * or the status was nil
+  def tracker=(tracker)
+    tracker_was = self.tracker
+    association(:tracker).writer(tracker)
+
+    if tracker != tracker_was
+      if status == tracker_was.try(:default_status)
+        self.status = nil
+      elsif status && tracker && !tracker.issue_status_ids.include?(status.id)
+        self.status = nil
+      end
+      reassign_custom_field_values
+      @workflow_rule_by_attribute = nil
+    end
+
+    self.status ||= default_status
+    self.tracker
+  end
+
+  def project_id=(project_id)
+    if project_id.to_s != self.project_id.to_s
+      self.project = (project_id.present? ? Project.find_by_id(project_id) : nil)
+    end
+    self.project_id
+  end
+
+  # Sets the project.
+  # Unless keep_tracker argument is set to true, this will change the tracker
+  # to the first tracker of the new project if the previous tracker is not part
+  # of the new project trackers.
+  # This will:
+  # * clear the fixed_version is it's no longer valid for the new project.
+  # * clear the parent checklist if it's no longer valid for the new project.
+  # * set the category to the category with the same name in the new
+  #   project if it exists, or clear it if it doesn't.
+  # * for new checklist, set the fixed_version to the project default version
+  #   if it's a valid fixed_version.
+  def project=(project, keep_tracker=false)
+    project_was = self.project
+    association(:project).writer(project)
+
+    if project != project_was
+      @safe_attribute_names = nil
+    end
+    if project_was && project && project_was != project
+      @assignable_versions = nil
+
+      unless keep_tracker || project.trackers.include?(tracker)
+        self.tracker = project.trackers.first
+      end
+
+      # Reassign to the category with same name if any
+      if category
+        self.category = project.issue_categories.find_by_name(category.name)
+      end
+
+      # Clear the assignee if not available in the new project for new issues (eg. copy)
+      # For existing issue, the previous assignee is still valid, so we keep it
+      if new_record? && assigned_to && !assignable_users.include?(assigned_to)
+        self.assigned_to_id = nil
+      end
+
+      # Keep the fixed_version if it's still valid in the new_project
+      if fixed_version && fixed_version.project != project && !project.shared_versions.include?(fixed_version)
+        self.fixed_version = nil
+      end
+
+      # Clear the parent task if it's no longer valid
+      unless valid_parent_project?
+        self.parent_checklist_id = nil
+      end
+
+      reassign_custom_field_values
+      @workflow_rule_by_attribute = nil
+    end
+
+    # Set fixed_version to the project default version if it's valid
+    if new_record? && fixed_version.nil? && project && project.default_version_id?
+      if project.shared_versions.open.exists?(project.default_version_id)
+        self.fixed_version_id = project.default_version_id
+      end
+    end
+
+    self.project
+  end
+
+  def description=(arg)
+    if arg.is_a?(String)
+      arg = arg.gsub(/(\r\n|\n|\r)/, "\r\n")
+    end
+
+    write_attribute(:description, arg)
+  end
+
+  def deleted_attachment_ids
+    Array(@deleted_attachment_ids).map(&:to_i)
+  end
+
+  # Overrides assign_attributes so that project and tracker get assigned first
+  def assign_attributes(new_attributes, *args)
+    return if new_attributes.nil?
+
+    attrs = new_attributes.dup
+    attrs.stringify_keys!
+
+    %w(project project_id tracker tracker_id).each do |attr|
+      if attrs.has_key?(attr)
+        send "#{attr}=", attrs.delete(attr)
+      end
+    end
+
+    super attrs, *args
+  end
+
+  def attributes=(new_attributes)
+    assign_attributes new_attributes
+  end
+
+  def estimated_hours=(h)
+    write_attribute :estimated_hours, (h.is_a?(String) ? (h.to_hours || h) : h)
+  end
+
+  safe_attributes 'project_id',
+    'tracker_id',
+    'status_id',
+    'category_id',
+    'assigned_to_id',
+    'priority_id',
+    'fixed_version_id',
+    'subject',
+    'description',
+    'start_date',
+    'due_date',
+    'done_ratio',
+    'estimated_hours',
+    'custom_field_values',
+    'custom_fields',
+    'lock_version',
+    'notes',
+    'importance',
+    :if => lambda {|checklist, user|
+      checklist.new_record? || checklist.attributes_editable?(user)
+    }
+
+  safe_attributes 'notes',
+    :if => lambda {|checklist, user| checklist.notes_addable?(user)}
+
+  safe_attributes 'private_notes',
+    :if => lambda {|checklist, user| !checklist.new_record? && user.allowed_to?(:set_notes_private, checklist.project)}
+
+  safe_attributes 'is_private',
+    :if => lambda {|checklist, user|
+      user.allowed_to?(:set_checklists_private, checklist.project) ||
+        (checklist.author_id == user.id && user.allowed_to?(:set_own_checklists_private, checklist.project))
+    }
+
+  safe_attributes 'parent_checklist_id',
+    :if => lambda {|checklist, user|
+      (checklist.new_record? || checklist.attributes_editable?(user)) &&
+        user.allowed_to?(:manage_subtasks, checklist.project)
+    }
+
+  safe_attributes 'deleted_attachment_ids',
+    :if => lambda {|checklist, user| checklist.attachments_deletable?(user)}
+
+  def safe_attribute_names(user=nil)
+    names = super
+    names -= disabled_core_fields
+    names -= read_only_attribute_names(user)
+
+    if new_record?
+      # Make sure that project_id can always be set for new checklists
+      names |= %w(project_id)
+    end
+
+    if dates_derived?
+      names -= %w(start_date due_date)
+    end
+
+    if priority_derived?
+      names -= %w(priority_id)
+    end
+
+    if done_ratio_derived?
+      names -= %w(done_ratio)
+    end
+
+    names
+  end
+
+  def importance_human
+    Issue.importance_human(importance)
+  end
+
+  def importance_select_options
+    importance = (new_record? ? Issue::DEFAULT_IMPORTANCE : self.importance) || Issue::DEFAULT_IMPORTANCE
+
+    Issue::IMPORTANCE_VALUES.map do |value|
+      [Issue.importance_human(value), value]
+    end
+  end
+
+  # Safely sets attributes
+  # Should be called from controllers instead of #attributes=
+  # attr_accessible is too rough because we still want things like
+  # Checklist.new(:project => foo) to work
+  def safe_attributes=(attrs, user=User.current)
+    if attrs.respond_to?(:to_unsafe_hash)
+      attrs = attrs.to_unsafe_hash
+    end
+
+    @attributes_set_by = user
+    return unless attrs.is_a?(Hash)
+
+    attrs = attrs.deep_dup
+
+    # Project and Tracker must be set before since new_statuses_allowed_to depends on it.
+    if (p = attrs.delete('project_id')) && safe_attribute?('project_id')
+      if p.is_a?(String) && !/^\d*$/.match?(p)
+        p_id = Project.find_by_identifier(p).try(:id)
+      else
+        p_id = p.to_i
+      end
+
+      if allowed_target_projects(user).where(:id => p_id).exists?
+        self.project_id = p_id
+      end
+
+      if project_id_changed? && attrs['category_id'].present? && attrs['category_id'].to_s == category_id_was.to_s
+        # Discard submitted category on previous project
+        attrs.delete('category_id')
+      end
+    end
+
+    if (t = attrs.delete('tracker_id')) && safe_attribute?('tracker_id')
+      if allowed_target_trackers(user).where(:id => t.to_i).exists?
+        self.tracker_id = t
+      end
+    end
+    if project && tracker.nil?
+      # Set a default tracker to accept custom field values
+      # even if tracker is not specified
+      allowed_trackers = allowed_target_trackers(user)
+
+      if attrs['parent_checklist_id'].present?
+        # If parent_checklist_id is present, the first tracker for which this field
+        # is not disabled is chosen as default
+        self.tracker = allowed_trackers.detect {|t| t.core_fields.include?('parent_checklist_id')}
+      end
+      self.tracker ||= allowed_trackers.first
+    end
+
+    statuses_allowed = new_statuses_allowed_to(user)
+
+    if (s = attrs.delete('status_id')) && safe_attribute?('status_id')
+      if statuses_allowed.collect(&:id).include?(s.to_i)
+        self.status_id = s
+      end
+    end
+
+    if new_record? && !statuses_allowed.include?(status)
+      self.status = statuses_allowed.first || default_status
+    end
+
+    if (u = attrs.delete('assigned_to_id')) && safe_attribute?('assigned_to_id')
+      self.assigned_to_id = u
+    end
+
+    attrs = delete_unsafe_attributes(attrs, user)
+    return if attrs.empty?
+
+    if attrs['parent_checklist_id'].present?
+      s = attrs['parent_checklist_id'].to_s
+      unless (m = s.match(%r{\A#?(\d+)\z})) && (m[1] == parent_id.to_s || Checklist.visible(user).exists?(m[1]))
+        @invalid_parent_checklist_id = attrs.delete('parent_checklist_id')
+      end
+    end
+
+    if attrs['custom_field_values'].present?
+      editable_custom_field_ids = editable_custom_field_values(user).map {|v| v.custom_field_id.to_s}
+      attrs['custom_field_values'].select! {|k, v| editable_custom_field_ids.include?(k.to_s)}
+    end
+
+    if attrs['custom_fields'].present?
+      editable_custom_field_ids = editable_custom_field_values(user).map {|v| v.custom_field_id.to_s}
+      attrs['custom_fields'].select! {|c| editable_custom_field_ids.include?(c['id'].to_s)}
+    end
+
+    assign_attributes attrs
+  end
+
+  def disabled_core_fields
+    tracker ? tracker.disabled_core_fields : []
+  end
+
+  # Returns the custom_field_values that can be edited by the given user
+  def editable_custom_field_values(user=nil)
+    read_only = read_only_attribute_names(user)
+    visible_custom_field_values(user).reject do |value|
+      read_only.include?(value.custom_field_id.to_s)
+    end
+  end
+
+  # Returns the custom fields that can be edited by the given user
+  def editable_custom_fields(user=nil)
+    editable_custom_field_values(user).map(&:custom_field).uniq
+  end
+
+  # Returns the names of attributes that are read-only for user or the current user
+  # For users with multiple roles, the read-only fields are the intersection of
+  # read-only fields of each role
+  # The result is an array of strings where sustom fields are represented with their ids
+  #
+  # Examples:
+  #   checklist.read_only_attribute_names # => ['due_date', '2']
+  #   checklist.read_only_attribute_names(user) # => []
+  def read_only_attribute_names(user=nil)
+    workflow_rule_by_attribute(user).reject {|attr, rule| rule != 'readonly'}.keys
+  end
+
+  # Returns the names of required attributes for user or the current user
+  # For users with multiple roles, the required fields are the intersection of
+  # required fields of each role
+  # The result is an array of strings where sustom fields are represented with their ids
+  #
+  # Examples:
+  #   checklist.required_attribute_names # => ['due_date', '2']
+  #   checklist.required_attribute_names(user) # => []
+  def required_attribute_names(user=nil)
+    workflow_rule_by_attribute(user).reject {|attr, rule| rule != 'required'}.keys
+  end
+
+  # Returns true if the attribute is required for user
+  def required_attribute?(name, user=nil)
+    required_attribute_names(user).include?(name.to_s)
+  end
+
+  # Returns a hash of the workflow rule by attribute for the given user
+  #
+  # Examples:
+  #   checklist.workflow_rule_by_attribute # => {'due_date' => 'required', 'start_date' => 'readonly'}
+  def workflow_rule_by_attribute(user=nil)
+    return @workflow_rule_by_attribute if @workflow_rule_by_attribute && user.nil?
+
+    user_real = user || User.current
+    roles = user_real.admin ? Role.all.to_a : user_real.roles_for_project(project)
+    roles = roles.select(&:consider_workflow?)
+    return {} if roles.empty?
+
+    result = {}
+    workflow_permissions = WorkflowPermission.where(:tracker_id => tracker_id, :old_status_id => status_id, :role_id => roles.map(&:id)).to_a
+
+    if workflow_permissions.any?
+      workflow_rules = workflow_permissions.inject({}) do |h, wp|
+        h[wp.field_name] ||= {}
+        h[wp.field_name][wp.role_id] = wp.rule
+        h
+      end
+
+      fields_with_roles = {}
+
+      IssueCustomField.where(:visible => false).joins(:roles).pluck(:id, "role_id").each do |field_id, role_id|
+        fields_with_roles[field_id] ||= []
+        fields_with_roles[field_id] << role_id
+      end
+
+      roles.each do |role|
+        fields_with_roles.each do |field_id, role_ids|
+          unless role_ids.include?(role.id)
+            field_name = field_id.to_s
+            workflow_rules[field_name] ||= {}
+            workflow_rules[field_name][role.id] = 'readonly'
+          end
+        end
+      end
+
+      workflow_rules.each do |attr, rules|
+        next if rules.size < roles.size
+        uniq_rules = rules.values.uniq
+
+        if uniq_rules.size == 1
+          result[attr] = uniq_rules.first
+        else
+          result[attr] = 'required'
+        end
+      end
+    end
+
+    @workflow_rule_by_attribute = result if user.nil?
+    result
+  end
+
+  private :workflow_rule_by_attribute
+
+  def done_ratio
+    if Checklist.use_status_for_done_ratio? && status && status.default_done_ratio
+      status.default_done_ratio
+    else
+      read_attribute(:done_ratio)
+    end
+  end
+
+  def self.use_status_for_done_ratio?
+    Setting.checklist_done_ratio == 'checklist_status'
+  end
+
+  def self.use_field_for_done_ratio?
+    Setting.checklist_done_ratio == 'checklist_field'
+  end
+
+  def validate_checklist
+    if due_date && start_date && (start_date_changed? || due_date_changed?) && due_date < start_date
+      errors.add :due_date, :greater_than_start_date
+    end
+
+    if fixed_version
+      if !assignable_versions.include?(fixed_version)
+        errors.add :fixed_version_id, :inclusion
+      elsif reopening? && fixed_version.closed?
+        errors.add :base, I18n.t(:error_can_not_reopen_checklist_on_closed_version)
+      end
+    end
+
+    # Checks that the checklist can not be added/moved to a disabled tracker
+    if project && (tracker_id_changed? || project_id_changed?)
+      if tracker && !project.trackers.include?(tracker)
+        errors.add :tracker_id, :inclusion
+      end
+    end
+
+    if assigned_to_id_changed? && assigned_to_id.present?
+      unless assignable_users.include?(assigned_to)
+        errors.add :assigned_to_id, :invalid
+      end
+    end
+
+    # Checks parent checklist assignment
+    if @invalid_parent_checklist_id.present?
+      errors.add :parent_checklist_id, :invalid
+    elsif @parent_checklist
+      if !valid_parent_project?(@parent_checklist)
+        errors.add :parent_checklist_id, :invalid
+      elsif (@parent_checklist != parent) && (
+          @parent_checklist.self_and_ancestors.any? {|a| a.relations_from.any? {|r| r.relation_type == IssueRelation::TYPE_PRECEDES && r.checklist_to.would_reschedule?(self)}}
+        )
+        errors.add :parent_checklist_id, :invalid
+      elsif !closed? && @parent_checklist.closed?
+        # cannot attach an open checklist to a closed parent
+        errors.add :base, :open_checklist_with_closed_parent
+      elsif !new_record?
+        # moving an existing checklist
+        if move_possible?(@parent_checklist)
+          # move accepted
+        else
+          errors.add :parent_checklist_id, :invalid
+        end
+      end
+    end
+  end
+
+  # Validates the checklist against additional workflow requirements
+  def validate_required_fields
+    user = new_record? ? author : current_journal.try(:user)
+
+    required_attribute_names(user).each do |attribute|
+      if /^\d+$/.match?(attribute)
+        attribute = attribute.to_i
+        v = custom_field_values.detect {|v| v.custom_field_id == attribute }
+        if v && Array(v.value).detect(&:present?).nil?
+          errors.add :base, v.custom_field.name + ' ' + l('activerecord.errors.messages.blank')
+        end
+      else
+        if respond_to?(attribute) && send(attribute).blank? && !disabled_core_fields.include?(attribute)
+          next if attribute == 'category_id' && project.try(:issue_categories).blank?
+          next if attribute == 'fixed_version_id' && assignable_versions.blank?
+          errors.add attribute, :blank
+        end
+      end
+    end
+  end
+
+  def validate_permissions
+    if @attributes_set_by && new_record?
+      unless allowed_target_trackers(@attributes_set_by).include?(tracker)
+        errors.add :tracker, :invalid
+      end
+    end
+  end
+
+  # Overrides Redmine::Acts::Customizable::InstanceMethods#validate_custom_field_values
+  # so that custom values that are not editable are not validated (eg. a custom field that
+  # is marked as required should not trigger a validation error if the user is not allowed
+  # to edit this field).
+  def validate_custom_field_values
+    user = new_record? ? author : current_journal.try(:user)
+    if new_record? || custom_field_values_changed?
+      editable_custom_field_values(user).each(&:validate_value)
+    end
+  end
+
+  # Set the done_ratio using the status if that setting is set.  This will keep the done_ratios
+  # even if the user turns off the setting later
+  def update_done_ratio_from_checklist_status
+    if Checklist.use_status_for_done_ratio? && status && status.default_done_ratio
+      self.done_ratio = status.default_done_ratio
+    end
+  end
+
+  def init_journal(user, notes = "")
+    @current_journal ||= Journal.new(:journalized => self, :user => user, :notes => notes)
+  end
+
+  # Returns the current journal or nil if it's not initialized
+  def current_journal
+    @current_journal
+  end
+
+  # Clears the current journal
+  def clear_journal
+    @current_journal = nil
+  end
+
+  # Returns the names of attributes that are journalized when updating the checklist
+  def journalized_attribute_names
+    names = Checklist.column_names - %w(id root_id lft rgt lock_version created_on updated_on closed_on)
+    if tracker
+      names -= tracker.disabled_core_fields
+    end
+    names
+  end
+
+  # Returns the id of the last journal or nil
+  def last_journal_id
+    if new_record?
+      nil
+    else
+      journals.maximum(:id)
+    end
+  end
+
+  # Returns a scope for journals that have an id greater than journal_id
+  def journals_after(journal_id)
+    scope = journals.reorder("#{Journal.table_name}.id ASC")
+
+    if journal_id.present?
+      scope = scope.where("#{Journal.table_name}.id > ?", journal_id.to_i)
+    end
+
+    scope
+  end
+
+  # Returns the journals that are visible to user with their index
+  # Used to display the checklist history
+  def visible_journals_with_index(user=User.current)
+    result = journals.
+      preload(:details).
+      preload(:user => :email_address).
+      order(:created_on => :desc, :id => :desc).to_a
+
+    max_indice = result.length
+    result.each_with_index {|j, i| j.indice = max_indice - i}
+
+    unless user.allowed_to?(:view_private_notes, project)
+      result.select! do |journal|
+        !journal.private_notes? || journal.user == user
+      end
+    end
+
+    Journal.preload_journals_details_custom_fields(result)
+    result.select! {|journal| journal.notes? || journal.visible_details.any?}
+    result
+  end
+
+  # Returns the initial status of the checklist
+  # Returns nil for a new checklist
+  def status_was
+    if status_id_changed?
+      if status_id_was.to_i > 0
+        @status_was ||= IssueStatus.find_by_id(status_id_was)
+      end
+    else
+      @status_was ||= status
+    end
+  end
+
+  # Return true if the checklist is closed, otherwise false
+  def closed?
+    status.present? && status.is_closed?
+  end
+
+  # Returns true if the checklist was closed when loaded
+  def was_closed?
+    status_was.present? && status_was.is_closed?
+  end
+
+  # Return true if the checklist is being reopened
+  def reopening?
+    if new_record?
+      false
+    else
+      status_id_changed? && !closed? && was_closed?
+    end
+  end
+  alias :reopened? :reopening?
+
+  # Return true if the checklist is being closed
+  def closing?
+    if new_record?
+      closed?
+    else
+      status_id_changed? && closed? && !was_closed?
+    end
+  end
+
+  # Returns true if the checklist is overdue
+  def overdue?
+    due_date.present? && (due_date < User.current.today) && !closed?
+  end
+
+  # Is the amount of work done less than it should for the due date
+  def behind_schedule?
+    return false if start_date.nil? || due_date.nil?
+    done_date = start_date + ((due_date - start_date + 1) * done_ratio / 100).floor
+    return done_date <= User.current.today
+  end
+
+  # Does this checklist have children?
+  def children?
+    !leaf?
+  end
+
+  # Users the checklist can be assigned to
+  def assignable_users
+    if issue
+      issue.assignable_users
+    else
+      []
+    end
+  end
+
+  # Versions that the checklist can be assigned to
+  def assignable_versions
+    return @assignable_versions if @assignable_versions
+
+    versions = project.shared_versions.open.to_a
+    if fixed_version
+      if fixed_version_id_changed?
+        # nothing to do
+      elsif project_id_changed?
+        if project.shared_versions.include?(fixed_version)
+          versions << fixed_version
+        end
+      else
+        versions << fixed_version
+      end
+    end
+    @assignable_versions = versions.uniq.sort
+  end
+
+  # Returns the default status of the checklist based on its tracker
+  # Returns nil if tracker is nil
+  def default_status
+    tracker.try(:default_status)
+  end
+
+  # Returns an array of statuses that user is able to apply
+  def new_statuses_allowed_to(user=User.current, include_default=false)
+    initial_status = nil
+    if new_record?
+      # nop
+    elsif tracker_id_changed?
+      if Tracker.where(:id => tracker_id_was, :default_status_id => status_id_was).any?
+        initial_status = default_status
+      elsif tracker.issue_status_ids.include?(status_id_was)
+        initial_status = IssueStatus.find_by_id(status_id_was)
+      else
+        initial_status = default_status
+      end
+    else
+      initial_status = status_was
+    end
+
+    initial_assigned_to_id = assigned_to_id_changed? ? assigned_to_id_was : assigned_to_id
+
+    assignee_transitions_allowed = initial_assigned_to_id.present? &&
+      (user.id == initial_assigned_to_id || user.group_ids.include?(initial_assigned_to_id))
+
+    statuses = []
+
+    statuses += IssueStatus.new_statuses_allowed(
+      initial_status,
+      user.admin ? Role.all.to_a : user.roles_for_project(project),
+      tracker,
+      author == user,
+      assignee_transitions_allowed
+    )
+
+    statuses << initial_status unless statuses.empty?
+    statuses << default_status if include_default || (new_record? && statuses.empty?)
+    statuses = statuses.compact.uniq.sort
+
+    if descendants.open.any?
+      # cannot close a blocked checklist or a parent with open subtasks
+      statuses.reject!(&:is_closed?)
+    end
+
+    if ancestors.open(false).any?
+      # cannot reopen a subtask of a closed parent
+      statuses.select!(&:is_closed?)
+    end
+
+    statuses
+  end
+
+  # Returns the original tracker
+  def tracker_was
+    Tracker.find_by_id(tracker_id_in_database)
+  end
+
+  # Returns the previous assignee whenever we're before the save
+  # or in after_* callbacks
+  def previous_assignee
+    if previous_assigned_to_id = assigned_to_id_change_to_be_saved.nil? ? assigned_to_id_before_last_save : assigned_to_id_in_database
+      Principal.find_by_id(previous_assigned_to_id)
+    end
+  end
+
+  # Returns the users that should be notified
+  def notified_users
+    # Author and assignee are always notified unless they have been
+    # locked or don't want to be notified
+    notified = [author, assigned_to, previous_assignee].compact.uniq
+    notified = notified.map {|n| n.is_a?(Group) ? n.users : n}.flatten
+    notified.uniq!
+    notified = notified.select {|u| u.active? && u.notify_about?(self)}
+
+    notified += project.notified_users
+    notified.uniq!
+    # Remove users that can not view the checklist
+    notified.reject! {|user| !visible?(user)}
+    notified
+  end
+
+  # Returns the email addresses that should be notified
+  def recipients
+    notified_users.collect(&:mail)
+  end
+
+  def notify?
+    @notify != false
+  end
+
+  def notify=(arg)
+    @notify = arg
+  end
+
+  # Returns the number of hours spent on this issue
+  def spent_hours
+    @spent_hours ||= time_entries.sum(:hours) || 0.0
+  end
+
+  def total_spent_hours
+    @total_spent_hours ||=
+      if leaf?
+        spent_hours
+      else
+        self_and_descendants.joins(:time_entries).sum("#{TimeEntry.table_name}.hours").to_f || 0.0
+      end
+  end
+
+  def total_estimated_hours
+    if leaf?
+      estimated_hours
+    else
+      @total_estimated_hours ||= self_and_descendants.visible.sum(:estimated_hours)
+    end
+  end
+
+  def last_updated_by
+    if @last_updated_by
+      @last_updated_by.presence
+    else
+      journals.reorder(:id => :desc).first.try(:user)
+    end
+  end
+
+  def last_notes
+    if @last_notes
+      @last_notes
+    else
+      journals.where.not(notes: '').reorder(:id => :desc).first.try(:notes)
+    end
+  end
+
+  # Preloads visible spent time for a collection of checklists
+  def self.load_visible_spent_hours(checklists, user=User.current)
+    if checklists.any?
+      hours_by_checklist_id = TimeEntry.visible(user).where(:checklist_id => checklists.map(&:id)).group(:checklist_id).sum(:hours)
+      checklists.each do |checklist|
+        checklist.instance_variable_set "@spent_hours", (hours_by_checklist_id[checklist.id] || 0.0)
+      end
+    end
+  end
+
+  # Preloads visible total spent time for a collection of checklists
+  def self.load_visible_total_spent_hours(checklists, user=User.current)
+    if checklists.any?
+      hours_by_checklist_id = TimeEntry.visible(user).joins(:checklist).
+        joins("JOIN #{Checklist.table_name} parent ON parent.root_id = #{Checklist.table_name}.root_id" +
+          " AND parent.lft <= #{Checklist.table_name}.lft AND parent.rgt >= #{Checklist.table_name}.rgt").
+        where("parent.id IN (?)", checklists.map(&:id)).group("parent.id").sum(:hours)
+      checklists.each do |checklist|
+        checklist.instance_variable_set "@total_spent_hours", (hours_by_checklist_id[checklist.id] || 0.0)
+      end
+    end
+  end
+
+  # Returns a scope of the given checklists and their descendants
+  def self.self_and_descendants(checklists)
+    Checklist.joins("JOIN #{Checklist.table_name} ancestors" +
+        " ON ancestors.root_id = #{Checklist.table_name}.root_id" +
+        " AND ancestors.lft <= #{Checklist.table_name}.lft AND ancestors.rgt >= #{Checklist.table_name}.rgt"
+      ).
+      where(:ancestors => {:id => checklists.map(&:id)})
+  end
+
+  # Preloads users who updated last a collection of checklists
+  def self.load_visible_last_updated_by(checklists, user=User.current)
+    if checklists.any?
+      checklist_ids = checklists.map(&:id)
+      journal_ids = Journal.joins(checklist: :project).
+        where(:journalized_type => 'Checklist', :journalized_id => checklist_ids).
+        where(Journal.visible_notes_condition(user, :skip_pre_condition => true)).
+        group(:journalized_id).
+        maximum(:id).
+        values
+      journals = Journal.where(:id => journal_ids).preload(:user).to_a
+
+      checklists.each do |checklist|
+        journal = journals.detect {|j| j.journalized_id == checklist.id}
+        checklist.instance_variable_set("@last_updated_by", journal.try(:user) || '')
+      end
+    end
+  end
+
+  # Preloads visible last notes for a collection of checklists
+  def self.load_visible_last_notes(checklists, user=User.current)
+    if checklists.any?
+      checklist_ids = checklists.map(&:id)
+      journal_ids = Journal.joins(checklist: :project).
+        where(:journalized_type => 'Checklist', :journalized_id => checklist_ids).
+        where(Journal.visible_notes_condition(user, :skip_pre_condition => true)).
+        where.not(notes: '').
+        group(:journalized_id).
+        maximum(:id).
+        values
+      journals = Journal.where(:id => journal_ids).to_a
+
+      checklists.each do |checklist|
+        journal = journals.detect {|j| j.journalized_id == checklist.id}
+        checklist.instance_variable_set("@last_notes", journal.try(:notes) || '')
+      end
+    end
+  end
+
+  # Returns the due date or the target due date if any
+  # Used on gantt chart
+  def due_before
+    due_date || (fixed_version ? fixed_version.effective_date : nil)
+  end
+
+  # Returns the time scheduled for this checklist.
+  #
+  # Example:
+  #   Start Date: 2/26/09, End Date: 3/04/09
+  #   duration => 6
+  def duration
+    (start_date && due_date) ? due_date - start_date : 0
+  end
+
+  # Returns the duration in working days
+  def working_duration
+    (start_date && due_date) ? working_days(start_date, due_date) : 0
+  end
+
+  # Sets start_date on the given date or the next working day
+  # and changes due_date to keep the same working duration.
+  def reschedule_on(date)
+    wd = working_duration
+    date = next_working_date(date)
+    self.start_date = date
+    self.due_date = add_working_days(date, wd)
+  end
+
+  # Reschedules the checklist on the given date or the next working day and saves the record.
+  # If the checklist is a parent task, this is done by rescheduling its subtasks.
+  def reschedule_on!(date, journal=nil)
+    return if date.nil?
+    if leaf? || !dates_derived?
+      if start_date.nil? || start_date != date
+        if journal
+          init_journal(journal.user)
+        end
+
+        reschedule_on(date)
+
+        begin
+          save
+        rescue ActiveRecord::StaleObjectError
+          reload
+          reschedule_on(date)
+          save
+        end
+      end
+    else
+      leaves.each do |leaf|
+        if leaf.start_date
+          # Only move subtask if it starts at the same date as the parent
+          # or if it starts before the given date
+          if start_date == leaf.start_date || date > leaf.start_date
+            leaf.reschedule_on!(date)
+          end
+        else
+          leaf.reschedule_on!(date)
+        end
+      end
+    end
+  end
+
+  def dates_derived?
+    !leaf? && Setting.parent_checklist_dates == 'derived'
+  end
+
+  def priority_derived?
+    !leaf? && Setting.parent_checklist_priority == 'derived'
+  end
+
+  def done_ratio_derived?
+    !leaf? && Setting.parent_checklist_done_ratio == 'derived'
+  end
+
+  def <=>(checklist)
+    if checklist.nil?
+      -1
+    elsif root_id != checklist.root_id
+      (root_id || 0) <=> (checklist.root_id || 0)
+    else
+      (lft || 0) <=> (checklist.lft || 0)
+    end
+  end
+
+  def to_s
+    "#{tracker} ##{id}: #{subject}"
+  end
+
+  # Returns a string of css classes that apply to the checklist
+  def css_classes(user=User.current)
+    s = +"checklist tracker-#{tracker_id} status-#{status_id} #{priority.try(:css_classes)}"
+    s << ' closed' if closed?
+    s << ' overdue' if overdue?
+    s << ' child' if child?
+    s << ' parent' unless leaf?
+    s << ' private' if is_private?
+    if user.logged?
+      s << ' created-by-me' if author_id == user.id
+      s << ' assigned-to-me' if assigned_to_id == user.id
+      s << ' assigned-to-my-group' if user.groups.any? {|g| g.id == assigned_to_id}
+    end
+    s
+  end
+
+  # Unassigns checklists from +version+ if it's no longer shared with checklist's project
+  def self.update_versions_from_sharing_change(version)
+    # Update checklists assigned to the version
+    update_versions(["#{Checklist.table_name}.fixed_version_id = ?", version.id])
+  end
+
+  # Unassigns checklists from versions that are no longer shared
+  # after +project+ was moved
+  def self.update_versions_from_hierarchy_change(project)
+    moved_project_ids = project.self_and_descendants.reload.pluck(:id)
+    # Update checklists of the moved projects and checklists assigned to a version of a moved project
+    Checklist.update_versions(
+            ["#{Version.table_name}.project_id IN (?) OR #{Checklist.table_name}.project_id IN (?)",
+              moved_project_ids, moved_project_ids]
+          )
+  end
+
+  def parent_checklist_id=(arg)
+    s = arg.to_s.strip.presence
+    if s && (m = s.match(%r{\A#?(\d+)\z})) && (@parent_checklist = Checklist.find_by_id(m[1]))
+      @invalid_parent_checklist_id = nil
+    elsif s.blank?
+      @parent_checklist = nil
+      @invalid_parent_checklist_id = nil
+    else
+      @parent_checklist = nil
+      @invalid_parent_checklist_id = arg
+    end
+  end
+
+  def parent_checklist_id
+    if @invalid_parent_checklist_id
+      @invalid_parent_checklist_id
+    elsif instance_variable_defined? :@parent_checklist
+      @parent_checklist.nil? ? nil : @parent_checklist.id
+    else
+      parent_id
+    end
+  end
+
+  def set_parent_id
+    self.parent_id = parent_checklist_id
+  end
+
+  # Returns true if checklist's project is a valid
+  # parent checklist project
+  def valid_parent_project?(checklist=parent)
+    return true if checklist.nil? || checklist.project_id == project_id
+
+    case Setting.cross_project_subtasks
+    when 'system'
+      true
+    when 'tree'
+      checklist.project.root == project.root
+    when 'hierarchy'
+      checklist.project.is_or_is_ancestor_of?(project) || checklist.project.is_descendant_of?(project)
+    when 'descendants'
+      checklist.project.is_or_is_ancestor_of?(project)
+    else
+      false
+    end
+  end
+
+  # Returns an checklist scope based on project and scope
+  def self.cross_project_scope(project, scope=nil)
+    if project.nil?
+      return Checklist
+    end
+
+    case scope
+    when 'all', 'system'
+      Checklist
+    when 'tree'
+      Checklist.joins(:project).where("(#{Project.table_name}.lft >= :lft AND #{Project.table_name}.rgt <= :rgt)",
+                                  :lft => project.root.lft, :rgt => project.root.rgt)
+    when 'hierarchy'
+      Checklist.joins(:project).where("(#{Project.table_name}.lft >= :lft AND #{Project.table_name}.rgt <= :rgt) OR (#{Project.table_name}.lft < :lft AND #{Project.table_name}.rgt > :rgt)",
+                                  :lft => project.lft, :rgt => project.rgt)
+    when 'descendants'
+      Checklist.joins(:project).where("(#{Project.table_name}.lft >= :lft AND #{Project.table_name}.rgt <= :rgt)",
+                                  :lft => project.lft, :rgt => project.rgt)
+    else
+      Checklist.where(:project_id => project.id)
+    end
+  end
+
+  def self.by_tracker(project, with_subprojects=false)
+    count_and_group_by(:project => project, :association => :tracker, :with_subprojects => with_subprojects)
+  end
+
+  def self.by_version(project, with_subprojects=false)
+    count_and_group_by(:project => project, :association => :fixed_version, :with_subprojects => with_subprojects)
+  end
+
+  def self.by_priority(project, with_subprojects=false)
+    count_and_group_by(:project => project, :association => :priority, :with_subprojects => with_subprojects)
+  end
+
+  def self.by_category(project, with_subprojects=false)
+    count_and_group_by(:project => project, :association => :category, :with_subprojects => with_subprojects)
+  end
+
+  def self.by_assigned_to(project, with_subprojects=false)
+    count_and_group_by(:project => project, :association => :assigned_to, :with_subprojects => with_subprojects)
+  end
+
+  def self.by_author(project, with_subprojects=false)
+    count_and_group_by(:project => project, :association => :author, :with_subprojects => with_subprojects)
+  end
+
+  def self.by_subproject(project)
+    r = count_and_group_by(:project => project, :with_subprojects => true, :association => :project)
+    r.reject {|r| r["project_id"] == project.id.to_s}
+  end
+
+  # Query generator for selecting groups of checklist counts for a project
+  # based on specific criteria
+  #
+  # Options
+  # * project - Project to search in.
+  # * with_subprojects - Includes subprojects checklists if set to true.
+  # * association - Symbol. Association for grouping.
+  def self.count_and_group_by(options)
+    assoc = reflect_on_association(options[:association])
+    select_field = assoc.foreign_key
+
+    Checklist.
+      visible(User.current, :project => options[:project], :with_subprojects => options[:with_subprojects]).
+      joins(:status, assoc.name).
+      group(:status_id, :is_closed, select_field).
+      count.
+      map do |columns, total|
+        status_id, is_closed, field_value = columns
+        is_closed = ['t', 'true', '1'].include?(is_closed.to_s)
+        {
+          "status_id" => status_id.to_s,
+          "closed" => is_closed,
+          select_field => field_value.to_s,
+          "total" => total.to_s
+        }
+      end
+  end
+
+  # Returns a scope of projects that user can assign the checklist to
+  def allowed_target_projects(user=User.current, context=nil)
+    if new_record? && context.is_a?(Project)
+      current_project = context.self_and_descendants
+    elsif new_record?
+      current_project = nil
+    else
+      current_project = project
+    end
+
+    self.class.allowed_target_projects(user, current_project)
+  end
+
+  # Returns a scope of projects that user can assign checklists to
+  # If current_project is given, it will be included in the scope
+  def self.allowed_target_projects(user=User.current, current_project=nil)
+    condition = Project.allowed_to_condition(user, :add_checklists)
+    if current_project.is_a?(Project)
+      condition = ["(#{condition}) OR #{Project.table_name}.id = ?", current_project.id]
+    elsif current_project
+      condition = ["(#{condition}) AND #{Project.table_name}.id IN (?)", current_project.map(&:id)]
+    end
+    Project.where(condition).having_trackers
+  end
+
+  # Returns a scope of trackers that user can assign the checklist to
+  def allowed_target_trackers(user=User.current)
+    self.class.allowed_target_trackers(project, user, tracker_id_was)
+  end
+
+  # Returns a scope of trackers that user can assign project checklists to
+  def self.allowed_target_trackers(project, user=User.current, current_tracker=nil)
+    if project
+      scope = project.trackers.sorted
+      unless user.admin?
+        roles = user.roles_for_project(project).select {|r| r.has_permission?(:add_checklists)}
+        unless roles.any? {|r| r.permissions_all_trackers?(:add_checklists)}
+          tracker_ids = roles.map {|r| r.permissions_tracker_ids(:add_checklists)}.flatten.uniq
+          if current_tracker
+            tracker_ids << current_tracker
+          end
+          scope = scope.where(:id => tracker_ids)
+        end
+      end
+      scope
+    else
+      Tracker.none
+    end
+  end
+
+  private
+
+  def user_tracker_permission?(user, permission)
+    if project && !project.active?
+      perm = Redmine::AccessControl.permission(permission)
+      return false unless perm && perm.read?
+    end
+
+    if user.admin?
+      true
+    else
+      roles = user.roles_for_project(project).select {|r| r.has_permission?(permission)}
+      roles.any? {|r| r.permissions_all_trackers?(permission) || r.permissions_tracker_ids?(permission, tracker_id)}
+    end
+  end
+
+  def after_project_change
+    # Update project_id on related time entries
+    TimeEntry.where({:checklist_id => id}).update_all(["project_id = ?", project_id])
+
+    # Move subtasks that were in the same project
+    children.each do |child|
+      next unless child.project_id == project_id_before_last_save
+      # Change project and keep project
+      child.send :project=, project, true
+      unless child.save
+        errors.add :base, l(:error_move_of_child_not_possible, :child => "##{child.id}", :errors => child.errors.full_messages.join(", "))
+        raise ActiveRecord::Rollback
+      end
+    end
+  end
+
+  def update_nested_set_attributes
+    if saved_change_to_parent_id?
+      update_nested_set_attributes_on_parent_change
+    end
+    remove_instance_variable(:@parent_issue) if instance_variable_defined?(:@parent_issue)
+  end
+
+  # Updates the nested set for when an existing issue is moved
+  def update_nested_set_attributes_on_parent_change
+    former_parent_id = parent_id_before_last_save
+
+    # update former parent
+    recalculate_attributes_for(former_parent_id) if former_parent_id
+  end
+
+  def update_parent_attributes
+    if parent_id
+      recalculate_attributes_for(parent_id)
+      association(:parent).reset
+    end
+  end
+
+  def recalculate_attributes_for(issue_id)
+    if issue_id && p = Checklist.find_by_id(issue_id)
+      if p.priority_derived?
+        # priority = highest priority of open children
+        # priority is left unchanged if all children are closed and there's no default priority defined
+        if priority_position = p.children.open.joins(:priority).maximum("#{IssuePriority.table_name}.position")
+          p.priority = IssuePriority.find_by_position(priority_position)
+        elsif default_priority = IssuePriority.default
+          p.priority = default_priority
+        end
+      end
+
+      if p.dates_derived?
+        # start/due dates = lowest/highest dates of children
+        p.start_date = p.children.minimum(:start_date)
+        p.due_date = p.children.maximum(:due_date)
+        if p.start_date && p.due_date && p.due_date < p.start_date
+          p.start_date, p.due_date = p.due_date, p.start_date
+        end
+      end
+
+      if p.done_ratio_derived?
+        # done ratio = average ratio of children weighted with their total estimated hours
+        unless Checklist.use_status_for_done_ratio? && p.status && p.status.default_done_ratio
+          children = p.children.to_a
+          if children.any?
+            child_with_total_estimated_hours = children.select {|c| c.total_estimated_hours.to_f > 0.0}
+            if child_with_total_estimated_hours.any?
+              average = child_with_total_estimated_hours.map(&:total_estimated_hours).sum.to_f / child_with_total_estimated_hours.count
+            else
+              average = 1.0
+            end
+            done = children.map {|c|
+              estimated = c.total_estimated_hours.to_f
+              estimated = average unless estimated > 0.0
+              ratio = c.closed? ? 100 : (c.done_ratio || 0)
+              estimated * ratio
+            }.sum
+            progress = done / (average * children.count)
+            p.done_ratio = progress.floor
+          end
+        end
+      end
+
+      # ancestors will be recursively updated
+      p.save(:validate => false)
+    end
+  end
+
+  # Singleton class method is public
+  class << self
+    # Update issues so their versions are not pointing to a
+    # fixed_version that is not shared with the issue's project
+    def update_versions(conditions=nil)
+      # Only need to update issues with a fixed_version from
+      # a different project and that is not systemwide shared
+      Checklist.joins(:project, :fixed_version).
+        where("#{Checklist.table_name}.fixed_version_id IS NOT NULL" +
+          " AND #{Checklist.table_name}.project_id <> #{Version.table_name}.project_id" +
+          " AND #{Version.table_name}.sharing <> 'system'").
+        where(conditions).each do |issue|
+        next if issue.project.nil? || issue.fixed_version.nil?
+        unless issue.project.shared_versions.include?(issue.fixed_version)
+          issue.init_journal(User.current)
+          issue.fixed_version = nil
+          issue.save
+        end
+      end
+    end
+  end
+
+  def delete_selected_attachments
+    if deleted_attachment_ids.present?
+      objects = attachments.where(:id => deleted_attachment_ids.map(&:to_i))
+      attachments.delete(objects)
+    end
+  end
+
+  # Callback on file attachment
+  def attachment_added(attachment)
+    if current_journal && !attachment.new_record?
+      current_journal.journalize_attachment(attachment, :added)
+    end
+  end
+
+  # Callback on attachment deletion
+  def attachment_removed(attachment)
+    if current_journal && !attachment.new_record?
+      current_journal.journalize_attachment(attachment, :removed)
+      current_journal.save
+    end
+  end
+
+  # Called after a relation is added
+  def relation_added(relation)
+    if current_journal
+      current_journal.journalize_relation(relation, :added)
+      current_journal.save
+    end
+  end
+
+  # Called after a relation is removed
+  def relation_removed(relation)
+    if current_journal
+      current_journal.journalize_relation(relation, :removed)
+      current_journal.save
+    end
+  end
+
+  # Default assignment based on project or category
+  def default_assign
+    if assigned_to.nil?
+      if category && category.assigned_to
+        self.assigned_to = category.assigned_to
+      elsif project && project.default_assigned_to
+        self.assigned_to = project.default_assigned_to
+      end
+    end
+  end
+
+  # Make sure updated_on is updated when adding a note and set updated_on now
+  # so we can set closed_on with the same value on closing
+  def force_updated_on_change
+    if @current_journal || changed?
+      self.updated_on = current_time_from_proper_timezone
+      if new_record?
+        self.created_on = updated_on
+      end
+    end
+  end
+
+  # Callback for setting closed_on when the issue is closed.
+  # The closed_on attribute stores the time of the last closing
+  # and is preserved when the issue is reopened.
+  def update_closed_on
+    if closing?
+      self.closed_on = updated_on
+    end
+  end
+
+  # Saves the changes in a Journal
+  # Called after_save
+  def create_journal
+    if current_journal
+      current_journal.save
+    end
+  end
+
+  def send_notification
+    if notify? && Setting.notified_events.include?('checklist_added')
+      Mailer.deliver_checklist_add(self)
+    end
+  end
+
+  def clear_disabled_fields
+    if tracker
+      tracker.disabled_core_fields.each do |attribute|
+        send "#{attribute}=", nil
+      end
+      self.done_ratio ||= 0
+    end
+  end
+end

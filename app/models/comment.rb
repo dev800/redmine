@@ -24,6 +24,8 @@ class Comment < ActiveRecord::Base
 
   validates_presence_of :commented, :author, :content
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
+
   after_create_commit :send_notification
 
   safe_attributes 'comments'

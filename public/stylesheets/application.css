@@ -551,7 +551,7 @@ fieldset#filters td.values select {min-width:130px;}
 #issue_is_private_wrap {float:right; margin-right:1em;}
 .toggle-multiselect { margin-right:5px; cursor:pointer;}
 .buttons { font-size: 0.9em; margin-bottom: 1.4em; margin-top: 1em; }
-.buttons .icon {paddin-bottom:3px; padding-top:1px;}
+.buttons .icon {padding-bottom:3px; padding-top:1px;}
 
 div#issue-changesets {float:right; width:45%; margin-left: 1em; margin-bottom: 1em; background: #fff; padding-left: 1em; font-size: 90%;}
 div#issue-changesets div.changeset { padding: 4px;}
@@ -1454,6 +1454,7 @@ td.gantt_selected_column .gantt_hdr,.gantt_selected_column_container {
   content: "&nbsp;";
 }
 
+.icon-checklist { background-image: url(../images/checklist.png); }
 .icon-add { background-image: url(../images/add.png); }
 .icon-edit { background-image: url(../images/edit.png); }
 .icon-copy { background-image: url(../images/copy.png); }
@@ -1626,7 +1627,7 @@ img.filecontent.image {background-image: url(../images/transparent.png);}
 .syntaxhl .hll { background-color: #ffffcc }
 .syntaxhl  { background: #fafafa; }
 .syntaxhl .c { color: #888888 } /* Comment */
-.syntaxhl .err { color: #FF0000; background-color: #FFAAAA } /* Error */
+.syntaxhl .err { color: #FF0000 } /* Error */
 .syntaxhl .k { color: #008800; font-weight: bold } /* Keyword */
 .syntaxhl .o { color: #333333 } /* Operator */
 .syntaxhl .ch { color: #888888 } /* Comment.Hashbang */
@@ -1737,10 +1738,11 @@ img {
   border-radius: 3px;
 }
 
-/* Fixes for IE 11 */
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-  select::-ms-expand {
-    display: none;
-  }
-  select[multiple=multiple] {padding-right: 0;}
+.clearfix::after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
 }

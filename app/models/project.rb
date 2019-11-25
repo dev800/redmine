@@ -37,6 +37,8 @@ class Project < ActiveRecord::Base
            lambda { joins(:principal).where(:users => {:type => 'User', :status => Principal::STATUS_ACTIVE}) }
   has_many :enabled_modules, :dependent => :delete_all
   has_and_belongs_to_many :trackers, lambda {order(:position)}
+  has_many :checklists, :dependent => :destroy
+  has_many :checklist_changes, :through => :checklists, :source => :journals
   has_many :issues, :dependent => :destroy
   has_many :issue_changes, :through => :issues, :source => :journals
   has_many :versions, :dependent => :destroy
@@ -63,6 +65,7 @@ class Project < ActiveRecord::Base
                      :edit_permission => :manage_files,
                      :delete_permission => :manage_files
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   acts_as_customizable
   acts_as_searchable :columns => ['name', 'identifier', 'description'], :project_key => "#{Project.table_name}.id", :permission => nil
   acts_as_event :title => Proc.new {|o| "#{l(:label_project)}: #{o.name}"},

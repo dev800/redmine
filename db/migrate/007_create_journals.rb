@@ -19,6 +19,7 @@ class CreateJournals < ActiveRecord::Migration[4.2]
       t.column "prop_key", :string, :limit => 30, :default => "", :null => false
       t.column "old_value", :string
       t.column "value", :string
+      t.column "deleted_at", :timestamp
     end
 
     # indexes

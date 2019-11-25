@@ -21,4 +21,5 @@ class ImportItem < ActiveRecord::Base
   belongs_to :import
 
   validates_presence_of :import_id, :position
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
 end

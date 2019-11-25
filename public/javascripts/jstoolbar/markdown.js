@@ -187,7 +187,8 @@ jsToolBar.prototype.elements.precode = {
     wiki: function() {
       var This = this;
       this.precodeMenu(function(lang){
-        This.encloseLineSelection('``` ' + lang + '\n', '\n```\n');
+        // This.encloseLineSelection('``` ' + lang + '\n', '\n```\n');
+        This.encloseLineSelection('```' + lang + '\n', '\n```');
       });
     }
   }

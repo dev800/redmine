@@ -409,6 +409,24 @@ function getRemoteTab(name, remote_url, url, load_always) {
   return false;
 }
 
+$(document).on('change', '.checklists-filter .filter-trigger', function() {
+  var $this = $(this);
+  var $option = $this.find('option[value="' + $this.val() + '"]');
+  var href = $option.attr("href");
+  var dataHref = $option.attr("data-href");
+
+  replaceInHistory(href)
+
+  $.ajax({
+    method: "GET",
+    url: dataHref,
+    data: {_t: (new Date()).valueOf()},
+    headers: {
+      "X-Request-URL": window.location.href
+    }
+  }).success(function(res) { })
+})
+
 //replaces current URL with the "href" attribute of the current link
 //(only triggered if supported by browser)
 function replaceInHistory(url) {
@@ -873,7 +891,11 @@ function addFormObserversForDoubleSubmit() {
 
 function defaultFocus(){
   if (($('#content :focus').length == 0) && (window.location.hash == '')) {
-    $('#content input[type=text], #content textarea').first().focus();
+    var $input = $('#content input[type=text], #content textarea').first()
+
+    if (!$input.hasClass('noneed-focused')) {
+      $input.focus();
+    }
   }
 }
 
@@ -928,17 +950,17 @@ function toggleNewObjectDropdown() {
 }( jQuery ));
 
 $(document).ready(function(){
-  $('#content').on('change', 'input[data-disables], input[data-enables], input[data-shows]', toggleDisabledOnChange);
+  $(document).on('change', '#content input[data-disables], input[data-enables], input[data-shows]', toggleDisabledOnChange);
   toggleDisabledInit();
 
-  $('#history .tabs').on('click', 'a', function(e){
+  $(document).on('click', '#history .tabs a', function(e){
     var tab = $(e.target).attr('id').replace('tab-','');
     document.cookie = 'history_last_tab=' + tab
   });
 });
 
 $(document).ready(function(){
-  $('#content').on('click', 'div.jstTabs a.tab-preview', function(event){
+  $(document).on('click', '#content div.jstTabs a.tab-preview', function(event) {
     var tab = $(event.target);
 
     var url = tab.data('url');
@@ -1054,7 +1076,6 @@ function inlineAutoComplete(element) {
     tribute.attach(element);
 }
 
-
 $(document).ready(setupAjaxIndicator);
 $(document).ready(hideOnLoad);
 $(document).ready(addFormObserversForDoubleSubmit);
@@ -1062,6 +1083,186 @@ $(document).ready(defaultFocus);
 $(document).ready(setupAttachmentDetail);
 $(document).ready(setupTabs);
 $(document).ready(setupFilePreviewNavigation);
-$(document).on('focus', '[data-auto-complete=true]', function(event) {
-  inlineAutoComplete(event.target);
+// $(document).on('focus', '[data-auto-complete=true]', function(event) {
+//   inlineAutoComplete(event.target);
+// });
+
+// Begin happy add /////////////////////////////////////////
+function escapeHTML(html) {
+  return html.replace(/&/g, '&amp;')
+  .replace(/>/g, '&gt;')
+  .replace(/</g, '&lt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&apos;')
+}
+
+function alert(msg, opts) {
+  var opts = opts || {};
+
+  $('#ajax-modal').html(
+    '<h3 class="title">' + escapeHTML(opts.title || 'alert') + '</h3>' +
+    '<div class="content">' + escapeHTML(msg) + '</div>'
+  );
+
+  showModal('ajax-modal');
+}
+
+function showHTMLDialog(html) {
+  var $modal = $('#dialog-modal');
+  $modal.html(html);
+  $modal.find('.close').show();
+  $("#dialog-overlay").show();
+  $("#dialog-modal-wrapper").show();
+  $('body').addClass('modal-overflow-hidden');
+  $modal.find('input[type=text], textarea').first().focus();
+}
+
+function closeHTMLDialog() {
+  $('#dialog-modal-wrapper').hide();
+  $('#dialog-overlay').hide();
+  $('body').removeClass('modal-overflow-hidden');
+  $('#dialog-modal-wrapper textarea').removeData('changed');
+}
+
+function showErrorMessages(fullMessages, opts) {
+  var opts = opts || {};
+  alert(fullMessages.join("\n"), {title: opts.title || 'Error'});
+}
+
+$(document).on('ajax:success', 'form.with-indicator', function(event) {
+  $('#ajax-indicator').show();
+}).on('ajax:success', 'form.with-indicator', function(event) {
+  $('#ajax-indicator').hide();
+}).on('ajax:error', 'form.with-indicator', function(event) {
+  $('#ajax-indicator').hide();
+})
+
+$(document).on('click', '#dialog-modal .close', function(event) {
+  closeHTMLDialog();
 });
+
+$(document).on('click', '[remote-href]', function(event) {
+  var $target = $(this);
+
+  $.get($target.attr('remote-href'), {})
+    .success(function(html) {
+      showHTMLDialog(html)
+    })
+    .fail(function(res) {
+      $.Toast.showToast({
+        title: 'request fail',
+        duration: 800,
+        icon: 'error',
+        image: ''
+      });
+    }).complete(function() { })
+});
+
+function syncData() {
+  $.each($("[data-sync-url]"), function() {
+    $.ajax({
+      method: "GET",
+      url: $(this).attr('data-sync-url'),
+      data: {_t: (new Date()).valueOf()},
+      headers: {
+        "X-Request-URL": window.location.href
+      }
+    }).success(function(res) { })
+  })
+}
+
+function bindChecklistSortable() {
+  $( ".checklists.ui-sortable" ).sortable({
+    stop: function() {
+      var $checklists = $(this).find(".checklist[data-checklist-id]");
+      var paramsChecklists = [];
+
+      $.each($checklists, function() {
+        var $this = $(this);
+        var id = parseInt($this.attr('data-checklist-id'))
+        var position = parseInt($this.attr('data-checklist-position'))
+
+        paramsChecklists.push({
+          id: id,
+          position: position
+        })
+      })
+
+      $.post("/checklists/sort.js", {
+        checklists: paramsChecklists
+      })
+    }
+  });
+}
+
+$(function() {
+  syncData();
+  bindChecklistSortable();
+})
+
+$(document).on('click', '.ui-widget-overlay', function() {
+  $(this).remove();
+  $('.ui-dialog').remove();
+});
+
++function($, window, document, undefined) {
+  var container = '<div class="toast-wrap"></div>';
+  var context = '<div class="toast-content"></div>';
+  var wrapSelector = ".toast-wrap";
+  var toastSelector = ".toast-content";
+  var styles = '.toast-wrap{position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;margin:auto;background:rgba(0,0,0,.2);}.toast-content{position:absolute;top: 50%;left: 50%;-webkit-transform: translate(-50%,-50%);-moz-transform: translate(-50%,-50%);-ms-transform: translate(-50%,-50%);-o-transform: translate(-50%,-50%);transform: translate(-50%,-50%);padding: 10px;background:rgba(0,0,0,.7);color:#fff;-webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px;max-width: 300px;min-width: 54px;text-align:center;cursor: default;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}.toast-img{display:block;max-width: 35px;max-height: 35px;margin: 0 auto 5px;}.success{display:block;width: 12px;height: 20px;border-right:6px solid #fff;border-bottom: 8px solid #fff;transform: rotate(45deg);-webkit-transform:rotate(45deg);margin: 0 auto 5px;}.error{display:block;width: 24px;height: 24px;font-size: 20px;color:rgba(255,255,255,.8);border:2px solid rgba(255,255,255,.8);border-radius: 50%;-webkit-border-radius: 50%;margin: 0 auto 5px;line-height:20px;text-align: center}.loading{position:relative;margin: 0 auto 5px;display:block;width:20px;height: 20px;border: 2px solid #fff;border-radius: 50%;-webkit-border-radius: 50%;animation: loading 1s linear infinite;}.loading:before{content: "";display: block;position: absolute;top: -5px;left: 0;width: 10px;height: 10px;background: #fff;border-radius: 50%; }@keyframes loading{0%{transform: rotate(0deg);}50%{transform: rotate(180deg);}100%{transform: rotate(360deg);}}@-webkit-keyframes loading{0%{-webkit-transform: rotate(0deg);}50%{-webkit-transform: rotate(180deg);}100%{-webkit-transform: rotate(360deg);}}';
+
+  var Toast = {
+    default : {
+      "title": "loading...", // <String>提示的内容，默认："加载中..."
+      "icon": "loading", // <String>图标，有效值 "success", "loading", "none", "error"，默认"loading"
+      "image": "", // <String>自定义图标的本地路径，image 的优先级高于 icon
+      "duration": 1500, // <Number>提示的延迟时间，单位毫秒，默认：1500(设置为0时不自动关闭)
+    },
+    showToast: function(opt){
+      var _this = this;
+      this.options = $.extend({}, this.default, opt);
+      $("body").append(container);
+      $(wrapSelector).append(context);
+      $("<style></style>").text(styles).appendTo($(wrapSelector));
+      if(this.options.image !== ""){
+        $(toastSelector).append('<img src="'+this.options.image+'" class="toast-img" alt="toast...">');
+      } else {
+        $(toastSelector).append('<span class="toast-icon"></span>');
+        switch(this.options.icon){
+          case "success":
+            $(".toast-icon").addClass('success');
+            break;
+          case "error":
+            $(".toast-icon").addClass('error');
+            $(".toast-icon").html("&times;");
+            break;
+          case "none":
+            $(".toast-icon").remove();
+            break;
+          default:
+            $(".toast-icon").addClass('loading');
+            break;
+        }
+      }
+      $(toastSelector).append('<p style="margin:0;"></p>').find('p').html(this.options.title);
+      if(this.options.duration>0){
+        setTimeout(function(){
+          _this.hideToast();
+        }, this.options.duration);
+      }
+    },
+    hideToast: function(){
+      if($(wrapSelector).length){
+        $(wrapSelector).fadeOut(500);
+        setTimeout(function(){
+          $(wrapSelector).empty().remove()
+        },1000);
+      } else {
+        return;
+      }
+    }
+  };
+
+  $.Toast = Toast;
+}(jQuery, window, document);

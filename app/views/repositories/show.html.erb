@@ -4,7 +4,7 @@
   <%= render :partial => 'navigation' %>
 </div>
 
-<h2><%= render :partial => 'breadcrumbs',
+<h2 class="content-title"><%= render :partial => 'breadcrumbs',
                :locals => { :path => @path, :kind => 'dir', :revision => @rev } %></h2>
 
 <% if !@entries.nil? && authorize_for('repositories', 'browse') %>
@@ -62,7 +62,7 @@
     <h3><%= l(:label_repository_plural) %></h3>
     <p>
       <%= @repositories.sort.collect {|repo|
-          link_to repo.name, 
+          link_to repo.name,
                   {:controller => 'repositories', :action => 'show',
                    :id => @project, :repository_id => repo.identifier_param, :rev => nil, :path => nil},
                   :class => 'repository' + (repo == @repository ? ' selected' : '')

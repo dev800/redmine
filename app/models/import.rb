@@ -26,6 +26,7 @@ class Import < ActiveRecord::Base
 
   before_destroy :remove_file
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   validates_presence_of :filename, :user_id
   validates_length_of :filename, :maximum => 255
 

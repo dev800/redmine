@@ -1,4 +1,4 @@
-<h2><%= link_to l(:label_report_plural), project_issues_report_path(@project) %> »</h2>
+<h2 class="content-title"><%= link_to l(:label_report_plural), project_issues_report_path(@project) %> »</h2>
 
 <h3><%=@report_title%></h3>
 <%= render :partial => 'details', :locals => { :data => @data, :field_name => @field, :rows => @rows } %>

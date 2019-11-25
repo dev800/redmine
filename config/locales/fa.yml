@@ -1178,7 +1178,7 @@ fa:
   default_tracker_feature: قابلیت
   default_tracker_support: پشتیبانی
   default_issue_status_new: جدید
-  default_issue_status_in_progress: در حال انجام
+  default_issue_status_solving: در حال انجام
   default_issue_status_resolved: حل‌شده
   default_issue_status_feedback: بازخورد
   default_issue_status_closed: بسته

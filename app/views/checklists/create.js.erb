@@ -1,0 +1,34 @@
+<% if @checklist.save %>
+  closeHTMLDialog();
+
+  $.Toast.showToast({
+    title: '<%= l(:notice_successful_create) %>',
+    duration: 800,
+    icon: 'success',
+    image: ''
+  });
+
+  $('textarea').removeData('changed');
+
+  $('.checklists-filter[data-issue-id="<%= @checklist.issue_id %>"]').replaceWith(
+    '<%= escape_javascript(render :partial => "checklists/filter", :locals => {
+      :issue => @issue,
+      :checklists => @issue.queried_checklists(
+        tracker: params[:checklists_tracker],
+        status: params[:checklists_status]
+      )
+    }) %>'
+  );
+
+  $('.checklists[data-issue-id="<%= @checklist.issue_id %>"]').append(
+    '<%= escape_javascript(render :partial => "checklists/checklist", :locals => { :checklist => @checklist }) %>'
+  )
+
+  if ($('.checklists[data-issue-id="<%= @checklist.issue_id %>"] > .checklist').length > 0) {
+    $('.checklists-empty[data-issue-id="<%= @checklist.issue_id %>"]').hide();
+  } else {
+    $('.checklists-empty[data-issue-id="<%= @checklist.issue_id %>"]').show();
+  }
+<% else %>
+  showErrorMessages(<%= raw @checklist.errors.full_messages.to_json %>, { title: '<%= l(:notice_fail_create) %>' })
+<% end %>

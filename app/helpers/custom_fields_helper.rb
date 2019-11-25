@@ -22,6 +22,8 @@ module CustomFieldsHelper
   CUSTOM_FIELDS_TABS = [
     {:name => 'IssueCustomField', :partial => 'custom_fields/index',
      :label => :label_issue_plural},
+    {:name => 'ChecklistCustomField', :partial => 'custom_fields/index',
+     :label => :label_checklist_plural},
     {:name => 'TimeEntryCustomField', :partial => 'custom_fields/index',
      :label => :label_spent_time},
     {:name => 'ProjectCustomField', :partial => 'custom_fields/index',

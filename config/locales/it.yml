@@ -591,7 +591,7 @@ it:
   default_tracker_feature: Funzione
   default_tracker_support: Supporto
   default_issue_status_new: Nuovo
-  default_issue_status_in_progress: In elaborazione
+  default_issue_status_solving: In elaborazione
   default_issue_status_resolved: Risolto
   default_issue_status_feedback: Commenti
   default_issue_status_closed: Chiuso

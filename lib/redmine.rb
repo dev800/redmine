@@ -92,9 +92,26 @@ Redmine::AccessControl.map do |map|
   map.permission :manage_public_queries, {:queries => [:new, :create, :edit, :update, :destroy]}, :require => :member
   map.permission :save_queries, {:queries => [:new, :create, :edit, :update, :destroy]}, :require => :loggedin
 
+  map.project_module :checklist_tracking do |map|
+    # Checklists
+    map.permission :view_checklists, {:checklists => [:index, :show]}, :read => true
+    map.permission :add_checklists, {:checklists => [:new, :create]}
+    map.permission :edit_checklists, {:checklists => [:edit, :update, :delete, :destroy]}
+
+    map.permission :edit_own_checklists, {:checklists => [:edit, :update], :journals => [:new], :attachments => :upload}
+    map.permission :set_checklists_private, {}
+    map.permission :set_own_checklists_private, {}, :require => :loggedin
+    map.permission :add_checklist_notes, {:checklists => [:edit, :update], :journals => [:new], :attachments => :upload}
+    map.permission :edit_checklist_notes, {:journals => [:edit, :update]}, :require => :loggedin
+    map.permission :edit_own_checklist_notes, {:journals => [:edit, :update]}, :require => :loggedin
+    map.permission :view_private_notes, {}, :read => true, :require => :member
+    map.permission :set_notes_private, {}, :require => :member
+    map.permission :delete_checklists, {:checklists => :destroy}, :require => :member
+  end
+
   map.project_module :issue_tracking do |map|
     # Issues
-    map.permission :view_issues, {:issues => [:index, :show, :issue_tab],
+    map.permission :view_issues, {:issues => [:index, :show, :issue_tab, :checklists],
                                   :auto_complete => [:issues],
                                   :context_menus => [:issues],
                                   :versions => [:index, :show, :status_by],
@@ -213,11 +230,17 @@ Redmine::MenuManager.map :application_menu do |menu|
             :caption => :label_project_plural
   menu.push :activity, {:controller => 'activities', :action => 'index'}
   menu.push :issues,   {:controller => 'issues', :action => 'index'},
-            :if => Proc.new {
+           :if => Proc.new {
                      User.current.allowed_to?(:view_issues, nil, :global => true) &&
                        EnabledModule.exists?(:project => Project.visible, :name => :issue_tracking)
                    },
             :caption => :label_issue_plural
+  # menu.push :checklists, {:controller => 'checklists', :action => 'index'},
+  #          :if => Proc.new {
+  #                    User.current.allowed_to?(:view_checklists, nil, :global => true) &&
+  #                      EnabledModule.exists?(:project => Project.visible, :name => :checklist_tracking)
+  #                  },
+  #           :caption => :label_checklist_plural
   menu.push :time_entries, {:controller => 'timelog', :action => 'index'},
             :if => Proc.new {
                      User.current.allowed_to?(:view_time_entries, nil, :global => true) &&
@@ -305,6 +328,7 @@ Redmine::MenuManager.map :project_menu do |menu|
   menu.push :roadmap, { :controller => 'versions', :action => 'index' }, :param => :project_id,
             :if => Proc.new { |p| p.shared_versions.any? }
   menu.push :issues, { :controller => 'issues', :action => 'index' }, :param => :project_id, :caption => :label_issue_plural
+  # menu.push :checklists, { :controller => 'checklists', :action => 'index' }, :param => :project_id, :caption => :label_checklist_plural
   menu.push :new_issue, { :controller => 'issues', :action => 'new', :copy_from => nil }, :param => :project_id, :caption => :label_issue_new,
             :html => { :accesskey => Redmine::AccessKeys.key_for(:new_issue) },
             :if => Proc.new { |p| Setting.new_item_menu_tab == '1' && Issue.allowed_target_trackers(p).any? },
@@ -326,6 +350,7 @@ end
 
 Redmine::Activity.map do |activity|
   activity.register :issues, :class_name => %w(Issue Journal)
+  activity.register :checklists, :class_name => %w(Checklist)
   activity.register :changesets
   activity.register :news
   activity.register :documents, :class_name => %w(Document Attachment)
@@ -336,6 +361,7 @@ Redmine::Activity.map do |activity|
 end
 
 Redmine::Search.map do |search|
+  search.register :checklists
   search.register :issues
   search.register :news
   search.register :documents

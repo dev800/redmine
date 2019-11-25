@@ -24,6 +24,7 @@ class Journal < ActiveRecord::Base
   # added as a quick fix to allow eager loading of the polymorphic association
   # since always associated to an issue, for now
   belongs_to :issue, :foreign_key => :journalized_id
+  belongs_to :checklist, :foreign_key => :journalized_id
 
   belongs_to :user
   has_many :details, :class_name => "JournalDetail", :dependent => :delete_all, :inverse_of => :journal
@@ -45,6 +46,7 @@ class Journal < ActiveRecord::Base
 
   before_create :split_private_notes
   after_create_commit :send_notification
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
 
   scope :visible, lambda {|*args|
     user = args.shift || User.current
@@ -55,9 +57,19 @@ class Journal < ActiveRecord::Base
       where(Journal.visible_notes_condition(user, :skip_pre_condition => true))
   }
 
+  scope :visible_for_checklist, lambda {|*args|
+    user = args.shift || User.current
+    options = args.shift || {}
+
+    joins(:checklist => :project).
+      where(Checklist.visible_condition(user, options)).
+      where(Journal.visible_notes_condition(user, :skip_pre_condition => true))
+  }
+
   safe_attributes(
     'notes',
     :if => lambda {|journal, user| journal.new_record? || journal.editable_by?(user)})
+
   safe_attributes(
     'private_notes',
     :if => lambda {|journal, user| user.allowed_to?(:set_notes_private, journal.project)})
@@ -170,6 +182,7 @@ class Journal < ActiveRecord::Base
   # Sets @custom_field instance variable on journals details using a single query
   def self.preload_journals_details_custom_fields(journals)
     field_ids = journals.map(&:details).flatten.select {|d| d.property == 'cf'}.map(&:prop_key).uniq
+
     if field_ids.any?
       fields_by_id = CustomField.where(:id => field_ids).inject({}) {|h, f| h[f.id] = f; h}
       journals.each do |journal|
@@ -180,6 +193,7 @@ class Journal < ActiveRecord::Base
         end
       end
     end
+
     journals
   end
 

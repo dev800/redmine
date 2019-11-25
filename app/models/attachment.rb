@@ -25,6 +25,7 @@ class Attachment < ActiveRecord::Base
   belongs_to :container, :polymorphic => true
   belongs_to :author, :class_name => "User"
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   validates_presence_of :filename, :author
   validates_length_of :filename, :maximum => 255
   validates_length_of :disk_filename, :maximum => 255
@@ -154,6 +155,10 @@ class Attachment < ActiveRecord::Base
   # Returns file's location on disk
   def diskfile
     File.join(self.class.storage_path, disk_directory.to_s, disk_filename.to_s)
+  end
+
+  def diskfile_deleted
+    File.join(self.class.storage_path, 'deleted', disk_directory.to_s, disk_filename.to_s)
   end
 
   def title
@@ -468,16 +473,22 @@ class Attachment < ActiveRecord::Base
   # Physically deletes the file from the file system
   def delete_from_disk!
     if disk_filename.present? && File.exist?(diskfile)
-      File.delete(diskfile)
+      diskfile_deleted_path = File.dirname(diskfile_deleted)
+
+      unless File.directory?(diskfile_deleted_path)
+        FileUtils.mkdir_p(diskfile_deleted_path)
+      end
+
+      FileUtils.mv(diskfile, diskfile_deleted)
     end
+
     Dir[thumbnail_path("*")].each do |thumb|
       File.delete(thumb)
     end
   end
 
   def thumbnail_path(size)
-    File.join(self.class.thumbnails_storage_path,
-              "#{digest}_#{filesize}_#{size}.thumb")
+    File.join(self.class.thumbnails_storage_path, "#{digest}_#{filesize}_#{size}.thumb")
   end
 
   def sanitize_filename(value)

@@ -10,6 +10,13 @@
 <p><label><%= l(:field_status) %></label> <%= @issue.status %></p>
 <% end %>
 
+<% if @issue.safe_attribute?('importance') %>
+  <p>
+    <%= f.select :importance, @issue.importance_select_options,
+      {:required => @issue.required_attribute?('importance')} %>
+  </p>
+<% end %>
+
 <% if @issue.safe_attribute? 'priority_id' %>
 <p><%= f.select :priority_id, (@priorities.collect {|p| [p.name, p.id]}), {:required => true} %></p>
 <% end %>
@@ -70,7 +77,7 @@
 <% end %>
 
 <% if @issue.safe_attribute? 'estimated_hours' %>
-<p><%= f.hours_field :estimated_hours, :size => 3, :required => @issue.required_attribute?('estimated_hours') %> <%= l(:field_hours) %></p>
+<p><%= f.hours_field :estimated_hours, :size => 10, :required => @issue.required_attribute?('estimated_hours') %> <%= l(:field_hours) %></p>
 <% end %>
 
 <% if @issue.safe_attribute?('done_ratio') && Issue.use_field_for_done_ratio? %>

@@ -35,7 +35,7 @@ class IssueStatusTest < ActiveSupport::TestCase
   end
 
   def test_create
-    status = IssueStatus.new :name => "Assigned"
+    status = IssueStatus.new :name => "Assigned", :flag_value => "assigned"
     assert !status.save
     # status name uniqueness
     assert_equal 1, status.errors.count

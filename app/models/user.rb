@@ -95,6 +95,7 @@ class User < Principal
   scope :logged, lambda { where("#{User.table_name}.status <> #{STATUS_ANONYMOUS}") }
   scope :status, lambda {|arg| where(arg.blank? ? nil : {:status => arg.to_i}) }
 
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
   acts_as_customizable
 
   attr_accessor :password, :password_confirmation, :generate_password

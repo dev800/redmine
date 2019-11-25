@@ -26,6 +26,7 @@ class Group < Principal
                           :after_remove => :user_removed
 
   acts_as_customizable
+  acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
 
   validates_presence_of :lastname
   validates_uniqueness_of :lastname, :case_sensitive => false

@@ -1,0 +1,41 @@
+<h2 class="content-title"><%= link_to issue_heading(@issue), @issue %> - <%= @issue.subject %></h2>
+<div class="checklists-wrapper" data-sync-url="<%= checklists_url(
+  format: 'js',
+  issue_id: @issue.id,
+  checklists_tracker: params[:checklists_tracker],
+  checklists_status: params[:checklists_status]
+) %>">
+  <div class="content clearfix">
+    <div class="contextual">
+      <%= render :partial => "checklists/filter", :locals => { request_url: request.url, :issue => @issue, :checklists => @checklists } %>
+    </div>
+    <h2 class="content-title"><%= l(:label_checklists) %></h2>
+  </div>
+  <%= render :partial => "checklists/checklists", :locals => {
+    :checklists => @checklists,
+    :issue => @issue
+  } %>
+  <div class="checklists-empty" style="<%= 'display: none' if @checklists.to_a.any? %>" data-issue-id="<%= @issue.id %>">
+    <%= l(:label_checklists_empty) %>
+  </div>
+</div>
+
+<div class="contextual">
+  <%= link_to l(:label_checklist_new), "javascript:;",
+    :class => 'icon icon-add new-checklist',
+    'remote-href' => checklist_new_path(issue_id: @issue.id)
+  %>
+</div>
+
+<% html_title "#{l(:label_checklists)} - #{@issue.tracker.name} ##{@issue.id}: #{@issue.subject}" %>
+
+<% content_for :sidebar do %>
+  <div></div>
+<% end %>
+
+<% heads_for_wiki_formatter %>
+<% include_calendar_headers_tags %>
+
+<% content_for :header_tags do %>
+  <%= javascript_include_tag 'attachments' %>
+<% end %>

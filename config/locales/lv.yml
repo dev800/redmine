@@ -858,7 +858,7 @@ lv:
   default_tracker_feature: Iezīme
   default_tracker_support: Atbalsts
   default_issue_status_new: Jauns
-  default_issue_status_in_progress: Attīstībā
+  default_issue_status_solving: Attīstībā
   default_issue_status_resolved: Atrisināts
   default_issue_status_feedback: Atsauksmes
   default_issue_status_closed: Slēgts

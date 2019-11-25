@@ -880,7 +880,7 @@ sr:
   default_tracker_feature: Функционалност
   default_tracker_support: Подршка
   default_issue_status_new: Ново
-  default_issue_status_in_progress: У току
+  default_issue_status_solving: У току
   default_issue_status_resolved: Решено
   default_issue_status_feedback: Повратна информација
   default_issue_status_closed: Затворено
