@@ -794,7 +794,8 @@ module ApplicationHelper
     @current_section = 0 if options[:edit_section_links]
 
     parse_sections(text, project, obj, attr, only_path, options)
-    parse_checklists(text, options)
+    # parse_checklists(text, options)
+
     text = parse_non_pre_blocks(text, obj, macros, options) do |text|
       [:parse_inline_attachments, :parse_hires_images, :parse_wiki_links, :parse_redmine_links].each do |method_name|
         send method_name, text, project, obj, attr, only_path, options
@@ -1066,11 +1067,12 @@ module ApplicationHelper
                                :title => truncate_single_line_raw(changeset.comments, 100))
               end
             end
-          elsif sep == '#' || sep == '##'
+          elsif sep == '#' || sep == '##' || sep == '$' || sep == '$$'
             oid = identifier.to_i
             case prefix
             when nil
               if oid.to_s == identifier &&
+                (sep == '#' || sep == '##') &&
                 issue = Issue.visible.find_by_id(oid)
                 anchor = comment_id ? "note-#{comment_id}" : nil
                 url = issue_url(issue, :only_path => only_path, :anchor => anchor)
@@ -1083,6 +1085,21 @@ module ApplicationHelper
                     content = "#{issue.tracker.name} ##{issue.id}"
                     title = "#{issue.tracker.name} ##{issue.id}: #{issue.subject.truncate(100)} (#{issue.status.name})"
                     link_to(content, url, :title => title, :class => issue.css_classes + " inner-link")
+                  end
+              elsif oid.to_s == identifier &&
+                (sep == '$' || sep == '$$') &&
+                checklist = Checklist.visible.find_by_id(oid)
+                anchor = comment_id ? "note-#{comment_id}" : nil
+                url = checklist_url(checklist, :only_path => only_path, :anchor => anchor)
+                link =
+                  if sep == '$$'
+                    content = "#{checklist.tracker.name} $#{checklist.id}: #{checklist.subject.truncate(100)} (#{checklist.status.name})"
+                    title = "#{checklist.tracker.name} $#{checklist.id}: #{checklist.subject.truncate(100)} (#{checklist.status.name})"
+                    link_to(content, url, :title => title, :class => checklist.css_classes + " inner-link")
+                  else
+                    content = "#{checklist.tracker.name} $#{checklist.id}"
+                    title = "#{checklist.tracker.name} $#{checklist.id}: #{checklist.subject.truncate(100)} (#{checklist.status.name})"
+                    link_to(content, url, :title => title, :class => checklist.css_classes + " inner-link")
                   end
               elsif identifier == 'note'
                 link = link_to("#note-#{comment_id}", "#note-#{comment_id}")
@@ -1207,6 +1224,7 @@ module ApplicationHelper
             (
               (
                 (?<sep1>\#\#?)|
+                (?<sep1>\$\$?)|
                 (
                   (?<repo_prefix>(?<repo_identifier>[a-z0-9\-_]+)\|)?
                   (?<sep2>r)
