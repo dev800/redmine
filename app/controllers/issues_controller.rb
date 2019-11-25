@@ -163,6 +163,7 @@ class IssuesController < ApplicationController
     unless User.current.allowed_to?(:add_issues, @issue.project, :global => true)
       raise ::Unauthorized
     end
+
     call_hook(:controller_issues_new_before_save, { :params => params, :issue => @issue })
     @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads]))
     if @issue.save
@@ -207,6 +208,7 @@ class IssuesController < ApplicationController
 
   def update
     return unless update_issue_from_params
+
     @issue.save_attachments(params[:attachments] ||
                              (params[:issue] && params[:issue][:uploads]))
     saved = false
@@ -245,6 +247,7 @@ class IssuesController < ApplicationController
 
   def issue_tab
     return render_error :status => 422 unless request.xhr?
+
     tab = params[:name]
 
     case tab
@@ -324,7 +327,7 @@ class IssuesController < ApplicationController
         end
       end
     end
-    @values_by_custom_field.delete_if {|k,v| v.blank?}
+    @values_by_custom_field.delete_if {|k, v| v.blank?}
     @custom_fields =
       edited_issues.map{|i| i.editable_custom_fields}.
         reduce(:&).select {|field| field.format.bulk_edit_supported}
@@ -358,6 +361,7 @@ class IssuesController < ApplicationController
       unless User.current.allowed_to?(:copy_issues, @projects)
         raise ::Unauthorized
       end
+
       target_projects = @projects
       if attributes['project_id'].present?
         target_projects = Project.where(:id => attributes['project_id']).to_a
@@ -365,6 +369,7 @@ class IssuesController < ApplicationController
       unless User.current.allowed_to?(:add_issues, target_projects)
         raise ::Unauthorized
       end
+
       unless User.current.allowed_to?(:add_issue_watchers, @projects)
         copy_watchers = false
       end
@@ -521,7 +526,7 @@ class IssuesController < ApplicationController
       :next_issue_id => params[:next_issue_id],
       :issue_position => params[:issue_position],
       :issue_count => params[:issue_count]
-    }.reject {|k,v| k.blank?}
+    }.reject {|k, v| k.blank?}
   end
 
   # Used by #edit and #update to set some common instance variables
@@ -565,6 +570,7 @@ class IssuesController < ApplicationController
         unless User.current.allowed_to?(:copy_issues, @copy_from.project)
           raise ::Unauthorized
         end
+
         @link_copy = link_copy?(params[:link_copy]) || request.get?
         @copy_attachments = params[:copy_attachments].present? || request.get?
         @copy_subtasks = params[:copy_subtasks].present? || request.get?
@@ -625,7 +631,9 @@ class IssuesController < ApplicationController
   # Saves @issue and a time_entry from the parameters
   def save_issue_with_child_records
     Issue.transaction do
-      if params[:time_entry] && (params[:time_entry][:hours].present? || params[:time_entry][:comments].present?) && User.current.allowed_to?(:log_time, @issue.project)
+      if params[:time_entry] &&
+           (params[:time_entry][:hours].present? || params[:time_entry][:comments].present?) &&
+           User.current.allowed_to?(:log_time, @issue.project)
         time_entry = @time_entry || TimeEntry.new
         time_entry.project = @issue.project
         time_entry.issue = @issue
@@ -634,10 +642,19 @@ class IssuesController < ApplicationController
         time_entry.safe_attributes = params[:time_entry]
         @issue.time_entries << time_entry
       end
-
-      call_hook(:controller_issues_edit_before_save, { :params => params, :issue => @issue, :time_entry => time_entry, :journal => @issue.current_journal})
+      call_hook(
+        :controller_issues_edit_before_save,
+        {:params => params, :issue => @issue,
+         :time_entry => time_entry,
+         :journal => @issue.current_journal}
+      )
       if @issue.save
-        call_hook(:controller_issues_edit_after_save, { :params => params, :issue => @issue, :time_entry => time_entry, :journal => @issue.current_journal})
+        call_hook(
+          :controller_issues_edit_after_save,
+          {:params => params, :issue => @issue,
+           :time_entry => time_entry,
+           :journal => @issue.current_journal}
+        )
       else
         raise ActiveRecord::Rollback
       end
@@ -661,7 +678,11 @@ class IssuesController < ApplicationController
   def redirect_after_create
     if params[:continue]
       url_params = {}
-      url_params[:issue] = {:tracker_id => @issue.tracker, :parent_issue_id => @issue.parent_issue_id}.reject {|k,v| v.nil?}
+      url_params[:issue] =
+        {
+          :tracker_id => @issue.tracker,
+          :parent_issue_id => @issue.parent_issue_id
+        }.reject {|k, v| v.nil?}
       url_params[:back_url] = params[:back_url].presence
 
       if params[:project_id]
