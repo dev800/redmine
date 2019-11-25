@@ -578,6 +578,16 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
   text-decoration: none;
 }
 
+div.wiki table {
+  word-break: keep-all;
+}
+
+div.wiki table,
+div.wiki td,
+div.wiki th {
+  border: none;
+}
+
 #main .wiki blockquote,
 #main .wiki dl,
 #main .wiki ol,
@@ -704,7 +714,8 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
 #main .wiki ol,
 #main .wiki ul {
   padding-left: 2em;
-  margin-bottom: 1.2em;
+  margin-top: 1em;
+  margin-bottom: 1.5em;
 }
 
 #main .wiki ol:last-child,
@@ -1468,6 +1479,7 @@ tr.issue td.last_updated_by {
   color: #467aa7;
 }
 
+#replies .message,
 #main .journal {
   overflow: auto;
   background: #ffffff;
@@ -1478,6 +1490,7 @@ tr.issue td.last_updated_by {
   box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.1);
 }
 
+#replies .message .wiki,
 #main .journal .wiki {
   padding: 0.4em;
   margin-bottom: 0;
@@ -1498,6 +1511,7 @@ tr.issue td.last_updated_by {
   position: relative;
 }
 
+#replies .message h4.reply-header,
 #main .journal.time_entry > h4,
 #main .journal h4.note-header {
   border-bottom: dotted 1px #c0c0c0;

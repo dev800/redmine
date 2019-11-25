@@ -32,7 +32,7 @@ module Redmine
         end
 
         def heads_for_wiki_formatter
-          unless @heads_for_wiki_formatter_included
+          unless @heads_for_wiki_formatter_included_for_markdown
             content_for :header_tags do
               javascript_include_tag('jstoolbar/jstoolbar') +
               javascript_include_tag('jstoolbar/markdown') +
@@ -40,7 +40,7 @@ module Redmine
               javascript_tag("var wikiImageMimeTypes = #{Redmine::MimeType.by_type('image').to_json};") +
               stylesheet_link_tag('jstoolbar')
             end
-            @heads_for_wiki_formatter_included = true
+            @heads_for_wiki_formatter_included_for_markdown = true
           end
         end
       end

@@ -291,6 +291,9 @@ Rails.application.routes.draw do
   get 'attachments/:object_type/:object_id/edit', :to => 'attachments#edit_all', :as => :object_attachments_edit
   patch 'attachments/:object_type/:object_id', :to => 'attachments#update_all', :as => :object_attachments
 
+  resources :upload_files, :only => [:show]
+  get 'upload_files/download/:id', :to => 'upload_files#download', :id => /\d+/, :as => :upload_file_download
+
   resources :groups do
     resources :memberships, :controller => 'principal_memberships'
     member do
@@ -361,6 +364,7 @@ Rails.application.routes.draw do
   match 'sys/fetch_changesets', :to => 'sys#fetch_changesets', :via => [:get, :post]
 
   match 'uploads', :to => 'attachments#upload', :via => :post
+  match 'files/upload', :to => 'upload_files#upload', :via => :post
 
   get 'issues/:id/checklists', :to => 'issues#checklists', :as => :issue_checklists
   get 'checklists', :to => 'checklists#index', :as => :checklists

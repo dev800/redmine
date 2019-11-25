@@ -30,9 +30,13 @@
 <% end %>
 
 <% if @issue.safe_attribute? 'description' %>
+<p id="issue_formatting_field" style="<%= @issue.new_record? ? nil : 'display:none' %>">
+  <%= f.select :formatting, [[l(:label_formatting_markdown), 'markdown'], [l(:label_formatting_richtext), 'richtext']] %>
+</p>
+
 <p>
   <%= f.label_for_field :description, :required => @issue.required_attribute?('description') %>
-  <%= link_to_function content_tag(:span, l(:button_edit), :class => 'icon icon-edit'), '$(this).hide(); $("#issue_description_and_toolbar").show()' unless @issue.new_record? %>
+  <%= link_to_function content_tag(:span, l(:button_edit), :class => 'icon icon-edit'), "triggerIssueDescriptionEdit(this)" if @issue.persisted? %>
   <%= content_tag 'span', :id => "issue_description_and_toolbar", :style => (@issue.new_record? ? nil : 'display:none') do %>
     <%= f.text_area :description, :cols => 60, :accesskey => accesskey(:edit), :class => 'wiki-edit',
                    :rows => [[10, @issue.description.to_s.length / 50].max, 20].min,
@@ -43,6 +47,15 @@
                    :no_label => true %>
   <% end %>
 </p>
+<% if @issue.formatting == 'richtext' %>
+  <% if @issue.new_record? %>
+    <%= javascript_tag do %>
+      $(document).ready(function() {
+        createRicheditor("#issue_description")
+      })
+    <% end %>
+  <% end %>
+<% end %>
 <%= wikitoolbar_for 'issue_description', preview_issue_path(:project_id => @issue.project, :issue_id => @issue.id) %>
 <% end %>
 

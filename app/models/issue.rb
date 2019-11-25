@@ -507,6 +507,7 @@ class Issue < ActiveRecord::Base
   end
 
   safe_attributes(
+    'formatting',
     'project_id',
     'tracker_id',
     'status_id',

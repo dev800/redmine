@@ -350,7 +350,7 @@ module ApplicationHelper
   end
 
   def format_activity_description(text)
-    h(text.to_s.truncate(120).gsub(%r{[\r\n]*<(pre|code)>.*$}m, '...')).
+    h(ActionView::Base.full_sanitizer.sanitize(text.to_s).truncate(120).gsub(%r{[\r\n]*<(pre|code)>.*$}m, '...')).
       gsub(/[\r\n]+/, "<br />").html_safe
   end
 
@@ -785,7 +785,12 @@ module ApplicationHelper
       text = h(text)
     else
       formatting = Setting.text_formatting
-      text = Redmine::WikiFormatting.to_html(formatting, text, :object => obj, :attribute => attr)
+
+      if obj.respond_to?(:formatting) && obj.formatting == 'richtext'
+        text = text
+      else
+        text = Redmine::WikiFormatting.to_html(formatting, text, :object => obj, :attribute => attr)
+      end
     end
 
     @parsed_headings = []
@@ -1665,7 +1670,7 @@ module ApplicationHelper
 
   # Returns the javascript tags that are included in the html layout head
   def javascript_heads
-    tags = javascript_include_tag('jquery-2.2.4-ui-1.11.0-ujs-5.2.3', 'tribute-3.7.3.min', 'application', 'responsive')
+    tags = javascript_include_tag('jquery-2.2.4-ui-1.11.0-ujs-5.2.3', 'tribute-3.7.3.min', 'application', 'responsive', 'kindeditor')
     unless User.current.pref.warn_on_leaving_unsaved == '0'
       tags << "\n".html_safe + javascript_tag("$(window).on('load', function(){ warnLeavingUnsaved('#{escape_javascript l(:text_warn_on_leaving_unsaved)}'); });")
     end

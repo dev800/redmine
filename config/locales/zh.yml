@@ -224,6 +224,7 @@ zh:
   mail_body_wiki_content_updated: "'%{id}' wiki页面已由 %{author} 更新。"
 
 
+  field_formatting: 格式
   field_flag_value: 标识
   field_flag_color: 标识颜色
   field_background_color: 背景颜色
@@ -990,6 +991,8 @@ zh:
   label_issues_visibility_public: 全部非私有问题
   text_issues_destroy_descendants_confirmation: 此操作同时会删除 %{count} 个子任务。
 
+  label_formatting_markdown: Markdown
+  label_formatting_richtext: 富文本
   field_commit_logs_encoding: 提交注释的编码
   field_scm_path_encoding: 路径编码
   text_scm_path_encoding_note: "默认: UTF-8"

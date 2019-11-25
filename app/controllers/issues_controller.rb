@@ -152,6 +152,7 @@ class IssuesController < ApplicationController
 
   def new
     @issue.importance = Issue::DEFAULT_IMPORTANCE
+    @issue.formatting = params[:formatting] || Setting.text_formatting
 
     respond_to do |format|
       format.html { render :action => 'new', :layout => !request.xhr? }

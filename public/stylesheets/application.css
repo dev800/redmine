@@ -1857,3 +1857,11 @@ img {
 #fixed-buttons a#goTop:hover {
   background-position: -30px -120px;
 }
+
+.ui-dialog {
+  z-index: 9999999 !important;
+}
+
+.ui-widget-overlay {
+  z-index: 9999998 !important;
+}

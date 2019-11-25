@@ -476,6 +476,10 @@ module IssuesHelper
         value = Issue.importance_human(detail.value) unless detail.value.blank?
         old_value = Issue.importance_human(detail.old_value) unless detail.old_value.blank?
 
+      when 'formatting'
+        value = l(:"label_formatting_#{detail.value}") unless detail.value.blank?
+        old_value = l(:"label_formatting_#{detail.old_value}") unless detail.old_value.blank?
+
       when 'parent_id'
         label = l(:field_parent_issue)
         value = "##{detail.value}" unless detail.value.blank?

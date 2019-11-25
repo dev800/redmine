@@ -923,8 +923,68 @@ function toggleNewObjectDropdown() {
   }
 }
 
-(function ( $ ) {
+$(document).on("change", '#issue_formatting_field select', function(e) {
+  var $selector = $(this);
+  var selectedValue = $selector.val();
 
+  $("#issue_formatting_field").show();
+  $("#issue_description_and_toolbar").show();
+
+  if (selectedValue == 'richtext') {
+    $("#issue_description_and_toolbar .jstTabs").hide();
+    createRicheditor("#issue_description");
+  } else {
+    $("#issue_description_and_toolbar .jstTabs").show();
+
+    removeRicheditor("#issue_description");
+  }
+})
+
+function triggerIssueDescriptionEdit(trigger) {
+  $(trigger).hide();
+  $("#issue_formatting_field").show();
+  $("#issue_description_and_toolbar").show();
+
+  if ($('#issue_formatting_field select').val() == 'richtext') {
+    $("#issue_description_and_toolbar .jstTabs").hide();
+    createRicheditor("#issue_description");
+  } else {
+    $("#issue_description_and_toolbar .jstTabs").show();
+  }
+}
+
+//	'source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
+//	'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+//	'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+//	'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
+//	'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+//	'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
+//	'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
+// 	'anchor', 'link', 'unlink', '|', 'about'
+function removeRicheditor(selector) {
+  KindEditor.remove(selector)
+}
+
+function createRicheditor(selector) {
+  KindEditor.create(selector, {
+    minHeight: 240,
+    // pasteType: 0,
+    uploadJson: '/files/upload.json',
+    themesPath: '/stylesheets/kindeditor/themes/',
+    pluginsPath: '/javascripts/kindeditor/plugins/',
+    items: [
+      'source', '|', 'undo', 'redo', '|', 'preview', 'code',
+      'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+      'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+      'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
+      'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+      'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', 'image',
+      'table', 'hr', 'emoticons', 'anchor', 'link', 'unlink'
+    ]
+  });
+}
+
+(function ( $ ) {
   // detect if native date input is supported
   var nativeDateInputSupported = true;
 
