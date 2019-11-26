@@ -718,6 +718,11 @@ div.wiki th {
   margin-bottom: 1.5em;
 }
 
+#main .wiki ol:first-child,
+#main .wiki ul:first-child {
+  margin-top: 0;
+}
+
 #main .wiki ol:last-child,
 #main .wiki ul:last-child {
   margin-bottom: 0;
@@ -1085,7 +1090,7 @@ h6,
 #main .wiki h1,
 #main .wiki h2,
 #main .wiki h3 {
-  word-break: break-all;
+  word-break: normal;
   padding-bottom: 0.48em;
   margin-bottom: 0.48em;
 }
