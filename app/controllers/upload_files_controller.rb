@@ -67,18 +67,14 @@ class UploadFilesController < ApplicationController
     @upload_file.move_to_target_directory!
 
     if saved
-      render :json => {:error => 0, :url => upload_file_download_path(@upload_file)}
+      render :json => {
+        :error => 0,
+        :url => upload_file_download_path(:id => @upload_file.id, :secret => @upload_file.secret),
+        :filename => @upload_file.filename,
+        :title => @upload_file.filename
+      }
     else
       render :json => {:error => 1}
-    end
-  end
-
-  def destroy
-    @upload_file.destroy
-
-    respond_to do |format|
-      format.js
-      format.api { render_api_ok }
     end
   end
 
@@ -86,8 +82,7 @@ class UploadFilesController < ApplicationController
 
   def find_upload_file
     @upload_file = UploadFile.find(params[:id])
-    # Show 404 if the filename in the url is wrong
-    raise ActiveRecord::RecordNotFound if params[:filename] && params[:filename] != @upload_file.filename
+    raise ActiveRecord::RecordNotFound if params[:secret] && params[:secret] != @upload_file.secret
   rescue ActiveRecord::RecordNotFound
     render_404
   end

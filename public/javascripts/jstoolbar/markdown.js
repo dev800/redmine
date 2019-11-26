@@ -205,12 +205,35 @@ jsToolBar.prototype.elements.link = {
     wiki: function() { this.encloseSelection("[[", "]]") }
   }
 }
+
 // image
 jsToolBar.prototype.elements.img = {
   type: 'button',
   title: 'Image',
   fn: {
     wiki: function() { this.encloseSelection("![](", ")") }
+  }
+}
+
+// uploadImage
+jsToolBar.prototype.elements.uploadImg = {
+  type: 'button',
+  title: 'Upload image',
+  fn: {
+    wiki: function() {
+      var editor = window.kindEditor;
+      var self = this;
+
+      editor.loadPlugin('image', function() {
+        editor.plugin.imageDialog({
+          showRemote : false,
+          clickFn : function(url, title, width, height, border, align) {
+            self.encloseSelection("![" + escapeHTML(title) + "](" + url + ")");
+            editor.hideDialog();
+          }
+        });
+      });
+    }
   }
 }
 

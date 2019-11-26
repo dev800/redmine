@@ -968,6 +968,17 @@ function removeRicheditor(selector) {
   KindEditor.remove(selector)
 }
 
+if (!window.kindEditor) {
+  $(document).ready(function() {
+    window.kindEditor = KindEditor.editor({
+      allowFileManager: true,
+      uploadJson: '/files/upload.json',
+      themesPath: '/stylesheets/kindeditor/themes/',
+      pluginsPath: '/javascripts/kindeditor/plugins/'
+    });
+  })
+}
+
 function createRicheditor(selector) {
   KindEditor.create(selector, {
     minHeight: 240,

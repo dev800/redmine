@@ -9,7 +9,14 @@
 <meta name="keywords" content="issue,bug,tracker" />
 <%= csrf_meta_tag %>
 <%= favicon %>
-<%= stylesheet_link_tag 'jquery/jquery-ui-1.11.0', 'tribute-3.7.3', 'application', 'responsive', '/javascripts/kindeditor/plugins/code/prettify', :media => 'all' %>
+<%= stylesheet_link_tag 'jquery/jquery-ui-1.11.0',
+    'tribute-3.7.3',
+    'application',
+    'responsive',
+    '/javascripts/kindeditor/plugins/code/prettify',
+    '/stylesheets/kindeditor/themes/default/default',
+    :media => 'all'
+-%>
 <%= stylesheet_link_tag 'rtl', :media => 'all' if l(:direction) == 'rtl' %>
 <%= javascript_heads %>
 <%= heads_for_theme %>

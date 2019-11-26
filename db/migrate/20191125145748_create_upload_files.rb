@@ -12,6 +12,7 @@ class CreateUploadFiles < ActiveRecord::Migration[5.2]
       t.datetime :deleted_at
       t.string :description
       t.string :disk_directory
+      t.string :secret
 
       t.index [:author_id]
       t.index [:created_on]

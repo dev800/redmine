@@ -25,6 +25,10 @@ class UploadFile < ActiveRecord::Base
   after_commit :delete_from_disk, :on => :destroy
   after_commit :reuse_existing_file_if_possible, :on => :create
 
+  before_create do |r|
+    r.secret = SecureRandom.hex(8)
+  end
+
   safe_attributes 'filename', 'content_type', 'description'
 
   # Returns an unsaved copy of the upload_file
