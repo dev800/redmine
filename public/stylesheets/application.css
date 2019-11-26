@@ -603,8 +603,10 @@ div#roadmap .related-issues td.assigned_to img { padding-left: 4px; padding-righ
 div#roadmap .wiki h1:first-child { display: none; }
 div#roadmap .wiki h1 { font-size: 120%; }
 div#roadmap .wiki h2 { font-size: 110%; }
-div#roadmap h2, div#roadmap h3 { display: inline; padding-right: 0;}
-body.controller-versions.action-show div#roadmap .related-issues {width:70%;}
+/* div#roadmap h2, div#roadmap h3 { display: inline; padding-right: 0;} */
+body.controller-versions.action-show div#roadmap .related-issues,
+body.controller-versions.action-show div#roadmap .wiki-wrapper {width:70%;}
+body.controller-versions.action-show div#roadmap .wiki-wrapper {padding-top:18px;}
 
 div#version-summary { float:right; width:28%; margin-left: 16px; margin-bottom: 16px; background-color: #fff; }
 div#version-summary fieldset { margin-bottom: 1em; }
@@ -1845,4 +1847,28 @@ img {
 
 .ui-widget-overlay {
   z-index: 9999998 !important;
+}
+
+.padding-top-lg {
+  padding-top: 24px;
+}
+
+.padding-top-md {
+  padding-top: 18px;
+}
+
+.padding-top-sm {
+  padding-top: 12px;
+}
+
+.padding-top-xs {
+  padding-top: 6px;
+}
+
+.clearfix:after {
+  content: '';
+  display: block;
+  visibility: hidden;
+  height: 0;
+  clear: both;
 }

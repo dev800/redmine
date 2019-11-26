@@ -11,7 +11,6 @@
   <span class="badge badge-status-<%= @version.status %>"><%= l("version_status_#{@version.status}") %></span>
 
 <%= render :partial => 'versions/overview', :locals => {:version => @version} %>
-<%= render(:partial => "wiki/content", :locals => {:content => @version.wiki_page.content}) if @version.wiki_page %>
 
 <div id="version-summary">
 <% if @version.visible_fixed_issues.estimated_hours > 0 || User.current.allowed_to?(:view_time_entries, @project) %>
@@ -52,6 +51,11 @@
   <% end %>
   </table>
 <% end %>
+
+<div class="wiki-wrapper">
+  <%= render(:partial => "wiki/content", :locals => {:content => @version.wiki_page.content}) if @version.wiki_page %>
+</div>
+
 <%= context_menu %>
 <% end %>
 </div>
