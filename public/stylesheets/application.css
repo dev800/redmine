@@ -1194,6 +1194,7 @@ div.wiki .external {
   background-position: 0% 60%;
   background-repeat: no-repeat;
   padding-left: 12px;
+  margin-left: 6px;
   background-image: url(../images/external.png);
 }
 
@@ -1220,35 +1221,9 @@ div.wiki *:not(pre)>code, div.wiki>code {
   border-radius: 0.1em;
 }
 
-/* div.wiki .toc ul.content {
-  background-color: #ffffdd;
-  border: 1px solid #e4e4e4;
-  padding: 4px;
-  line-height: 1.2em;
-  margin-bottom: 12px;
-  margin-right: 12px;
-  margin-left: 0;
-  display: table
-}
-* html div.wiki .toc ul.content { width: 50%; }
-
-div.wiki .toc ul.content.right { float: right; margin-left: 12px; margin-right: 0; width: auto; }
-div.wiki .toc ul.content.left  { float: left; margin-right: 12px; margin-left: 0; width: auto; }
-div.wiki .toc ul.content ul { margin: 0; padding: 0; }
-div.wiki .toc ul.content li {list-style-type:none; margin: 0; font-size:12px;}
-div.wiki .toc ul.content>li:first-child {margin-bottom: .5em; color: #777;}
-div.wiki .toc ul.content li li {margin-left: 1.5em; font-size:10px;}
-div.wiki .toc ul.content a {
-  font-size: 0.9em;
-  font-weight: normal;
-  text-decoration: none;
-  color: #606060;
-}
-div.wiki .toc ul.content a:hover { color: #c61a1a; text-decoration: underline;} */
-
 @media screen and (min-width: 899px) {
   #main #content.with-toc {
-    padding-left: 232px;
+    padding-left: 244px;
     margin-left: 12px;
   }
 
@@ -1262,8 +1237,9 @@ div.wiki .toc ul.content a:hover { color: #c61a1a; text-decoration: underline;} 
     max-height: calc(100vh - 176px);
     min-height: 358px;
     bottom: 36px;
-    left: 12px;
+    left: 24px;
     display: block;
+    overflow: hidden;
   }
 
   #main #content.with-toc .toc .content {
@@ -1288,7 +1264,7 @@ div.wiki .toc ul.content a:hover { color: #c61a1a; text-decoration: underline;} 
 #main .wiki .toc .header {
   font-size: 16px;
   margin-top: 4px;
-  margin-bottom: 0;
+  margin-bottom: 6px;
   padding-top: 6px;
   margin-right: 1em;
   text-align: center;
@@ -1296,9 +1272,10 @@ div.wiki .toc ul.content a:hover { color: #c61a1a; text-decoration: underline;} 
 
 #main .wiki .toc .content {
   font-size: 12px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 0;
+  padding-bottom: 16px;
   padding-right: 1em;
+  margin-top: 0;
 }
 
 #main .wiki .toc ul {
@@ -1325,7 +1302,11 @@ a.wiki-anchor { display: none; margin-left: 6px; text-decoration: none; }
 a.wiki-anchor:hover { color: #aaa !important; text-decoration: none; }
 h1:hover a.wiki-anchor, h2:hover a.wiki-anchor, h3:hover a.wiki-anchor, h4:hover a.wiki-anchor, h5:hover a.wiki-anchor, h6:hover a.wiki-anchor { display: inline; color: #ddd; }
 
-div.wiki img {vertical-align:middle; max-width:100%;}
+div.wiki img {
+  vertical-align: middle;
+  max-width: 100%;
+  box-shadow: 0px 0px 10px #888888;
+}
 
 /***** My page layout *****/
 .block-receiver {
