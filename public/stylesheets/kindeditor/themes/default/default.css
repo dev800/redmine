@@ -744,7 +744,7 @@
 	display: block;
 	width: 408px;
 	height: 260px;
-	font-family: "sans serif",tahoma,verdana,helvetica;
+	font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
 	font-size: 12px;
 	border-color: #848484 #E0E0E0 #E0E0E0 #848484;
 	border-style: solid;

@@ -869,8 +869,6 @@ function setupFilePreviewNavigation() {
   }
 }
 
-
-
 function hideOnLoad() {
   $('.hol').hide();
 }
@@ -922,6 +920,11 @@ function toggleNewObjectDropdown() {
     dropdown.addClass('visible');
   }
 }
+
+$(document).ready(function() {
+  // https://jmblog.github.io/color-themes-for-google-code-prettify/
+  prettyPrint();
+})
 
 $(document).on("change", '#issue_formatting_field select', function(e) {
   var $selector = $(this);

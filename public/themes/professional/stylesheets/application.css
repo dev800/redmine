@@ -838,6 +838,11 @@ div.wiki th {
   line-height: 1.45;
   overflow: auto;
   padding: 10px;
+  width: 100%;
+}
+
+#main .wiki pre.prettyprint {
+  border: 1px solid #e2e2e2 !important;
 }
 
 #main .wiki pre code {
@@ -846,7 +851,6 @@ div.wiki th {
   display: inline;
   line-height: inherit;
   margin: 0;
-  max-width: auto;
   overflow: visible;
   padding: 0;
   word-wrap: normal;
