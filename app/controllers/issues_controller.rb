@@ -18,90 +18,90 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class IssuesController < ApplicationController
-default_search_scope :issues
+  default_search_scope :issues
 
-before_action :find_issue, :only => [:show, :edit, :update, :issue_tab, :checklists]
-before_action :find_issues, :only => [:bulk_edit, :bulk_update, :destroy]
-before_action :authorize, :except => [:index, :new, :create]
-before_action :find_optional_project, :only => [:index, :new, :create]
-before_action :build_new_issue_from_params, :only => [:new, :create]
-accept_rss_auth :index, :show, :checklists
-accept_api_auth :index, :show, :create, :update, :destroy, :checklists
+  before_action :find_issue, :only => [:show, :edit, :update, :issue_tab, :checklists]
+  before_action :find_issues, :only => [:bulk_edit, :bulk_update, :destroy]
+  before_action :authorize, :except => [:index, :new, :create]
+  before_action :find_optional_project, :only => [:index, :new, :create]
+  before_action :build_new_issue_from_params, :only => [:new, :create]
+  accept_rss_auth :index, :show, :checklists
+  accept_api_auth :index, :show, :create, :update, :destroy, :checklists
 
-rescue_from Query::StatementInvalid, :with => :query_statement_invalid
+  rescue_from Query::StatementInvalid, :with => :query_statement_invalid
 
-helper :journals
-helper :projects
-helper :custom_fields
-helper :issue_relations
-helper :watchers
-helper :attachments
-helper :queries
-include QueriesHelper
-helper :repositories
-helper :timelog
+  helper :journals
+  helper :projects
+  helper :custom_fields
+  helper :issue_relations
+  helper :watchers
+  helper :attachments
+  helper :queries
+  include QueriesHelper
+  helper :repositories
+  helper :timelog
 
-def checklists
-  @project = @issue.project
+  def checklists
+    @project = @issue.project
 
-  @checklists = @issue.queried_checklists(
-    tracker: params[:checklists_tracker],
-    status: params[:checklists_status]
-  )
+    @checklists = @issue.queried_checklists(
+      tracker: params[:checklists_tracker],
+      status: params[:checklists_status]
+    )
 
-  respond_to do |format|
-    format.html {
-      render :template => 'issues/checklists'
-    }
-  end
-rescue ActiveRecord::RecordNotFound
-  render_404
-end
-
-def index
-  use_session = !request.format.csv?
-  retrieve_query(IssueQuery, use_session)
-
-  if @query.valid?
     respond_to do |format|
       format.html {
-        @issue_count = @query.issue_count
-        @issue_pages = Paginator.new @issue_count, per_page_option, params['page']
-        @issues = @query.issues(:offset => @issue_pages.offset, :limit => @issue_pages.per_page)
-        render :layout => !request.xhr?
-      }
-      format.api  {
-        @offset, @limit = api_offset_and_limit
-        @query.column_names = %w(author)
-        @issue_count = @query.issue_count
-        @issues = @query.issues(:offset => @offset, :limit => @limit)
-        Issue.load_visible_relations(@issues) if include_in_api_response?('relations')
-      }
-      format.atom {
-        @issues = @query.issues(:limit => Setting.feeds_limit.to_i)
-        render_feed(@issues,
-                    :title => "#{@project || Setting.app_title}: #{l(:label_issue_plural)}")
-      }
-      format.csv  {
-        @issues = @query.issues(:limit => Setting.issues_export_limit.to_i)
-        send_data(query_to_csv(@issues, @query, params[:csv]),
-                  :type => 'text/csv; header=present', :filename => 'issues.csv')
-      }
-      format.pdf  {
-        @issues = @query.issues(:limit => Setting.issues_export_limit.to_i)
-        send_file_headers! :type => 'application/pdf', :filename => 'issues.pdf'
+        render :template => 'issues/checklists'
       }
     end
-  else
-    respond_to do |format|
-      format.html { render :layout => !request.xhr? }
-      format.any(:atom, :csv, :pdf) { head 422 }
-      format.api { render_validation_errors(@query) }
-    end
+  rescue ActiveRecord::RecordNotFound
+    render_404
   end
-rescue ActiveRecord::RecordNotFound
-  render_404
-end
+
+  def index
+    use_session = !request.format.csv?
+    retrieve_query(IssueQuery, use_session)
+
+    if @query.valid?
+      respond_to do |format|
+        format.html do
+          @issue_count = @query.issue_count
+          @issue_pages = Paginator.new @issue_count, per_page_option, params['page']
+          @issues = @query.issues(:offset => @issue_pages.offset, :limit => @issue_pages.per_page)
+          render :layout => !request.xhr?
+        end
+        format.api do
+          @offset, @limit = api_offset_and_limit
+          @query.column_names = %w(author)
+          @issue_count = @query.issue_count
+          @issues = @query.issues(:offset => @offset, :limit => @limit)
+          Issue.load_visible_relations(@issues) if include_in_api_response?('relations')
+        end
+        format.atom do
+          @issues = @query.issues(:limit => Setting.feeds_limit.to_i)
+          render_feed(@issues,
+                      :title => "#{@project || Setting.app_title}: #{l(:label_issue_plural)}")
+        end
+        format.csv do
+          @issues = @query.issues(:limit => Setting.issues_export_limit.to_i)
+          send_data(query_to_csv(@issues, @query, params[:csv]),
+                    :type => 'text/csv; header=present', :filename => 'issues.csv')
+        end
+        format.pdf do
+          @issues = @query.issues(:limit => Setting.issues_export_limit.to_i)
+          send_file_headers! :type => 'application/pdf', :filename => 'issues.pdf'
+        end
+      end
+    else
+      respond_to do |format|
+        format.html {render :layout => !request.xhr?}
+        format.any(:atom, :csv, :pdf) {head 422}
+        format.api {render_validation_errors(@query)}
+      end
+    end
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
 
   def show
     @journals = @issue.visible_journals_with_index
@@ -109,9 +109,9 @@ end
 
     @relations =
       @issue.relations.
-        select {|r|
+        select do |r|
           r.other_issue(@issue) && r.other_issue(@issue).visible?
-        }
+        end
 
     @checklists = @issue.queried_checklists(
       tracker: params[:checklists_tracker],
@@ -126,7 +126,7 @@ end
     end
 
     respond_to do |format|
-      format.html {
+      format.html do
         @allowed_statuses = @issue.new_statuses_allowed_to(User.current)
         @priorities = IssuePriority.active
         @time_entry = TimeEntry.new(:issue => @issue, :project => @issue.project)
@@ -134,19 +134,19 @@ end
         @relation = IssueRelation.new
         retrieve_previous_and_next_issue_ids
         render :template => 'issues/show'
-      }
-      format.api {
+      end
+      format.api do
         @changesets = @issue.changesets.visible.preload(:repository, :user).to_a
         @changesets.reverse! if User.current.wants_comments_in_reverse_order?
-      }
-      format.atom {
+      end
+      format.atom do
         render :template => 'journals/index', :layout => false,
         :content_type => 'application/atom+xml'
-      }
-      format.pdf  {
+      end
+      format.pdf do
         send_file_headers!(:type => 'application/pdf',
                            :filename => "#{@project.identifier}-#{@issue.id}.pdf")
-      }
+      end
     end
   end
 
@@ -154,7 +154,7 @@ end
     @issue.importance = Issue::DEFAULT_IMPORTANCE
 
     respond_to do |format|
-      format.html { render :action => 'new', :layout => !request.xhr? }
+      format.html {render :action => 'new', :layout => !request.xhr?}
       format.js
     end
   end
@@ -164,35 +164,35 @@ end
       raise ::Unauthorized
     end
 
-    call_hook(:controller_issues_new_before_save, { :params => params, :issue => @issue })
+    call_hook(:controller_issues_new_before_save, {:params => params, :issue => @issue})
     @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads]))
     if @issue.save
-      call_hook(:controller_issues_new_after_save, { :params => params, :issue => @issue})
+      call_hook(:controller_issues_new_after_save, {:params => params, :issue => @issue})
       respond_to do |format|
-        format.html {
+        format.html do
           render_attachment_warning_if_needed(@issue)
           flash[:notice] =
             l(:notice_issue_successful_create,
               :id => view_context.link_to("##{@issue.id}", issue_path(@issue),
                                           :title => @issue.subject))
           redirect_after_create
-        }
-        format.api  {
+        end
+        format.api do
           render :action => 'show', :status => :created,
           :location => issue_url(@issue)
-        }
+        end
       end
       return
     else
       respond_to do |format|
-        format.html {
+        format.html do
           if @issue.project.nil?
             render_error :status => 422
           else
             render :action => 'new'
           end
-        }
-        format.api  { render_validation_errors(@issue) }
+        end
+        format.api  {render_validation_errors(@issue)}
       end
     end
   end
@@ -201,7 +201,7 @@ end
     return unless update_issue_from_params
 
     respond_to do |format|
-      format.html { }
+      format.html {}
       format.js
     end
   end
@@ -230,17 +230,17 @@ end
         flash[:notice] = l(:notice_successful_update)
       end
       respond_to do |format|
-        format.html {
+        format.html do
           redirect_back_or_default(
             issue_path(@issue, previous_and_next_issue_ids_params)
           )
-        }
-        format.api  { render_api_ok }
+        end
+        format.api  {render_api_ok}
       end
     else
       respond_to do |format|
-        format.html { render :action => 'edit' }
-        format.api  { render_validation_errors(@issue) }
+        format.html {render :action => 'edit'}
+        format.api  {render_validation_errors(@issue)}
       end
     end
   end
@@ -299,7 +299,7 @@ end
     end
     target_projects ||= @projects
 
-    @trackers = target_projects.map {|p| Issue.allowed_target_trackers(p) }.reduce(:&)
+    @trackers = target_projects.map {|p| Issue.allowed_target_trackers(p)}.reduce(:&)
     if params[:issue]
       @target_tracker = @trackers.detect {|t| t.id.to_s == params[:issue][:tracker_id].to_s}
       if @target_tracker
@@ -403,7 +403,7 @@ end
       end
       journal = issue.init_journal(User.current, params[:notes])
       issue.safe_attributes = attributes
-      call_hook(:controller_issues_bulk_edit_before_save, { :params => params, :issue => issue })
+      call_hook(:controller_issues_bulk_edit_before_save, {:params => params, :issue => issue})
       if issue.save
         saved_issues << issue
       else
@@ -474,8 +474,8 @@ end
       end
     end
     respond_to do |format|
-      format.html { redirect_back_or_default _project_issues_path(@project) }
-      format.api  { render_api_ok }
+      format.html {redirect_back_or_default _project_issues_path(@project)}
+      format.api  {render_api_ok}
     end
   end
 
