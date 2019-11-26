@@ -1261,7 +1261,6 @@ class IssuesControllerTest < Redmine::ControllerTest
     )
     assert_response :success
     assert_equal ['4.00', '3.00', '0.00'], columns_values_in_list('spent_hours')[0..2]
-
     Project.find(3).disable_module!(:time_tracking)
     get(
       :index,
