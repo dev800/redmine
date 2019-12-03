@@ -456,6 +456,7 @@ div.square {
 form {display: inline;}
 input, select {vertical-align: middle; margin-top: 1px; margin-bottom: 1px; height: 24px; padding: 0 7px;}
 input, select, textarea { color: #333; background-color: #fff; border:1px solid #ccc; border-radius:3px; box-sizing: border-box;}
+input[type="checkbox"],input[type="radio"] {height: auto;}
 select {
   -webkit-appearance: none;
   -moz-appearance: none;

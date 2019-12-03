@@ -1,4 +1,4 @@
-@import url(../../../stylesheets/application.css?v=201911261410);
+@import url(../../../stylesheets/application.css?v=201911271043);
 
 body{ color:#303030; background:#e8eaec; }
 
@@ -793,7 +793,7 @@ div.wiki th {
 #main .wiki img {
   background-color: #fff;
   box-sizing: content-box;
-  max-width: 100%;
+  max-width: 61.8%;
 }
 
 #main .wiki img[align=right] {
@@ -1538,7 +1538,7 @@ tr.issue td.last_updated_by {
 #main .journal ul.details,
 #main ul.revision-info {
   color: #959595;
-  margin-bottom: 0.8em;
+  margin-bottom: 0.6em;
   padding-left: 2em;
   padding-right: 0.6em;
 }
@@ -1731,6 +1731,13 @@ div.issue .attributes {
 .tabular input,
 .tabular select {
   min-width: 140px;
+}
+
+#main .tabular input[type="radio"],
+#main .tabular input[type="checkbox"],
+.tabular input[type="radio"],
+.tabular input[type="checkbox"] {
+  min-width: auto;
 }
 
 #main a.user.active {
