@@ -1235,6 +1235,10 @@ $(document).on('ajax:success', 'form.with-indicator', function(event) {
   $('#ajax-indicator').hide();
 })
 
+$(document).ready(function() {
+  $(".wiki img").lightBox();
+})
+
 $(document).on('click', '#dialog-modal .close', function(event) {
   closeHTMLDialog();
 });

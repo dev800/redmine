@@ -1683,6 +1683,7 @@ module ApplicationHelper
   def javascript_heads
     tags = javascript_include_tag(
       'jquery-2.2.4-ui-1.11.0-ujs-5.2.3',
+      'jquery.lightbox',
       'tribute-3.7.3.min',
       'application',
       'responsive',
