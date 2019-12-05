@@ -1305,11 +1305,12 @@ a.wiki-anchor { display: none; margin-left: 6px; text-decoration: none; }
 a.wiki-anchor:hover { color: #aaa !important; text-decoration: none; }
 h1:hover a.wiki-anchor, h2:hover a.wiki-anchor, h3:hover a.wiki-anchor, h4:hover a.wiki-anchor, h5:hover a.wiki-anchor, h6:hover a.wiki-anchor { display: inline; color: #ddd; }
 
-div.wiki img {
+.wiki img {
   vertical-align: middle;
   max-width: 100%;
   box-shadow: 0px 0px 10px #888888;
   margin-bottom: 12px;
+  cursor: zoom-in;
 }
 
 /***** My page layout *****/
@@ -1873,4 +1874,34 @@ img {
   visibility: hidden;
   height: 0;
   clear: both;
+}
+
+.overflow-none {
+  overflow: hidden;
+}
+
+.image-popup-panel {
+  position: fixed;
+  text-align: center;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  z-index: 999999;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.58);
+}
+
+.image-popup-panel__inner {
+  display: block;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: auto;
+  padding: .4em 0;
+}
+
+.image-popup-panel__inner img {
+  cursor: zoom-out;
+  position: relative;
+  max-width: 100%;
 }

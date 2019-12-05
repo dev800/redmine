@@ -794,6 +794,7 @@ div.wiki th {
   background-color: #fff;
   box-sizing: content-box;
   max-width: 61.8%;
+  max-height: calc(100vh - 24px);
 }
 
 #main .wiki img[align=right] {

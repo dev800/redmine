@@ -8,27 +8,27 @@ $.ajaxPrefilter(function (s) {
   }
 });
 
-function checkAll(id, checked) {
-  $('#'+id).find('input[type=checkbox]:enabled').prop('checked', checked);
+function checkAll (id, checked) {
+  $('#' + id).find('input[type=checkbox]:enabled').prop('checked', checked);
 }
 
-function toggleCheckboxesBySelector(selector) {
+function toggleCheckboxesBySelector (selector) {
   var all_checked = true;
-  $(selector).each(function(index) {
+  $(selector).each(function (index) {
     if (!$(this).is(':checked')) { all_checked = false; }
   });
   $(selector).prop('checked', !all_checked).trigger('change');
 }
 
-function showAndScrollTo(id, focus) {
-  $('#'+id).show();
+function showAndScrollTo (id, focus) {
+  $('#' + id).show();
   if (focus !== null) {
-    $('#'+focus).focus();
+    $('#' + focus).focus();
   }
-  $('html, body').animate({scrollTop: $('#'+id).offset().top}, 100);
+  $('html, body').animate({ scrollTop: $('#' + id).offset().top }, 100);
 }
 
-function toggleRowGroup(el) {
+function toggleRowGroup (el) {
   var tr = $(el).parents('tr').first();
   var n = tr.next();
   tr.toggleClass('open');
@@ -39,9 +39,9 @@ function toggleRowGroup(el) {
   }
 }
 
-function collapseAllRowGroups(el) {
+function collapseAllRowGroups (el) {
   var tbody = $(el).parents('tbody').first();
-  tbody.children('tr').each(function(index) {
+  tbody.children('tr').each(function (index) {
     if ($(this).hasClass('group')) {
       $(this).removeClass('open');
       $(this).find('.expander').switchClass('icon-expended', 'icon-collapsed');
@@ -51,9 +51,9 @@ function collapseAllRowGroups(el) {
   });
 }
 
-function expandAllRowGroups(el) {
+function expandAllRowGroups (el) {
   var tbody = $(el).parents('tbody').first();
-  tbody.children('tr').each(function(index) {
+  tbody.children('tr').each(function (index) {
     if ($(this).hasClass('group')) {
       $(this).addClass('open');
       $(this).find('.expander').switchClass('icon-collapsed', 'icon-expended');
@@ -63,7 +63,7 @@ function expandAllRowGroups(el) {
   });
 }
 
-function toggleAllRowGroups(el) {
+function toggleAllRowGroups (el) {
   var tr = $(el).parents('tr').first();
   if (tr.hasClass('open')) {
     collapseAllRowGroups(el);
@@ -72,74 +72,74 @@ function toggleAllRowGroups(el) {
   }
 }
 
-function toggleFieldset(el) {
+function toggleFieldset (el) {
   var fieldset = $(el).parents('fieldset').first();
   fieldset.toggleClass('collapsed');
   fieldset.children('legend').toggleClass('icon-expended icon-collapsed');
   fieldset.children('div').toggle();
 }
 
-function hideFieldset(el) {
+function hideFieldset (el) {
   var fieldset = $(el).parents('fieldset').first();
   fieldset.toggleClass('collapsed');
   fieldset.children('div').hide();
 }
 
 // columns selection
-function moveOptions(theSelFrom, theSelTo) {
+function moveOptions (theSelFrom, theSelTo) {
   $(theSelFrom).find('option:selected').detach().prop("selected", false).appendTo($(theSelTo));
 }
 
-function moveOptionUp(theSel) {
-  $(theSel).find('option:selected').each(function(){
+function moveOptionUp (theSel) {
+  $(theSel).find('option:selected').each(function () {
     $(this).prev(':not(:selected)').detach().insertAfter($(this));
   });
 }
 
-function moveOptionTop(theSel) {
+function moveOptionTop (theSel) {
   $(theSel).find('option:selected').detach().prependTo($(theSel));
 }
 
-function moveOptionDown(theSel) {
-  $($(theSel).find('option:selected').get().reverse()).each(function(){
+function moveOptionDown (theSel) {
+  $($(theSel).find('option:selected').get().reverse()).each(function () {
     $(this).next(':not(:selected)').detach().insertBefore($(this));
   });
 }
 
-function moveOptionBottom(theSel) {
+function moveOptionBottom (theSel) {
   $(theSel).find('option:selected').detach().appendTo($(theSel));
 }
 
-function initFilters() {
-  $('#add_filter_select').change(function() {
+function initFilters () {
+  $('#add_filter_select').change(function () {
     addFilter($(this).val(), '', []);
   });
-  $('#filters-table td.field input[type=checkbox]').each(function() {
+  $('#filters-table td.field input[type=checkbox]').each(function () {
     toggleFilter($(this).val());
   });
-  $('#filters-table').on('click', 'td.field input[type=checkbox]', function() {
+  $('#filters-table').on('click', 'td.field input[type=checkbox]', function () {
     toggleFilter($(this).val());
   });
-  $('#filters-table').on('click', '.toggle-multiselect', function() {
+  $('#filters-table').on('click', '.toggle-multiselect', function () {
     toggleMultiSelect($(this).siblings('select'))
     $(this).toggleClass('icon-toggle-plus icon-toggle-minus')
   });
-  $('#filters-table').on('keypress', 'input[type=text]', function(e) {
+  $('#filters-table').on('keypress', 'input[type=text]', function (e) {
     if (e.keyCode == 13) $(this).closest('form').submit();
   });
 }
 
-function addFilter(field, operator, values) {
+function addFilter (field, operator, values) {
   var fieldId = field.replace('.', '_');
-  var tr = $('#tr_'+fieldId);
+  var tr = $('#tr_' + fieldId);
 
   var filterOptions = availableFilters[field];
   if (!filterOptions) return;
 
   if (filterOptions['remote'] && filterOptions['values'] == null) {
-    $.getJSON(filtersUrl, {'name': field}).done(function(data) {
+    $.getJSON(filtersUrl, { 'name': field }).done(function (data) {
       filterOptions['values'] = data;
-      addFilter(field, operator, values) ;
+      addFilter(field, operator, values);
     });
     return;
   }
@@ -149,16 +149,16 @@ function addFilter(field, operator, values) {
   } else {
     buildFilterRow(field, operator, values);
   }
-  $('#cb_'+fieldId).prop('checked', true);
+  $('#cb_' + fieldId).prop('checked', true);
   toggleFilter(field);
-  $('#add_filter_select').val('').find('option').each(function() {
+  $('#add_filter_select').val('').find('option').each(function () {
     if ($(this).attr('value') == field) {
       $(this).attr('disabled', true);
     }
   });
 }
 
-function buildFilterRow(field, operator, values) {
+function buildFilterRow (field, operator, values) {
   var fieldId = field.replace('.', '_');
   var filterTable = $("#filters-table");
   var filterOptions = availableFilters[field];
@@ -167,9 +167,9 @@ function buildFilterRow(field, operator, values) {
   var filterValues = filterOptions['values'];
   var i, select;
 
-  var tr = $('<tr class="filter">').attr('id', 'tr_'+fieldId).html(
-    '<td class="field"><input checked="checked" id="cb_'+fieldId+'" name="f[]" value="'+field+'" type="checkbox"><label for="cb_'+fieldId+'"> '+filterOptions['name']+'</label></td>' +
-    '<td class="operator"><select id="operators_'+fieldId+'" name="op['+field+']"></td>' +
+  var tr = $('<tr class="filter">').attr('id', 'tr_' + fieldId).html(
+    '<td class="field"><input checked="checked" id="cb_' + fieldId + '" name="f[]" value="' + field + '" type="checkbox"><label for="cb_' + fieldId + '"> ' + filterOptions['name'] + '</label></td>' +
+    '<td class="operator"><select id="operators_' + fieldId + '" name="op[' + field + ']"></td>' +
     '<td class="values"></td>'
   );
   filterTable.append(tr);
@@ -180,84 +180,84 @@ function buildFilterRow(field, operator, values) {
     if (operators[i] == operator) { option.prop('selected', true); }
     select.append(option);
   }
-  select.change(function(){ toggleOperator(field); });
+  select.change(function () { toggleOperator(field); });
 
   switch (filterOptions['type']) {
-  case "list":
-  case "list_optional":
-  case "list_status":
-  case "list_subprojects":
-    tr.find('td.values').append(
-      '<span style="display:none;"><select class="value" id="values_'+fieldId+'_1" name="v['+field+'][]"></select>' +
-      ' <span class="toggle-multiselect icon-only icon-toggle-plus">&nbsp;</span></span>'
-    );
-    select = tr.find('td.values select');
-    if (values.length > 1) { select.attr('multiple', true); }
-    for (i = 0; i < filterValues.length; i++) {
-      var filterValue = filterValues[i];
-      var option = $('<option>');
-      if ($.isArray(filterValue)) {
-        option.val(filterValue[1]).text(filterValue[0]);
-        if ($.inArray(filterValue[1], values) > -1) {option.prop('selected', true);}
-        if (filterValue.length == 3) {
-          var optgroup = select.find('optgroup').filter(function(){return $(this).attr('label') == filterValue[2]});
-          if (!optgroup.length) {optgroup = $('<optgroup>').attr('label', filterValue[2]);}
-          option = optgroup.append(option);
+    case "list":
+    case "list_optional":
+    case "list_status":
+    case "list_subprojects":
+      tr.find('td.values').append(
+        '<span style="display:none;"><select class="value" id="values_' + fieldId + '_1" name="v[' + field + '][]"></select>' +
+        ' <span class="toggle-multiselect icon-only icon-toggle-plus">&nbsp;</span></span>'
+      );
+      select = tr.find('td.values select');
+      if (values.length > 1) { select.attr('multiple', true); }
+      for (i = 0; i < filterValues.length; i++) {
+        var filterValue = filterValues[i];
+        var option = $('<option>');
+        if ($.isArray(filterValue)) {
+          option.val(filterValue[1]).text(filterValue[0]);
+          if ($.inArray(filterValue[1], values) > -1) { option.prop('selected', true); }
+          if (filterValue.length == 3) {
+            var optgroup = select.find('optgroup').filter(function () { return $(this).attr('label') == filterValue[2] });
+            if (!optgroup.length) { optgroup = $('<optgroup>').attr('label', filterValue[2]); }
+            option = optgroup.append(option);
+          }
+        } else {
+          option.val(filterValue).text(filterValue);
+          if ($.inArray(filterValue, values) > -1) { option.prop('selected', true); }
         }
-      } else {
-        option.val(filterValue).text(filterValue);
-        if ($.inArray(filterValue, values) > -1) {option.prop('selected', true);}
+        select.append(option);
       }
-      select.append(option);
-    }
-    break;
-  case "date":
-  case "date_past":
-    tr.find('td.values').append(
-      '<span style="display:none;"><input type="date" name="v['+field+'][]" id="values_'+fieldId+'_1" size="10" class="value date_value" /></span>' +
-      ' <span style="display:none;"><input type="date" name="v['+field+'][]" id="values_'+fieldId+'_2" size="10" class="value date_value" /></span>' +
-      ' <span style="display:none;"><input type="text" name="v['+field+'][]" id="values_'+fieldId+'" size="3" class="value" /> '+labelDayPlural+'</span>'
-    );
-    $('#values_'+fieldId+'_1').val(values[0]).datepickerFallback(datepickerOptions);
-    $('#values_'+fieldId+'_2').val(values[1]).datepickerFallback(datepickerOptions);
-    $('#values_'+fieldId).val(values[0]);
-    break;
-  case "string":
-  case "text":
-    tr.find('td.values').append(
-      '<span style="display:none;"><input type="text" name="v['+field+'][]" id="values_'+fieldId+'" size="30" class="value" /></span>'
-    );
-    $('#values_'+fieldId).val(values[0]);
-    break;
-  case "relation":
-    tr.find('td.values').append(
-      '<span style="display:none;"><input type="text" name="v['+field+'][]" id="values_'+fieldId+'" size="6" class="value" /></span>' +
-      '<span style="display:none;"><select class="value" name="v['+field+'][]" id="values_'+fieldId+'_1"></select></span>'
-    );
-    $('#values_'+fieldId).val(values[0]);
-    select = tr.find('td.values select');
-    for (i = 0; i < filterValues.length; i++) {
-      var filterValue = filterValues[i];
-      var option = $('<option>');
-      option.val(filterValue[1]).text(filterValue[0]);
-      if (values[0] == filterValue[1]) { option.prop('selected', true); }
-      select.append(option);
-    }
-    break;
-  case "integer":
-  case "float":
-  case "tree":
-    tr.find('td.values').append(
-      '<span style="display:none;"><input type="text" name="v['+field+'][]" id="values_'+fieldId+'_1" size="14" class="value" /></span>' +
-      ' <span style="display:none;"><input type="text" name="v['+field+'][]" id="values_'+fieldId+'_2" size="14" class="value" /></span>'
-    );
-    $('#values_'+fieldId+'_1').val(values[0]);
-    $('#values_'+fieldId+'_2').val(values[1]);
-    break;
+      break;
+    case "date":
+    case "date_past":
+      tr.find('td.values').append(
+        '<span style="display:none;"><input type="date" name="v[' + field + '][]" id="values_' + fieldId + '_1" size="10" class="value date_value" /></span>' +
+        ' <span style="display:none;"><input type="date" name="v[' + field + '][]" id="values_' + fieldId + '_2" size="10" class="value date_value" /></span>' +
+        ' <span style="display:none;"><input type="text" name="v[' + field + '][]" id="values_' + fieldId + '" size="3" class="value" /> ' + labelDayPlural + '</span>'
+      );
+      $('#values_' + fieldId + '_1').val(values[0]).datepickerFallback(datepickerOptions);
+      $('#values_' + fieldId + '_2').val(values[1]).datepickerFallback(datepickerOptions);
+      $('#values_' + fieldId).val(values[0]);
+      break;
+    case "string":
+    case "text":
+      tr.find('td.values').append(
+        '<span style="display:none;"><input type="text" name="v[' + field + '][]" id="values_' + fieldId + '" size="30" class="value" /></span>'
+      );
+      $('#values_' + fieldId).val(values[0]);
+      break;
+    case "relation":
+      tr.find('td.values').append(
+        '<span style="display:none;"><input type="text" name="v[' + field + '][]" id="values_' + fieldId + '" size="6" class="value" /></span>' +
+        '<span style="display:none;"><select class="value" name="v[' + field + '][]" id="values_' + fieldId + '_1"></select></span>'
+      );
+      $('#values_' + fieldId).val(values[0]);
+      select = tr.find('td.values select');
+      for (i = 0; i < filterValues.length; i++) {
+        var filterValue = filterValues[i];
+        var option = $('<option>');
+        option.val(filterValue[1]).text(filterValue[0]);
+        if (values[0] == filterValue[1]) { option.prop('selected', true); }
+        select.append(option);
+      }
+      break;
+    case "integer":
+    case "float":
+    case "tree":
+      tr.find('td.values').append(
+        '<span style="display:none;"><input type="text" name="v[' + field + '][]" id="values_' + fieldId + '_1" size="14" class="value" /></span>' +
+        ' <span style="display:none;"><input type="text" name="v[' + field + '][]" id="values_' + fieldId + '_2" size="14" class="value" /></span>'
+      );
+      $('#values_' + fieldId + '_1').val(values[0]);
+      $('#values_' + fieldId + '_2').val(values[1]);
+      break;
   }
 }
 
-function toggleFilter(field) {
+function toggleFilter (field) {
   var fieldId = field.replace('.', '_');
   if ($('#cb_' + fieldId).is(':checked')) {
     $("#operators_" + fieldId).show().removeAttr('disabled');
@@ -268,9 +268,9 @@ function toggleFilter(field) {
   }
 }
 
-function enableValues(field, indexes) {
+function enableValues (field, indexes) {
   var fieldId = field.replace('.', '_');
-  $('#tr_'+fieldId+' td.values .value').each(function(index) {
+  $('#tr_' + fieldId + ' td.values .value').each(function (index) {
     if ($.inArray(index, indexes) >= 0) {
       $(this).removeAttr('disabled');
       $(this).parents('span').first().show();
@@ -288,7 +288,7 @@ function enableValues(field, indexes) {
   });
 }
 
-function toggleOperator(field) {
+function toggleOperator (field) {
   var fieldId = field.replace('.', '_');
   var operator = $("#operators_" + fieldId);
   switch (operator.val()) {
@@ -312,7 +312,7 @@ function toggleOperator(field) {
       enableValues(field, []);
       break;
     case "><":
-      enableValues(field, [0,1]);
+      enableValues(field, [0, 1]);
       break;
     case "<t+":
     case ">t+":
@@ -335,7 +335,7 @@ function toggleOperator(field) {
   }
 }
 
-function toggleMultiSelect(el) {
+function toggleMultiSelect (el) {
   if (el.attr('multiple')) {
     el.removeAttr('multiple');
     el.attr('size', 1);
@@ -1235,8 +1235,40 @@ $(document).on('ajax:success', 'form.with-indicator', function(event) {
   $('#ajax-indicator').hide();
 })
 
-$(document).ready(function() {
-  $(".wiki img").lightBox();
+function imagePopup(image) {
+  $("body").addClass("overflow-none");
+  var $popupPanel = $(".image-popup-panel");
+
+  if ($popupPanel.length === 0) {
+    $("body").append('<div class="image-popup-panel"></div>');
+    $popupPanel = $(".image-popup-panel");
+  }
+
+  $popupPanel.html('<div class="image-popup-panel__inner"><img class="image-popup-panel__img" src="' + image.src + '"/></div>');
+
+  var $image = $popupPanel.find(".image-popup-panel__img");
+
+  $image.load(function() {
+    var $this = $(this);
+    var height = $this.get(0).height;
+    var padding = 12;
+    var windowHeight = $(window).height();
+
+    if (height + padding * 12 > windowHeight) {
+      $this.css("top", padding + "px").css("margin-bottom", padding + "px");
+    } else {
+      $this.css("top", (windowHeight - height) / 2 + "px");
+    }
+  })
+}
+
+$(document).on("click", ".image-popup-panel", function() {
+  $(this).remove();
+  $("body").removeClass("overflow-none");
+})
+
+$(document).on("click", ".wiki img", function() {
+  imagePopup({ src: $(this).attr("src") });
 })
 
 $(document).on('click', '#dialog-modal .close', function(event) {
