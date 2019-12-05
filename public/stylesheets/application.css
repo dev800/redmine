@@ -1897,7 +1897,7 @@ img {
   height: 100%;
   box-sizing: border-box;
   overflow: auto;
-  padding: .4em 0;
+  padding: .4em;
 }
 
 .image-popup-panel__inner img {

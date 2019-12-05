@@ -1254,9 +1254,7 @@ function imagePopup(image) {
     var padding = 12;
     var windowHeight = $(window).height();
 
-    if (height + padding * 12 > windowHeight) {
-      $this.css("top", padding + "px").css("margin-bottom", padding + "px");
-    } else {
+    if (height + padding * 2 <= windowHeight) {
       $this.css("top", (windowHeight - height) / 2 + "px");
     }
   })
