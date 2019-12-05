@@ -219,7 +219,7 @@ class AttachmentsControllerTest < Redmine::ControllerTest
     get(:show, :params => {:id => a.id})
     assert_response :success
     assert_equal 'text/html', @response.content_type
-    assert_select 'div.wiki', :html => "<h1>Header 1</h1>\n\n<h2>Header 2</h2>\n\n<h3>Header 3</h3>"
+    assert_select 'div.wiki', :html => "<h1 id=\"header-1\">Header 1</h1>\n\n<h2 id=\"header-2\">Header 2</h2>\n\n<h3 id=\"header-3\">Header 3</h3>"
   end
 
   def test_show_text_file_fromated_textile
