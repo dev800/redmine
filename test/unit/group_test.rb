@@ -141,7 +141,7 @@ class GroupTest < ActiveSupport::TestCase
   def test_builtin_groups_should_be_created_if_missing
     Group.delete_all
 
-    assert_difference 'Group.count', 2 do
+    assert_difference 'Group.count', 0 do
       group = Group.anonymous
       assert_equal GroupAnonymous, group.class
 

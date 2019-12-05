@@ -98,11 +98,11 @@ class CustomFieldsHelperTest < Redmine::HelperTest
 
   def test_select_type_radio_buttons
     result = select_type_radio_buttons('UserCustomField')
-    assert_select_in result, 'input[type="radio"]', :count => 10
+    assert_select_in result, 'input[type="radio"]', :count => 11
     assert_select_in result, 'input#type_UserCustomField[checked=?]', 'checked'
 
     result = select_type_radio_buttons(nil)
-    assert_select_in result, 'input[type="radio"]', :count => 10
+    assert_select_in result, 'input[type="radio"]', :count => 11
     assert_select_in result, 'input#type_IssueCustomField[checked=?]', 'checked'
   end
 end

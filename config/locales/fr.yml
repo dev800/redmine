@@ -1183,17 +1183,31 @@ fr:
   default_role_manager: Manager
   default_role_developer: Développeur
   default_role_reporter: Rapporteur
+
   default_tracker_bug: Anomalie
   default_tracker_feature: Evolution
   default_tracker_support: Assistance
+
   default_issue_status_new: Nouveau
   default_issue_status_solving: En cours
   default_issue_status_resolved: Résolu
   default_issue_status_feedback: Commentaire
   default_issue_status_closed: Fermé
   default_issue_status_rejected: Rejeté
+  default_issue_status_requirement: Demande
+  default_issue_status_pending: En suspens
+  default_issue_status_unsolved: Non résolu
+  default_issue_status_alpha: Alpha
+  default_issue_status_bate: Bert.
+  default_issue_status_qualified: éligible
+  default_issue_status_released: Publication
+  default_issue_status_finished: C'est fait.
+  default_issue_status_cancel: Annuler
+
   default_doc_category_user: Documentation utilisateur
   default_doc_category_tech: Documentation technique
+  default_doc_category_requirement: Documentation demande
+
   default_priority_low: Bas
   default_priority_normal: Normal
   default_priority_high: Haut

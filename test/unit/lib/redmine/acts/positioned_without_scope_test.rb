@@ -42,7 +42,7 @@ class Redmine::Acts::PositionedWithoutScopeTest < ActiveSupport::TestCase
     t = Tracker.generate!(flag_value: "TrackerTMP")
     t.destroy
 
-    assert_equal [1, 2, 3, 4], Tracker.order(:id).pluck(:position)
+    assert_equal [1, 2, 3], Tracker.order(:id).pluck(:position)
   end
 
   def test_update_should_update_positions

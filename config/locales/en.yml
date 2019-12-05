@@ -1243,24 +1243,50 @@ en:
   default_role_manager: Manager
   default_role_developer: Developer
   default_role_reporter: Reporter
+
   default_tracker_bug: Bug
   default_tracker_feature: Feature
   default_tracker_support: Support
+  default_tracker_task: Task
+  default_tracker_checklist: Checklist
+  default_tracker_cases: Case
+  default_tracker_release: Release
+
   default_issue_status_new: New
   default_issue_status_solving: In Progress
   default_issue_status_resolved: Resolved
   default_issue_status_feedback: Feedback
   default_issue_status_closed: Closed
+  default_issue_status_requirement: Requirement
   default_issue_status_rejected: Rejected
+  default_issue_status_pending: Pending
+  default_issue_status_unsolved: Unsolved
+  default_issue_status_alpha: Alpha
+  default_issue_status_bate: Bate
+  default_issue_status_qualified: Qualified
+  default_issue_status_released: Released
+  default_issue_status_finished: Finished
+  default_issue_status_cancel: Cancel
+
   default_doc_category_user: User documentation
   default_doc_category_tech: Technical documentation
+  default_doc_category_requirement: Equirement documentation
+
   default_priority_low: Low
   default_priority_normal: Normal
   default_priority_high: High
   default_priority_urgent: Urgent
   default_priority_immediate: Immediate
+
   default_activity_design: Design
   default_activity_development: Development
+  default_activity_requirement: Requirement
+  default_activity_analysis: Analysis
+  default_activity_test: Test
+  default_activity_replease: Replease
+  default_activity_report: Report
+  default_activity_study: Study
+  default_activity_meeting: Meeting
 
   enumeration_issue_priorities: Issue priorities
   enumeration_doc_categories: Document categories

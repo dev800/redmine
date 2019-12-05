@@ -70,7 +70,8 @@ class AdminControllerTest < Redmine::ControllerTest
       }
     assert_response :redirect
     assert_nil flash[:error]
-    assert IssueStatus.find_by_name('Nouveau')
+    assert_nil IssueStatus.find_by_name('Nouveau')
+    assert IssueStatus.find_by_name('Demande')
   end
 
   def test_load_default_configuration_data_should_rescue_error

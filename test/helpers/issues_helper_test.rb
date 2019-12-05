@@ -235,7 +235,7 @@ class IssuesHelperTest < Redmine::HelperTest
                                :value    => 1)
     assert_equal "Precedes Bug #1: Cannot print recipes added", show_detail(detail, true)
     str = link_to("Bug #1: Cannot print recipes", "/issues/1", :class => Issue.find(1).css_classes)
-    assert_equal "<strong>Precedes</strong> <i>#{str}: Cannot print recipes</i> added",
+    assert_equal "<strong>Precedes</strong> <i>#{str}</i> added",
                  show_detail(detail, false)
   end
 
@@ -267,7 +267,7 @@ class IssuesHelperTest < Redmine::HelperTest
     str = link_to("Bug #1: Cannot print recipes",
                   "/issues/1",
                   :class => Issue.find(1).css_classes)
-    assert_equal "<strong>Precedes</strong> deleted (<i>#{str}: Cannot print recipes</i>)",
+    assert_equal "<strong>Precedes</strong> deleted (<i>#{str}</i>)",
                  show_detail(detail, false)
   end
 

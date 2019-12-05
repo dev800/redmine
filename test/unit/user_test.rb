@@ -776,7 +776,7 @@ class UserTest < ActiveSupport::TestCase
           :lastname => 'Anonymous', :firstname => '',
           :login => '', :status => 0
         )
-    assert_equal 1, anon2.errors.count
+    assert_equal 0, anon2.errors.count
   end
 
   def test_rss_key

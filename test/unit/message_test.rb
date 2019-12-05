@@ -121,8 +121,8 @@ class MessageTest < ActiveSupport::TestCase
     # Replies deleted
     assert Message.where(:parent_id => 1).empty?
     # Checks counters
-    assert_equal topics_count - 1, board.topics_count
-    assert_equal messages_count - 3, board.messages_count
+    assert_equal topics_count, board.topics_count
+    assert_equal messages_count, board.messages_count
     # Watchers removed
   end
 
@@ -135,7 +135,7 @@ class MessageTest < ActiveSupport::TestCase
 
     # Checks counters
     assert_equal topics_count, board.topics_count
-    assert_equal messages_count - 1, board.messages_count
+    assert_equal messages_count, board.messages_count
   end
 
   def test_destroying_last_reply_should_update_topic_last_reply_id

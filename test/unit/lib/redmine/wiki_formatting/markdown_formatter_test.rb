@@ -97,7 +97,7 @@ class Redmine::WikiFormatting::MarkdownFormatterTest < ActionView::TestCase
       * One
       * Two
     STR
-    assert_equal "<p>This is a list:</p>\n\n<ul>\n<li>One</li>\n<li>Two</li>\n</ul>", @formatter.new(text).to_html.strip
+    assert_equal "<p>This is a list:</p><ul><li>One</li><li>Two</li></ul>".gsub("\n", ""), @formatter.new(text).to_html.strip.gsub("\n", "")
   end
 
   def test_footnotes

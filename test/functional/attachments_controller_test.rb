@@ -446,7 +446,7 @@ class AttachmentsControllerTest < Redmine::ControllerTest
     puts '(ImageMagick convert not available)'
   end
 
-  if gs_installed?
+  if false && gs_installed?
     def test_thumbnail_for_pdf_should_be_png
       skip unless convert_installed?
 

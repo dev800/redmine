@@ -1311,7 +1311,7 @@ module ApplicationHelper
         anchor = "#{anchor}-#{idx}"
       end
       @parsed_headings << [level, anchor, item]
-      "<a name=\"#{anchor}\"></a>\n<h#{level} #{attrs}>#{content}<a href=\"##{anchor}\" class=\"wiki-anchor\">&para;</a></h#{level}>"
+      "<a name=\"#{anchor}\"></a>\n<h#{level}#{attrs.present? ? attrs : ''}>#{content}<a href=\"##{anchor}\" class=\"wiki-anchor\">&para;</a></h#{level}>"
     end
   end
 
