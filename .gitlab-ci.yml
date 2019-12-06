@@ -27,7 +27,7 @@ cache:
 
 .prepare-for-test-mysql:
   before_script:
-    - gem install bundler --no-ri --no-rdoc
+    - gem install bundler
     - cp config/database.yml.example config/database.yml
     - 'sed -i -e "s/host:.*$/host: mysql/g" config/database.yml'
     - 'sed -i -e "s/password:.*$/password: root/g" config/database.yml'
@@ -36,7 +36,7 @@ cache:
 
 .prepare-for-test-pg:
   before_script:
-    - gem install bundler  --no-ri --no-rdoc
+    - gem install bundler
     - cp config/database.yml.example config/database.yml
     - 'sed -i -e "s/mysql2$/postgresql/g" config/database.yml'
     - 'sed -i -e "s/host:.*$/host: postgres/g" config/database.yml'
@@ -46,7 +46,7 @@ cache:
     - rake db:drop db:create db:migrate
 
 before_script:
-  - gem install bundler  --no-ri --no-rdoc
+  - gem install bundler
   - bundle install -j $(nproc) --path vendor --without development postgres minimagick
 
 # rubocop:
