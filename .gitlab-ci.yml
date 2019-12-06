@@ -49,17 +49,17 @@ before_script:
   - gem install bundler  --no-ri --no-rdoc
   - bundle install -j $(nproc) --path vendor --without development postgres minimagick
 
-rubocop:
-  stage: test
-  script:
-    - bundle exec rubocop --parallel
+# rubocop:
+#   stage: test
+#   script:
+#     - bundle exec rubocop --parallel
 
-test mysql:
-  extends: .prepare-for-test-mysql
-  <<: *use-mysql
-  stage: test
-  script:
-    - bundle exec rake test
+# test mysql:
+#   extends: .prepare-for-test-mysql
+#   <<: *use-mysql
+#   stage: test
+#   script:
+#     - bundle exec rake test
 
 test pg:
   extends: .prepare-for-test-pg
