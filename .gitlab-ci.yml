@@ -32,7 +32,7 @@ cache:
     - 'sed -i -e "s/host:.*$/host: mysql/g" config/database.yml'
     - 'sed -i -e "s/password:.*$/password: root/g" config/database.yml'
     - bundle install -j $(nproc) --path vendor --without development postgres minimagick
-    - rake db:drop db:create db:migrate
+    - bundle exec rake db:drop db:create db:migrate
 
 .prepare-for-test-pg:
   before_script:
@@ -43,7 +43,7 @@ cache:
     - 'sed -i -e "s/password:.*$/password: root/g" config/database.yml'
     - 'sed -i -e "32,33d" config/database.yml'
     - bundle install -j $(nproc) --path vendor --without development minimagick mysql2
-    - rake db:drop db:create db:migrate
+    - bundle exec rake db:drop db:create db:migrate
 
 before_script:
   - gem install bundler
