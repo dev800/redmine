@@ -144,7 +144,8 @@ end %>
 <%= render :partial => 'relations' %>
 </div>
 <% end %>
-
+<hr />
+<%= render :partial => "participants/participants", :locals => { :partable => @issue } %>
 </div>
 
 <%= render partial: 'action_menu_edit' if User.current.wants_comments_in_reverse_order? %>
@@ -164,12 +165,14 @@ end %>
 
 <% content_for :sidebar do %>
   <%= render :partial => 'issues/sidebar' %>
-
+  <div></div>
+  <% if true %>
   <% if User.current.allowed_to?(:add_issue_watchers, @project) ||
     (@issue.watchers.present? && User.current.allowed_to?(:view_issue_watchers, @project)) %>
     <div id="watchers">
       <%= render :partial => 'watchers/watchers', :locals => {:watched => @issue} %>
     </div>
+  <% end %>
   <% end %>
 <% end %>
 

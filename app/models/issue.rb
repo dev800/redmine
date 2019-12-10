@@ -34,6 +34,7 @@ class Issue < ActiveRecord::Base
   belongs_to :category, :class_name => 'IssueCategory'
 
   has_many :journals, :as => :journalized, :dependent => :destroy, :inverse_of => :journalized
+  has_many :participants, :as => :partable, :dependent => :destroy, :inverse_of => :partable
   has_many :checklists, :dependent => :destroy
   has_many :time_entries, :dependent => :destroy
   has_and_belongs_to_many :changesets, lambda {order("#{Changeset.table_name}.committed_on ASC, #{Changeset.table_name}.id ASC")}
@@ -1639,6 +1640,7 @@ class Issue < ActiveRecord::Base
   def after_project_change
     # Update project_id on related time entries
     TimeEntry.where({:issue_id => id}).update_all(["project_id = ?", project_id])
+    Checklist.where({:issue_id => id}).update_all(["project_id = ?", project_id])
 
     # Delete issue relations
     unless Setting.cross_project_issue_relations?

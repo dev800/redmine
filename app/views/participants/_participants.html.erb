@@ -1,0 +1,20 @@
+<% participants = partable.participants.includes([:user]) %>
+<div id="participants" class="participants-container" partable-type="<%= partable.class.to_s %>" partable-id="<%= partable.id %>">
+  <div class="contextual">
+    <%= link_to l(:button_edit), "javascript:;", "remote-href" => participant_edit_path({
+      :object_type => partable.class.to_s,
+      :object_id => partable.id
+    }) %>
+  </div>
+  <p>
+    <strong><%=l(:label_participants)%></strong>
+    <span class="participants-listing">
+      <% participants.each do |participant| %>
+        <span class="participant">
+          <%= link_to_user(participant.user) %>
+          <span class="participant-roles">[<%= participant.roles_description %>]</span>
+        </span>
+      <% end %>
+    </span>
+  </p>
+</div>

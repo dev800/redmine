@@ -1,0 +1,25 @@
+<a href="javascript:;" class="close" style="display: none;"><%= l(:button_close) %></a>
+<h3 class="title"><%= l(:field_participants_edit) %></h3>
+<div class="content-wrapper participants-container" partable-type="<%= partable.class.to_s %>" partable-id="<%= partable.id %>">
+  <div id="content" class="content">
+    <div class="field-row">
+      <%= text_field_tag 'user_search', nil,
+        :placeholder => l(:label_users_search),
+        :class => "autocomplete",
+        :"object-type" => partable.class.to_s,
+        :"object-id" => partable.id,
+        :"data-url" => participant_complete_path({
+          :object_type => partable.class.to_s,
+          :object_id => partable.id
+        })
+      %>
+    </div>
+    <div class="participants-editing autoscroll">
+      <%= render :partial => "participants/complete", :locals => {
+        :partable => @partable,
+        :participants => @participants,
+        :users => @users
+      } %>
+    </div>
+  </div>
+</div>

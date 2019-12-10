@@ -18,6 +18,7 @@ class Checklist < ActiveRecord::Base
 
   has_many :time_entries, :dependent => :destroy
   has_many :journals, class_name: "Journal", :as => :journalized, :dependent => :destroy, :inverse_of => :journalized
+  has_many :participants, :as => :partable, :dependent => :destroy, :inverse_of => :partable
   has_and_belongs_to_many :changesets, lambda {order("#{Changeset.table_name}.committed_on ASC, #{Changeset.table_name}.id ASC")}
 
   acts_as_paranoid :column => 'deleted_at', :column_type => 'time'

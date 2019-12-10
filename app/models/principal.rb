@@ -82,7 +82,7 @@ class Principal < ActiveRecord::Base
         sql << ' OR ('
         sql << tokens.map.with_index do |token, index|
           params.merge!(:"token_#{index}" => token)
-          "(LOWER(#{table_name}.firstname) LIKE LOWER(:token_#{index}) OR LOWER(#{table_name}.lastname) LIKE LOWER(:token_#{index}))"
+          "(LOWER(#{table_name}.keywords) LIKE LOWER(:token_#{index}) OR LOWER(#{table_name}.firstname) LIKE LOWER(:token_#{index}) OR LOWER(#{table_name}.lastname) LIKE LOWER(:token_#{index}))"
         end.join(' AND ')
         sql << ')'
       end

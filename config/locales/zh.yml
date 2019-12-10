@@ -696,6 +696,13 @@ zh:
   label_options: 选项
   label_copy_workflow_from: 从以下选项复制工作流程
   label_permissions_report: 权限报表
+  label_users_search: 用户搜索
+  label_participants: 参与者
+  label_participant_type_leader: 负责人
+  label_participant_type_requester: 需求方
+  label_participant_type_resolver: 执行者
+  label_participant_type_tester: 测试员
+  label_participant_type_tracker: 跟踪者
   label_watched_issues: 关注的问题
   label_related_issues: 相关的问题
   label_applied_status: 应用后的状态
@@ -966,6 +973,7 @@ zh:
   enumeration_activities: 活动（时间跟踪）
   enumeration_system_activity: 系统活动
 
+  field_participants_edit: 设置参与者
   field_warn_on_leaving_unsaved: 当离开未保存内容的页面时，提示我
   text_warn_on_leaving_unsaved: 若离开当前页面，则该页面内未保存的内容将丢失。
   label_my_queries: 我的自定义查询
@@ -1341,4 +1349,6 @@ zh:
   field_checklist_edit: 编辑检查项
   label_checklists: 检查列表
   label_checklists_empty: 检查列表为空
+  label_search_users_empty: 没有匹配的用户
+  label_participants_empty: 暂未设置参与者
   wrong_rgb_value: 错误的颜色值

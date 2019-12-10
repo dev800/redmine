@@ -63,7 +63,6 @@
       <%= call_hook(:view_checklists_show_details_bottom, :checklist => @checklist) %>
     </div>
 
-
     <% if checklist.description? %>
       <hr />
       <div class="description">
@@ -81,8 +80,9 @@
     <% end %>
 
     <%= render_full_width_custom_fields_rows(checklist) %>
-
     <%= call_hook(:view_checklists_show_description_bottom, :checklist => checklist) %>
+    <hr />
+    <%= render :partial => "participants/participants", :locals => { :partable => checklist } %>
   </div>
 
   <div id="history">

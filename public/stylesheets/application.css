@@ -322,8 +322,6 @@ tr.version.closed, tr.version.closed a { color: #999; }
 tr.version td.name { padding-left: 20px; }
 tr.version td.date, tr.version td.status, tr.version td.sharing { text-align: center; white-space:nowrap; }
 
-tr.member td.icon-user, #principals_for_new_member .icon-user {background:transparent;}
-
 tr.user td {width:13%;white-space: nowrap;}
 td.username, td.firstname, td.lastname, td.email {text-align:left !important;}
 tr.user td.email { width:18%; }
@@ -563,6 +561,7 @@ div#issue-changesets p { margin-top: 0; margin-bottom: 1em;}
 div.journal .contextual {margin-top: 0;}
 div.journal.private-notes .wiki {border-left:2px solid #d22; padding-left:4px; margin-left:-6px;}
 div.journal ul.details, ul.revision-info {color:#959595; margin-bottom: 1.5em;}
+#main div.journal ul.details + .wiki, #main ul.revision-info + .wiki {padding-top: 0}
 div.journal ul.details a, ul.revision-info a {color:#70A7CD;}
 div.journal ul.details a:hover, ul.revision-info a:hover {color:#D14848;}
 body.avatars-on div.journal {padding-left:32px;}
@@ -691,7 +690,7 @@ ul.properties li span {font-style:italic;}
 .total-hours span.hours-int { font-size: 120%; }
 
 .autoscroll {overflow-x: auto; padding:1px; margin-bottom: 1.2em; position: relative;}
-#user_login, #user_firstname, #user_lastname, #user_mail, #my_account_form select, #user_form select, #user_identity_url { width: 90%; }
+#user_pinyin, #user_login, #user_firstname, #user_lastname, #user_mail, #my_account_form select, #user_form select, #user_identity_url { width: 90%; }
 
 #workflow_copy_form select { width: 200px; }
 table.transitions td.enabled {background: #bfb;}
@@ -914,7 +913,7 @@ select.bool_cf {width:auto !important;}
 #users_for_watcher {height: 200px; overflow:auto;}
 #users_for_watcher label {display: block;}
 
-input#principal_search, input#user_search {width:90%}
+input#principal_search, input#user_search {width:100%}
 .roles-selection label {display:inline-block; width:210px;}
 
 input.autocomplete {
@@ -1496,7 +1495,7 @@ td.gantt_selected_column .gantt_hdr,.gantt_selected_column_container {
 .icon {
   background-position: 0% 50%;
   background-repeat: no-repeat;
-  padding-left: 20px;
+  padding-left: 20px !important;
 }
 .icon-only {
   background-position: 0% 50%;
@@ -1876,9 +1875,9 @@ img {
   clear: both;
 }
 
-.overflow-none {
+/* .overflow-none {
   overflow: hidden;
-}
+} */
 
 .image-popup-panel {
   position: fixed;
@@ -1908,4 +1907,63 @@ img {
 
 .pages-hierarchy {
   padding-left: 1.5em;
+}
+
+table.bordered-table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+table.bordered-table .header-row {
+  text-align: center;
+}
+
+table.bordered-table tr th,
+table.bordered-table tr td {
+  border: 1px solid #dfe2e5;
+  padding: 6px 2px;
+}
+
+.participants-editing .users-table {
+  width: 100%;
+  margin-top: 0.8em;
+  text-align: center;
+  font-size: 12px;
+}
+
+.participants-editing .users-table tr td {
+  padding: 0 2px;
+}
+
+.participants-editing .users-table label.user-role {
+  display: block;
+  padding: 0.6em 0;
+}
+
+.participants-editing .list-empty {
+  padding: 1.5em 0;
+  color: #999;
+}
+
+.participants-listing {
+  display: inline-block;
+}
+
+.participants-listing .participant {
+  display: inline-block;
+  margin: 0 0.25em;
+}
+
+.participants-listing .participant-roles {
+  color: #888;
+  font-size: 12px;
+}
+
+.participants-listing .participant:after {
+  content: ", ";
+  display: inline-block;
+}
+
+.participants-listing .participant:last-child:after {
+  content: "";
 }

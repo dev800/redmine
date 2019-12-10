@@ -25,6 +25,7 @@ class WikiContent < ActiveRecord::Base
   belongs_to :author, :class_name => 'User'
   has_many :versions, :class_name => 'WikiContentVersion', :dependent => :delete_all
   validates_presence_of :text
+  validates_presence_of :comments
   validates_length_of :comments, :maximum => 1024, :allow_nil => true
 
   after_save :create_version

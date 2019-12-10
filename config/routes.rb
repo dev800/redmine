@@ -366,6 +366,11 @@ Rails.application.routes.draw do
   match 'uploads', :to => 'attachments#upload', :via => :post
   match 'files/upload', :to => 'upload_files#upload', :via => :post
 
+  get 'participants/edit', :to => 'participants#edit', :as => :participant_edit
+  put 'participants/update', :to => 'participants#update', :as => :participant_update
+  get 'participants/complete', :to => 'participants#complete', :as => :participant_complete
+  get 'participants', :to => 'participants#index', :as => :participants
+
   get 'issues/:id/checklists', :to => 'issues#checklists', :as => :issue_checklists
   get 'checklists', :to => 'checklists#index', :as => :checklists
   post 'checklists', :to => 'checklists#create', :as => :checklist_create

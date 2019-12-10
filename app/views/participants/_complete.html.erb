@@ -1,0 +1,96 @@
+<%
+  participants_index = @participants.index_by(&:user_id)
+%>
+<% if @users && @keywords.present? %>
+  <% if @users.any? %>
+    <table class="users-table bordered-table">
+      <tr class="header-row">
+        <th><%= l(:field_user) %></th>
+        <th style="width: 16.67%"><%= l(:label_participant_type_leader) %></th>
+        <th style="width: 16.67%"><%= l(:label_participant_type_requester) %></th>
+        <th style="width: 16.67%"><%= l(:label_participant_type_resolver) %></th>
+        <th style="width: 16.67%"><%= l(:label_participant_type_tester) %></th>
+        <th style="width: 16.67%"><%= l(:label_participant_type_tracker) %></th>
+      </tr>
+      <% @users.each do |user| %>
+        <% participant = participants_index[user.id] %>
+        <tr>
+          <th><%= link_to_user(user, :only_path => true, :target_blank => true) %></th>
+          <td>
+            <label class="user-role">
+              <%= check_box_tag("users[#{user.id}][is_leader]", "1", participant.present? && participant.is_leader, :id => nil, :"user-id" => user.id, :role => "is_leader") %>
+            </label>
+          </td>
+          <td>
+            <label class="user-role">
+              <%= check_box_tag("users[#{user.id}][is_requester]", "1", participant.present? && participant.is_requester, :id => nil, :"user-id" => user.id, :role => "is_requester") %>
+            </label>
+          </td>
+          <td>
+            <label class="user-role">
+              <%= check_box_tag("users[#{user.id}][is_resolver]", "1", participant.present? && participant.is_resolver, :id => nil, :"user-id" => user.id, :role => "is_resolver") %>
+            </label>
+          </td>
+          <td>
+            <label class="user-role">
+              <%= check_box_tag("users[#{user.id}][is_tester]", "1", participant.present? && participant.is_tester, :id => nil, :"user-id" => user.id, :role => "is_tester") %>
+            </label>
+          </td>
+          <td>
+            <label class="user-role">
+              <%= check_box_tag("users[#{user.id}][is_tracker]", "1", participant.present? && participant.is_tracker, :id => nil, :"user-id" => user.id, :role => "is_tracker") %>
+            </label>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  <% else %>
+    <div class="list-empty"><%= l(:label_search_users_empty) %></div>
+  <% end %>
+<% else %>
+  <% if @participants.any? %>
+    <table class="users-table bordered-table">
+      <tr class="header-row">
+        <th><%= l(:field_user) %></th>
+        <th style="width: 16.67%"><%= l(:label_participant_type_leader) %></th>
+        <th style="width: 16.67%"><%= l(:label_participant_type_requester) %></th>
+        <th style="width: 16.67%"><%= l(:label_participant_type_resolver) %></th>
+        <th style="width: 16.67%"><%= l(:label_participant_type_tester) %></th>
+        <th style="width: 16.67%"><%= l(:label_participant_type_tracker) %></th>
+      </tr>
+      <% @participants.each do |participant| %>
+        <tr>
+          <th><%= link_to_user(participant.user, :only_path => true, :target_blank => true) %></th>
+          <td>
+            <label class="user-role">
+              <%= check_box_tag("users[#{participant.user_id}][is_leader]", "1", participant.is_leader, :id => nil, :"user-id" => participant.user_id, :role => "is_leader") %>
+            </label>
+          </td>
+          <td>
+            <label class="user-role">
+              <%= check_box_tag("users[#{participant.user_id}][is_requester]", "1", participant.is_requester, :id => nil, :"user-id" => participant.user_id, :role => "is_requester") %>
+            </label>
+          </td>
+          <td>
+            <label class="user-role">
+              <%= check_box_tag("users[#{participant.user_id}][is_resolver]", "1", participant.is_resolver, :id => nil, :"user-id" => participant.user_id, :role => "is_resolver") %>
+            </label>
+          </td>
+          <td>
+            <label class="user-role">
+              <%= check_box_tag("users[#{participant.user_id}][is_tester]", "1", participant.is_tester, :id => nil, :"user-id" => participant.user_id, :role => "is_tester") %>
+            </label>
+          </td>
+          <td>
+            <label class="user-role">
+              <%= check_box_tag("users[#{participant.user_id}][is_tracker]", "1", participant.is_tracker, :id => nil, :"user-id" => participant.user_id, :role => "is_tracker") %>
+            </label>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+
+  <% else %>
+    <div class="list-empty"><%= l(:label_participants_empty) %></div>
+  <% end %>
+<% end %>

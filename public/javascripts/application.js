@@ -1236,7 +1236,7 @@ $(document).on('ajax:success', 'form.with-indicator', function(event) {
 })
 
 function imagePopup(image) {
-  $("body").addClass("overflow-none");
+  // $("body").addClass("overflow-none");
   var $popupPanel = $(".image-popup-panel");
 
   if ($popupPanel.length === 0) {
@@ -1262,7 +1262,7 @@ function imagePopup(image) {
 
 $(document).on("click", ".image-popup-panel", function() {
   $(this).remove();
-  $("body").removeClass("overflow-none");
+  // $("body").removeClass("overflow-none");
 })
 
 $(document).on("click", ".wiki img", function() {
@@ -1289,6 +1289,42 @@ $(document).on('click', '[remote-href]', function(event) {
       });
     }).complete(function() { })
 });
+
+$(document).on('input', '.autocomplete[data-url]', function() {
+  var $input = $(this);
+  var dataUrl = $input.attr('data-url');
+  var objectType = $input.attr('object-type');
+  var objectId = $input.attr('object-id');
+
+  $.get(dataUrl, { q: $input.val().trim() }, function(html) {
+    $('[partable-type="' + objectType + '"][partable-id="' + objectId + '"] .participants-editing').html(html);
+  })
+})
+
+$(document).on("click", '.participants-editing .user-role input[type="checkbox"]', function() {
+  var $checkbox = $(this);
+  var $partable = $checkbox.closest('.participants-container[partable-type][partable-id]');
+  var objectType = $partable.attr('partable-type');
+  var objectId = $partable.attr('partable-id');
+  var checked = $checkbox.is(":checked");
+  var userId = $checkbox.attr('user-id');
+  var role = $checkbox.attr('role');
+
+  $.ajax({
+    url: '/participants/update.js',
+    dataType: 'script',
+    data: {
+      object_type: objectType,
+      object_id: objectId,
+      user_id: userId,
+      role: role,
+      checked: checked
+    },
+    method: 'put'
+  }).success(function(resp) {
+
+  })
+})
 
 function syncData() {
   $.each($("[data-sync-url]"), function() {

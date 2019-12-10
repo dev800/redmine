@@ -60,7 +60,9 @@ module ApplicationHelper
       name = h(user.name(options[:format]))
       if user.active? || (User.current.admin? && user.logged?)
         only_path = options[:only_path].nil? ? true : options[:only_path]
-        link_to "#{options[:name_prefix]}#{name}", user_url(user, :only_path => only_path), :class => user.css_classes
+        linker_opts = {:class => user.css_classes}
+        linker_opts[:target] = "_blank" if options[:target_blank]
+        link_to "#{options[:name_prefix]}#{name}", user_url(user, :only_path => only_path), linker_opts
       else
         name
       end

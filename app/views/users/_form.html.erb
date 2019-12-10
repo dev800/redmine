@@ -7,9 +7,10 @@
 <fieldset class="box tabular">
   <legend><%=l(:label_information_plural)%></legend>
   <p><%= f.text_field :login, :required => true, :size => 25  %></p>
-  <p><%= f.text_field :firstname, :required => true %></p>
   <p><%= f.text_field :lastname, :required => true %></p>
+  <p><%= f.text_field :firstname, :required => true %></p>
   <p><%= f.text_field :mail, :required => true %></p>
+  <p><%= f.text_field :pinyin, :required => true, :autocomplete => "off" %></p>
   <% unless @user.force_default_language? %>
   <p><%= f.select :language, lang_options_for_select %></p>
   <% end %>
@@ -32,7 +33,7 @@
   <% end %>
   <div id="password_fields" style="<%= 'display:none;' if @user.auth_source %>">
   <p>
-    <%= f.password_field :password, :required => true, :size => 25  %>
+    <%= f.password_field :password, :required => true, :autocomplete => "new-password", :size => 25  %>
     <em class="info"><%= l(:text_caracters_minimum, :count => Setting.password_min_length) %></em>
     <% if Setting.password_required_char_classes.any? %>
       <em class="info"><%= l(:text_characters_must_contain, :character_classes => Setting.password_required_char_classes.collect{|c| l("label_password_char_class_#{c}")}.join(", ")) %></em>

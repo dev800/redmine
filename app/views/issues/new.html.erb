@@ -32,9 +32,11 @@
 
     <p id="attachments_form"><label><%= l(:label_attachment_plural) %></label><%= render :partial => 'attachments/form', :locals => {:container => @issue} %></p>
 
+    <% if false %>
     <div id="watchers_form_container">
       <%= render :partial => 'issues/watchers_form' %>
     </div>
+    <% end %>
   </div>
 
   <p class="form-actions">

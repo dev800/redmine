@@ -1,0 +1,3 @@
+$('#participants.participants-container[partable-type="<%= @partable.class.to_s %>"][partable-id="<%= @partable.id %>"]').replaceWith('<%= j(
+  render(:partial => "participants/participants", :locals => { :partable => @partable })
+) %>')
