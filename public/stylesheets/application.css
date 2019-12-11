@@ -782,6 +782,10 @@ html>body .tabular p {overflow:hidden;}
   line-height: 24px;
 }
 
+.tabular .value {
+  line-height: 24px;
+}
+
 .tabular label.floating{
   font-weight: normal;
   margin-left: 0px;

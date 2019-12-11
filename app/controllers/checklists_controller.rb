@@ -53,7 +53,7 @@ class ChecklistsController < ApplicationController
   end
 
   def create
-    unless User.current.allowed_to?(:add_checklists, @checklist.project, :global => true)
+    unless @issue && @issue.checklistable?
       render :status => 403, :json => {
         :status => 403,
         :errors => {
@@ -130,16 +130,14 @@ class ChecklistsController < ApplicationController
     @checklist.project = @project
 
     if request.get?
-      @checklist.project ||= @checklist.allowed_target_projects.first
+      @checklist.project ||= (@checklist.allowed_target_projects + Project.all_cross_collaboration).uniq.first
     end
 
     @checklist.author ||= User.current
     @checklist.start_date ||= User.current.today if Setting.default_issue_start_date_to_creation_date?
 
     checklist_attributes = (params[:checklist] || {}).deep_dup
-
     @checklist.tracker ||= @issue.allowed_target_trackers.first
-
 
     if action_name == 'new' && params[:was_default_status] == checklist_attributes[:status_id]
       checklist_attributes.delete(:status_id)

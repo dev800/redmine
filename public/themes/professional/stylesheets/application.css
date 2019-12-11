@@ -1159,7 +1159,6 @@ table.list td {
 
 #main h2.content-title {
   margin-bottom: 0.18em;
-  padding-top: 0.38em;
 }
 
 h1, h2, h3, h4 {
@@ -1402,7 +1401,7 @@ select#checklist_done_ratio { width: 95px; }
 .checklist-show .checklist-info p.author {margin-top:0.5em;}
 .checklist-show .checklist-info span.private, div.journal span.private {font-size: 60%;}
 .checklist-show .checklist-info .next-prev-links {color:#999;}
-.checklist-show .checklist-info .attributes {margin-top: 1em;}
+.checklist-show .checklist-info .attributes {margin-top: 1em; line-height: 2em;}
 .checklist-show .checklist-info .attributes .attribute {padding-left:180px; clear:left; min-height: 1.8em;}
 .checklist-show .checklist-info .attributes .attribute .label {text-align: right; width: 170px; margin-left:-180px; font-weight:bold; float:left;  overflow:hidden; text-overflow: ellipsis;}
 .checklist-show .checklist-info .attribute .value {overflow:auto; text-overflow: ellipsis;}

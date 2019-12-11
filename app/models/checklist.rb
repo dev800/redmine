@@ -145,36 +145,40 @@ class Checklist < ActiveRecord::Base
     end
   end
 
+  def participanted?(usr=nil)
+    self.participants.select { |participant| participant.user_id == usr.id }.any?
+  end
+
   # Returns true if usr or current user is allowed to view the checklist
   def visible?(usr=nil)
-    issue.visible?(usr)
+    issue.visible?(usr) || participanted?(usr)
   end
 
   # Returns true if user or current user is allowed to edit or add notes to the checklist
   def editable?(user=User.current)
-    attributes_editable?(user) || notes_addable?(user)
+    attributes_editable?(user) || notes_addable?(user) || participanted?(user) || issue.participanted?(user)
   end
 
   # Returns true if user or current user is allowed to edit the checklist
   def attributes_editable?(user=User.current)
     user_tracker_permission?(user, :edit_checklists) || (
       user_tracker_permission?(user, :edit_own_checklists) && author == user
-    )
+    ) || participanted?(user) || issue.participanted?(user)
   end
 
   # Overrides Redmine::Acts::Attachable::InstanceMethods#attachments_editable?
   def attachments_editable?(user=User.current)
-    attributes_editable?(user)
+    attributes_editable?(user) || participanted?(user) || issue.participanted?(user)
   end
 
   # Returns true if user or current user is allowed to add notes to the checklist
   def notes_addable?(user=User.current)
-    user_tracker_permission?(user, :add_checklist_notes)
+    user_tracker_permission?(user, :add_checklist_notes) || participanted?(user) || issue.participanted?(user)
   end
 
   # Returns true if user or current user is allowed to delete the checklist
   def deletable?(user=User.current)
-    user_tracker_permission?(user, :delete_checklists)
+    user_tracker_permission?(user, :delete_checklists) || participanted?(user) || issue.participanted?(user)
   end
 
   def initialize(attributes=nil, *args)
@@ -1428,7 +1432,7 @@ class Checklist < ActiveRecord::Base
   def self.allowed_target_trackers(project, user=User.current, current_tracker=nil)
     if project
       scope = project.trackers.sorted
-      unless user.admin?
+      unless user.admin? || project.cross_collaboration
         roles = user.roles_for_project(project).select {|r| r.has_permission?(:add_checklists)}
         unless roles.any? {|r| r.permissions_all_trackers?(:add_checklists)}
           tracker_ids = roles.map {|r| r.permissions_tracker_ids(:add_checklists)}.flatten.uniq

@@ -407,7 +407,10 @@ class Project < ActiveRecord::Base
     when ['issues', 'show'],
       ['issues', 'edit'],
       ['issues', 'update'],
+      ['issues', 'checklists'],
+      ['checklists', 'index'],
       ['checklists', 'show'],
+      ['checklists', 'create'],
       ['checklists', 'edit'],
       ['checklists', 'update']
       self.cross_collaboration

@@ -614,6 +614,8 @@ class User < Principal
       membership.roles.to_a
     elsif project.is_public?
       project.override_roles(builtin_role)
+    elsif project.cross_collaboration
+      project.override_roles(builtin_role)
     else
       []
     end
