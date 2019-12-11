@@ -6,6 +6,8 @@ class Participant < ActiveRecord::Base
   validates_uniqueness_of :user_id, :scope => [:partable_type, :partable_id]
   validate :validate_user
 
+  ROLES = [:leader, :requester, :resolver, :tester, :tracker]
+
   def roles_description
     roles = []
     roles.push(l(:label_participant_type_leader)) if self.is_leader

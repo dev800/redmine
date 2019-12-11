@@ -85,6 +85,26 @@ module ApplicationHelper
     end
   end
 
+  def link_to_checklist(checklist, options={})
+    title = nil
+    subject = nil
+    text = options[:tracker] == false ? "$#{checklist.id}" : "#{checklist.tracker} $#{checklist.id}"
+    if options[:subject] == false
+      title = checklist.subject.truncate(60)
+    else
+      subject = checklist.subject
+      if truncate_length = options[:truncate]
+        subject = subject.truncate(truncate_length)
+      end
+    end
+    only_path = options[:only_path].nil? ? true : options[:only_path]
+    text = subject ? "#{text}: #{subject}" : text
+    s = link_to(text, checklist_url(checklist, :only_path => only_path),
+                :class => checklist.css_classes, :title => title)
+    s = h("#{checklist.project} - ") + s if options[:project]
+    s
+  end
+
   # Displays a link to +issue+ with its subject.
   # Examples:
   #

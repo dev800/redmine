@@ -4,7 +4,7 @@ class ChecklistsController < ApplicationController
 
   before_action :find_checklist, :only => [:show, :edit, :update]
   before_action :find_optional_project, :only => [:index, :new, :create]
-  before_action :authorize, :except => [:index, :show, :edit, :new, :create, :sort]
+  before_action :authorize, :except => [:index, :show, :edit, :new, :create, :sort, :participated]
   before_action :find_issue, :only => [:new, :create]
   before_action :build_new_checklist_from_params, :only => [:new, :create]
   accept_rss_auth :index, :show
@@ -25,6 +25,18 @@ class ChecklistsController < ApplicationController
   include QueriesHelper
   helper :repositories
   helper :timelog
+
+  def participated
+    @user = User.current
+
+    @checklists = Checklist.participants_of_user(@user, {
+      tracker: params[:checklists_tracker],
+      status: params[:checklists_status],
+      participants_type: params[:checklists_participants_type]
+    }).includes([:project, :issue, :status, :tracker])
+
+    render :action => 'participated', :layout => !request.xhr?
+  end
 
   def index
     if params[:issue_id]
@@ -130,7 +142,7 @@ class ChecklistsController < ApplicationController
     @checklist.project = @project
 
     if request.get?
-      @checklist.project ||= (@checklist.allowed_target_projects + Project.all_cross_collaboration).uniq.first
+      @checklist.project ||= @checklist.allowed_target_projects.first
     end
 
     @checklist.author ||= User.current

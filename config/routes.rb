@@ -44,6 +44,7 @@ Rails.application.routes.draw do
   post 'boards/:board_id/topics/:id/destroy', :to => 'messages#destroy'
 
   # Misc issue routes. TODO: move into resources
+  get 'issues/participated', :to => 'issues#participated', :as => :participated_issues
   match '/issues/auto_complete', :to => 'auto_completes#issues', :via => :get, :as => 'auto_complete_issues'
   match '/issues/context_menu', :to => 'context_menus#issues', :as => 'issues_context_menu', :via => [:get, :post]
   match '/issues/changes', :to => 'journals#index', :as => 'issue_changes', :via => :get
@@ -371,6 +372,7 @@ Rails.application.routes.draw do
   get 'participants/complete', :to => 'participants#complete', :as => :participant_complete
   get 'participants', :to => 'participants#index', :as => :participants
 
+  get 'checklists/participated', :to => 'checklists#participated', :as => :participated_checklists
   get 'issues/:id/checklists', :to => 'issues#checklists', :as => :issue_checklists
   get 'checklists', :to => 'checklists#index', :as => :checklists
   post 'checklists', :to => 'checklists#create', :as => :checklist_create

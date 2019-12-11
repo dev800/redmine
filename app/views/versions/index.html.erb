@@ -24,12 +24,10 @@
       <span class="badge badge-status-<%= version.status %>"><%= l("version_status_#{version.status}") %></span>
     </header>
     <%= render :partial => 'versions/overview', :locals => {:version => version} %>
-    <%= render(:partial => "wiki/content",
-               :locals => {:content => version.wiki_page.content}) if version.wiki_page %>
     <% if (issues = @issues_by_version[version]) && issues.size > 0 %>
       <%= form_tag({}, :data => {:cm_url => issues_context_menu_path}) do -%>
         <table class="list related-issues">
-        <caption><%= l(:label_related_issues) %></caption>
+        <h3 class="section-header"><%= l(:label_related_issues) %></h3>
         <% issues.each do |issue| -%>
           <tr class="hascontextmenu <%= issue.css_classes %>">
             <td class="checkbox"><%= check_box_tag 'ids[]', issue.id, false, :id => nil %></td>
@@ -41,6 +39,8 @@
         </table>
       <% end %>
     <% end %>
+    <%= render(:partial => "wiki/content",
+               :locals => {:content => version.wiki_page.content}) if version.wiki_page %>
     <%= call_hook :view_projects_roadmap_version_bottom, :version => version %>
   </article>
   <% end %>

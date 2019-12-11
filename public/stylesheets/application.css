@@ -29,7 +29,8 @@ div#wrapper, div#wrapper2, div#wrapper3 { min-height: inherit; }
 
 #account {float:right;}
 
-#header {min-height:5.3em;margin:0;background-color:#628DB6;color:#f8f8f8; padding: 4px 8px 20px 6px; position:relative;}
+.has-main-menu #header {min-height:5.2em;}
+#header {min-height:3.2em;margin:0;background-color:#628DB6;color:#f8f8f8; padding: 4px 8px 20px 6px; position:relative;}
 #header a {color:#f8f8f8;}
 #header h1 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 #header h1 .breadcrumbs { display:block; font-size: .5em; font-weight: normal; }
@@ -1970,4 +1971,27 @@ table.bordered-table tr td {
 
 .participants-listing .participant:last-child:after {
   content: "";
+}
+
+.checklists-list td.project,
+.issues-list td.project {
+  width: 100px;
+}
+
+.checklists-list td.status,
+.issues-list td.status {
+  width: 62px;
+}
+
+.content-title {
+  color: #000;
+}
+
+.list-filter {
+  float: right;
+}
+
+h3.list-title {
+  padding-bottom: 0;
+  color: #000;
 }

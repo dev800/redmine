@@ -94,7 +94,6 @@ class Project < ActiveRecord::Base
   scope :active, lambda { where(:status => STATUS_ACTIVE) }
   scope :status, lambda {|arg| where(arg.blank? ? nil : {:status => arg.to_i}) }
   scope :all_public, lambda { where(:is_public => true) }
-  scope :all_cross_collaboration, lambda { where(:cross_collaboration => true) }
   scope :visible, lambda {|*args| where(Project.visible_condition(args.shift || User.current, *args)) }
   scope :allowed_to, lambda {|*args|
     user = args.first.is_a?(Symbol) ? User.current : args.shift
@@ -157,6 +156,12 @@ class Project < ActiveRecord::Base
     user.allowed_to?(:view_project, self)
   end
 
+  ALLOW_ACTIONS = [:add_issues, :add_checklists, :log_time]
+
+  def allowed_cross_collaboration?(action)
+    action.in?(ALLOW_ACTIONS)
+  end
+
   # Returns a SQL conditions string used to find all projects visible by the specified user.
   #
   # Examples:
@@ -190,10 +195,16 @@ class Project < ActiveRecord::Base
       base_statement
     else
       statement_by_role = {}
+
       unless options[:member]
         role = user.builtin_role
-        if role.allowed_to?(permission)
+        if role.allowed_to?(permission) || permission.in?(ALLOW_ACTIONS)
           s = "#{Project.table_name}.is_public = #{connection.quoted_true}"
+
+          if permission.in?(ALLOW_ACTIONS)
+            s = "#{s} OR #{Project.table_name}.cross_collaboration = #{connection.quoted_true}"
+          end
+
           if user.id
             group = role.anonymous? ? Group.anonymous : Group.non_member
             principal_ids = [user.id, group.id].compact
@@ -406,13 +417,20 @@ class Project < ActiveRecord::Base
     case [ctrl, action]
     when ['issues', 'show'],
       ['issues', 'edit'],
+      ['issues', 'new'],
       ['issues', 'update'],
       ['issues', 'checklists'],
+      ['issues', 'participated'],
       ['checklists', 'index'],
       ['checklists', 'show'],
       ['checklists', 'create'],
       ['checklists', 'edit'],
-      ['checklists', 'update']
+      ['checklists', 'update'],
+      ['checklists', 'participated'],
+      ['timelog', 'new'],
+      ['timelog', 'create'],
+      ['timelog', 'index'],
+      ['timelog', 'report']
       self.cross_collaboration
     else
       false

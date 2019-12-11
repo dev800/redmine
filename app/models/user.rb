@@ -712,7 +712,7 @@ class User < Principal
       return false unless context.allows_to?(action)
       # Admin users are authorized for anything else
       return true if admin?
-      # return true if allowed_cross_collaboration?(action, context)
+      return true if context.allowed_cross_collaboration?(action)
 
       roles = roles_for_project(context)
       return false unless roles

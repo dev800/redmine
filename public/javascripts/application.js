@@ -409,6 +409,46 @@ function getRemoteTab(name, remote_url, url, load_always) {
   return false;
 }
 
+$(document).on('change', '#participated-issues .filter-trigger', function() {
+  var $this = $(this);
+  var $option = $this.find('option[value="' + $this.val() + '"]');
+  var href = $option.attr("href");
+  var dataHref = $option.attr("data-href");
+
+  replaceInHistory(href)
+
+  $.ajax({
+    method: "GET",
+    url: dataHref,
+    data: {_t: (new Date()).valueOf()},
+    headers: {
+      "X-Request-URL": window.location.href
+    }
+  }).success(function(html) {
+    $("#participated-issues").replaceWith(html);
+  })
+})
+
+$(document).on('change', '#participated-checklists .filter-trigger', function() {
+  var $this = $(this);
+  var $option = $this.find('option[value="' + $this.val() + '"]');
+  var href = $option.attr("href");
+  var dataHref = $option.attr("data-href");
+
+  replaceInHistory(href)
+
+  $.ajax({
+    method: "GET",
+    url: dataHref,
+    data: {_t: (new Date()).valueOf()},
+    headers: {
+      "X-Request-URL": window.location.href
+    }
+  }).success(function(html) {
+    $("#participated-checklists").replaceWith(html);
+  })
+})
+
 $(document).on('change', '.checklists-filter .filter-trigger', function() {
   var $this = $(this);
   var $option = $this.find('option[value="' + $this.val() + '"]');
@@ -1363,9 +1403,34 @@ function bindChecklistSortable() {
   });
 }
 
+function setHeaderClass() {
+  if ($("#main-menu").length === 0) {
+    $("body").removeClass("has-main-menu");
+  }
+}
+
+function loadParticipatedIssues() {
+  if ($('#participated-issues[data-loaded="false"]').length > 0) {
+    $.get("/issues/participated", {}, function(html) {
+      $('#participated-issues').replaceWith(html);
+    })
+  }
+}
+
+function loadParticipatedChecklists() {
+  if ($('#participated-checklists[data-loaded="false"]').length > 0) {
+    $.get("/checklists/participated", {}, function(html) {
+      $('#participated-checklists').replaceWith(html);
+    })
+  }
+}
+
 $(function() {
   syncData();
   bindChecklistSortable();
+  loadParticipatedIssues();
+  loadParticipatedChecklists();
+  setHeaderClass();
 })
 
 $(document).on('click', '.ui-widget-overlay', function() {

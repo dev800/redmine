@@ -22,7 +22,7 @@ class IssuesController < ApplicationController
 
   before_action :find_issue, :only => [:show, :edit, :update, :issue_tab, :checklists]
   before_action :find_issues, :only => [:bulk_edit, :bulk_update, :destroy]
-  before_action :authorize, :except => [:index, :new, :create]
+  before_action :authorize, :except => [:index, :new, :create, :participated]
   before_action :find_optional_project, :only => [:index, :new, :create]
   before_action :build_new_issue_from_params, :only => [:new, :create]
   accept_rss_auth :index, :show, :checklists
@@ -40,6 +40,18 @@ class IssuesController < ApplicationController
   include QueriesHelper
   helper :repositories
   helper :timelog
+
+  def participated
+    @user = User.current
+
+    @issues = Issue.participants_of_user(@user, {
+      tracker: params[:issues_tracker],
+      status: params[:issues_status],
+      participants_type: params[:issues_participants_type]
+    }).includes([:project, :status, :tracker])
+
+    render :action => 'participated', :layout => !request.xhr?
+  end
 
   def checklists
     @project = @issue.project
@@ -585,9 +597,9 @@ class IssuesController < ApplicationController
         return
       end
     end
-    @issue.project = @project || Project.all_cross_collaboration.find_by_id((params[:issue] || {})[:project_id])
+    @issue.project = @project || Project.where(:cross_collaboration => true).find_by_id((params[:issue] || {})[:project_id])
     if request.get?
-      @issue.project ||= (@issue.allowed_target_projects + Project.all_cross_collaboration).uniq.first
+      @issue.project ||= @issue.allowed_target_projects.first
     end
     @issue.author ||= User.current
     @issue.start_date ||= User.current.today if Setting.default_issue_start_date_to_creation_date?

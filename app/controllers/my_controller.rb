@@ -43,8 +43,8 @@ class MyController < ApplicationController
   # Show user's page
   def page
     @user = User.current
-    @groups = @user.pref.my_page_groups
-    @blocks = @user.pref.my_page_layout
+    # @groups = @user.pref.my_page_groups
+    # @blocks = @user.pref.my_page_layout
   end
 
   # Edit user's account

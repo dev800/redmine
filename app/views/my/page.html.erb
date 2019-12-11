@@ -1,46 +1,22 @@
 <div class="contextual">
-  <%= form_tag({:action => "add_block"}, :remote => true, :id => "block-form", authenticity_token: true) do %>
-    <%= label_tag('block-select', l(:button_add)) %>:
-    <%= block_select_tag(@user) %>
+  <% if User.current.allowed_to?(:add_issues, @project, :global => true) && (@project.nil? || Issue.allowed_target_trackers(@project).any?) %>
+    <%= link_to l(:label_issue_new), _new_project_issue_path(@project), :class => 'icon icon-add new-issue' %>
   <% end %>
 </div>
 
 <h2 class="content-title"><%=l(:label_my_page)%></h2>
 
 <div id="my-page" class="splitcontent">
-<% @groups.each do |group| %>
-  <div id="list-<%= group %>" class="block-receiver splitcontent<%= group %>">
-    <%= render_blocks(@blocks[group], @user) %>
+  <div class="splitcontentleft">
+    <div id="participated-issues" data-loaded="false">
+    </div>
   </div>
-<% end %>
+  <div class="splitcontentright">
+    <div id="participated-checklists" data-loaded="false">
+    </div>
+  </div>
 </div>
 
 <%= context_menu %>
-
-<%= javascript_tag do %>
-$(document).ready(function(){
-  $('#block-select').val('');
-  $('.block-receiver').sortable({
-    connectWith: '.block-receiver',
-    tolerance: 'pointer',
-    handle: '.sort-handle',
-    start: function(event, ui){$(this).parent().addClass('dragging');},
-    stop: function(event, ui){$(this).parent().removeClass('dragging');},
-    update: function(event, ui){
-      // trigger the call on the list that receives the block only
-      if ($(this).find(ui.item).length > 0) {
-        $.ajax({
-          url: "<%= escape_javascript url_for(:action => "order_blocks") %>",
-          type: 'post',
-          data: {
-            'group': $(this).attr('id').replace(/^list-/, ''),
-            'blocks': $.map($(this).children(), function(el){return $(el).attr('id').replace(/^block-/, '');})
-          }
-        });
-      }
-    }
-  });
-});
-<% end %>
 
 <% html_title(l(:label_my_page)) -%>

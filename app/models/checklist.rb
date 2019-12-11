@@ -107,10 +107,77 @@ class Checklist < ActiveRecord::Base
   # Should be after_create but would be called before previous after_save callbacks
   after_destroy :update_parent_attributes
   after_create_commit :send_notification
+  after_create :set_default_participants
 
   after_create do |r|
     r.position = r.id
     r.save!
+  end
+
+  def set_default_participants
+    # 创建者默认为需求方
+    Participant.update(self, {:user_id => self.author_id, :roles => [:is_requester], :checked => true})
+
+    # 被指派者默认为负责人
+    if self.assigned_to_id
+      Participant.update(self, {:user_id => self.assigned_to_id, :roles => [:is_leader], :checked => true})
+    end
+
+    true
+  end
+
+  #
+  # options:
+  #
+  #   :tracker
+  #   :status
+  #   :participants_type
+  def self.participants_of_user(user, options={})
+    checklists = self.scope_of(self, options).joins(:participants).where({:participants => {:user_id => user.id}})
+
+    case options[:participants_type]
+    when 'type:all'
+      checklists
+    when 'type:is_leader'
+      checklists.where({:participants => {:is_leader => true}})
+    when 'type:is_requester'
+      checklists.where({:participants => {:is_requester => true}})
+    when 'type:is_resolver'
+      checklists.where({:participants => {:is_resolver => true}})
+    when 'type:is_tester'
+      checklists.where({:participants => {:is_tester => true}})
+    when 'type:is_tracker'
+      checklists.where({:participants => {:is_tracker => true}})
+    else
+      checklists
+    end
+  end
+
+  def self.scope_of(checklists, options={})
+    checklists_status = options[:status].present? ? options[:status] : Issue::DEFAULT_CHECKLISTS_STATUS
+    checklists_tracker = options[:tracker].present? ? options[:tracker] : Issue::DEFAULT_CHECKLISTS_TRACKER
+
+    checklists = checklists
+      .joins(:status)
+      .joins(:tracker)
+      .preload(:project, :status, :tracker, :priority, :author, :assigned_to, {:custom_values => :custom_field})
+      .order(:position => :asc, :id => :asc)
+
+    if checklists_status === 'status:open'
+      checklists = checklists.where({IssueStatus.table_name => {is_closed: false}})
+    elsif checklists_status === 'status:closed'
+      checklists = checklists.where({IssueStatus.table_name => {is_closed: true}})
+    elsif checklists_status && checklists_status.starts_with?('id:')
+      id = checklists_status.sub('id:', '').strip().to_i
+      checklists = checklists.where({IssueStatus.table_name => {id: id}})
+    end
+
+    if checklists_tracker && checklists_tracker.starts_with?('id:')
+      id = checklists_tracker.sub('id:', '').strip().to_i
+      checklists = checklists.where({Tracker.table_name => {id: id}})
+    end
+
+    checklists
   end
 
   # Returns a SQL conditions string used to find all checklists visible by the specified user
@@ -951,51 +1018,7 @@ class Checklist < ActiveRecord::Base
 
   # Returns an array of statuses that user is able to apply
   def new_statuses_allowed_to(user=User.current, include_default=false)
-    initial_status = nil
-    if new_record?
-      # nop
-    elsif tracker_id_changed?
-      if Tracker.where(:id => tracker_id_was, :default_status_id => status_id_was).any?
-        initial_status = default_status
-      elsif tracker.issue_status_ids.include?(status_id_was)
-        initial_status = IssueStatus.find_by_id(status_id_was)
-      else
-        initial_status = default_status
-      end
-    else
-      initial_status = status_was
-    end
-
-    initial_assigned_to_id = assigned_to_id_changed? ? assigned_to_id_was : assigned_to_id
-
-    assignee_transitions_allowed = initial_assigned_to_id.present? &&
-      (user.id == initial_assigned_to_id || user.group_ids.include?(initial_assigned_to_id))
-
-    statuses = []
-
-    statuses += IssueStatus.new_statuses_allowed(
-      initial_status,
-      user.admin ? Role.all.to_a : user.roles_for_project(project),
-      tracker,
-      author == user,
-      assignee_transitions_allowed
-    )
-
-    statuses << initial_status unless statuses.empty?
-    statuses << default_status if include_default || (new_record? && statuses.empty?)
-    statuses = statuses.compact.uniq.sort
-
-    if descendants.open.any?
-      # cannot close a blocked checklist or a parent with open subtasks
-      statuses.reject!(&:is_closed?)
-    end
-
-    if ancestors.open(false).any?
-      # cannot reopen a subtask of a closed parent
-      statuses.select!(&:is_closed?)
-    end
-
-    statuses
+    IssueStatus.for_checklists_enable
   end
 
   # Returns the original tracker

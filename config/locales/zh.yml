@@ -1348,6 +1348,10 @@ zh:
   field_checklists: 检查列表
   field_checklist_new: 新建检查项
   field_checklist_edit: 编辑检查项
+  label_issues: 问题
+  label_as: 作为
+  label_participanted_issues: 问题
+  label_participanted_checklists: 检查项
   label_checklists: 检查列表
   label_checklists_empty: 检查列表为空
   label_search_users_empty: 没有匹配的用户

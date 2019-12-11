@@ -123,6 +123,10 @@ class Issue < ActiveRecord::Base
   after_create_commit :send_notification
   after_create :set_default_participants
 
+  def self.participants_of_user(user, options={})
+    self.joins(:participants).where({:participants => {:user_id => user.id}})
+  end
+
   def set_default_participants
     # 创建者默认为需求方
     Participant.update(self, {:user_id => self.author_id, :roles => [:is_requester], :checked => true})
@@ -189,30 +193,61 @@ class Issue < ActiveRecord::Base
   DEFAULT_CHECKLISTS_TRACKER = nil
 
   def queried_checklists(options = {})
-    checklists_status = options[:status].present? ? options[:status] : DEFAULT_CHECKLISTS_STATUS
-    checklists_tracker = options[:tracker].present? ? options[:tracker] : DEFAULT_CHECKLISTS_TRACKER
+    Checklist.scope_of(self.checklists, options)
+  end
 
-    checklists = self.checklists
+  #
+  # options:
+  #
+  #   :tracker
+  #   :status
+  #   :participants_type
+  def self.participants_of_user(user, options={})
+    issues = self.scope_of(self, options).joins(:participants).where({:participants => {:user_id => user.id}})
+
+    case options[:participants_type]
+    when 'type:all'
+      issues
+    when 'type:is_leader'
+      issues.where({:participants => {:is_leader => true}})
+    when 'type:is_requester'
+      issues.where({:participants => {:is_requester => true}})
+    when 'type:is_resolver'
+      issues.where({:participants => {:is_resolver => true}})
+    when 'type:is_tester'
+      issues.where({:participants => {:is_tester => true}})
+    when 'type:is_tracker'
+      issues.where({:participants => {:is_tracker => true}})
+    else
+      issues
+    end
+  end
+
+  def self.scope_of(issues, options={})
+    issues_status = options[:status].present? ? options[:status] : Issue::DEFAULT_CHECKLISTS_STATUS
+    issues_tracker = options[:tracker].present? ? options[:tracker] : Issue::DEFAULT_CHECKLISTS_TRACKER
+
+    issues = issues
       .joins(:status)
       .joins(:tracker)
       .preload(:project, :status, :tracker, :priority, :author, :assigned_to, {:custom_values => :custom_field})
-      .order(:position => :asc, :id => :asc)
+      .order(:id => :asc)
 
-    if checklists_status === 'status:open'
-      checklists = checklists.where({IssueStatus.table_name => {is_closed: false}})
-    elsif checklists_status === 'status:closed'
-      checklists = checklists.where({IssueStatus.table_name => {is_closed: true}})
-    elsif checklists_status && checklists_status.starts_with?('id:')
-      id = checklists_status.sub('id:', '').strip().to_i
-      checklists = checklists.where({IssueStatus.table_name => {id: id}})
+    if issues_status === 'status:open'
+      issues = issues.where({IssueStatus.table_name => {is_closed: false}})
+    elsif issues_status === 'status:closed'
+      issues = issues.where({IssueStatus.table_name => {is_closed: true}})
+    elsif issues_status && issues_status.starts_with?('id:')
+      id = issues_status.sub('id:', '').strip().to_i
+      issues = issues.where({IssueStatus.table_name => {id: id}})
     end
 
-    if checklists_tracker && checklists_tracker.starts_with?('id:')
-      id = checklists_tracker.sub('id:', '').strip().to_i
-      checklists = checklists.where({Tracker.table_name => {id: id}})
+    if issues_tracker && issues_tracker.starts_with?('id:')
+      id = issues_tracker.sub('id:', '').strip().to_i
+      issues = issues.where({Tracker.table_name => {id: id}})
     end
 
-    checklists
+    issues
   end
 
   def participanted?(usr=nil)
