@@ -265,6 +265,8 @@ class ApplicationController < ActionController::Base
 
   # Authorize the user for the requested action
   def authorize(ctrl = params[:controller], action = params[:action], global = false)
+    return true if @project && @project.cross_collaboration_allows_to?(ctrl, action)
+
     allowed = User.current.allowed_to?({:controller => ctrl, :action => action}, @project || @projects, :global => global)
     if allowed
       true

@@ -16,19 +16,26 @@ class Participant < ActiveRecord::Base
     roles.join(", ")
   end
 
+  # Participant.update(issue, {:user_id => 1, :roles => :is_requester, :checked => true})
   def self.update(partable, opts = {})
     checked = opts[:checked]
     user_id = opts[:user_id]
     scope = partable.participants.where(:user_id => user_id)
     participant = scope.first()
-    role = opts[:role].to_sym
+    roles = Array.wrap(opts[:roles]).map(&:to_sym)
 
     if participant
-      participant.update_attribute(role, checked)
+      roles.each do |role|
+        participant.update_attribute(role, checked)
+      end
     else
       if checked
         participant = scope.new
-        participant.write_attribute(role, checked)
+
+        roles.each do |role|
+          participant.write_attribute(role, checked)
+        end
+
         participant.save!
       end
     end
@@ -42,7 +49,6 @@ class Participant < ActiveRecord::Base
         participant
       else
         participant.destroy
-        nil
       end
     end
   end

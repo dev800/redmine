@@ -94,6 +94,7 @@ class Project < ActiveRecord::Base
   scope :active, lambda { where(:status => STATUS_ACTIVE) }
   scope :status, lambda {|arg| where(arg.blank? ? nil : {:status => arg.to_i}) }
   scope :all_public, lambda { where(:is_public => true) }
+  scope :all_cross_collaboration, lambda { where(:cross_collaboration => true) }
   scope :visible, lambda {|*args| where(Project.visible_condition(args.shift || User.current, *args)) }
   scope :allowed_to, lambda {|*args|
     user = args.first.is_a?(Symbol) ? User.current : args.shift
@@ -399,6 +400,20 @@ class Project < ActiveRecord::Base
 
   def reopen
     self_and_descendants.status(STATUS_CLOSED).update_all :status => STATUS_ACTIVE
+  end
+
+  def cross_collaboration_allows_to?(ctrl, action)
+    case [ctrl, action]
+    when ['issues', 'show'],
+      ['issues', 'edit'],
+      ['issues', 'update'],
+      ['checklists', 'show'],
+      ['checklists', 'edit'],
+      ['checklists', 'update']
+      self.cross_collaboration
+    else
+      false
+    end
   end
 
   # Returns an array of projects the project can be moved to
@@ -744,6 +759,7 @@ class Project < ActiveRecord::Base
   end
 
   safe_attributes(
+    'cross_collaboration',
     'name',
     'description',
     'homepage',

@@ -15,7 +15,7 @@ class ParticipantsController < ApplicationController
   # TODO: 增加权限控制
   def update
     Participant.update(@partable, {
-      :role => params[:role],
+      :roles => params[:role],
       :user_id => params[:user_id].to_i,
       :checked => params[:checked] == 'true'
     })

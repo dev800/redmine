@@ -268,6 +268,7 @@ zh:
   field_role: 角色
   field_homepage: 主页
   field_is_public: 公开
+  field_cross_collaboration: 垮部门协作
   field_parent: 上级项目
   field_is_in_roadmap: 在路线图中显示
   field_login: 登录名

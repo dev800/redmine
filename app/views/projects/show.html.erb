@@ -1,4 +1,7 @@
 <div class="contextual">
+  <% if User.current.allowed_to?(:add_issues, @project) %>
+    <%= link_to l(:label_issue_new), _new_project_issue_path(@project), :class => 'icon icon-add' %>
+  <% end %>
   <% if User.current.allowed_to?(:add_subprojects, @project) %>
     <%= link_to l(:label_subproject_new), new_project_path(:parent_id => @project), :class => 'icon icon-add' %>
   <% end %>

@@ -121,6 +121,19 @@ class Issue < ActiveRecord::Base
   after_save :after_create_from_copy
   after_destroy :update_parent_attributes
   after_create_commit :send_notification
+  after_create :set_default_participants
+
+  def set_default_participants
+    # 创建者默认为需求方
+    Participant.update(self, {:user_id => self.author_id, :roles => [:is_requester], :checked => true})
+
+    # 被指派者默认为负责人
+    if self.assigned_to_id
+      Participant.update(self, {:user_id => self.assigned_to_id, :roles => [:is_leader], :checked => true})
+    end
+
+    true
+  end
 
   # Returns a SQL conditions string used to find all issues visible by the specified user
   def self.visible_condition(user, options={})
@@ -202,9 +215,14 @@ class Issue < ActiveRecord::Base
     checklists
   end
 
+  def participanted?(usr=nil)
+    self.participants.select { |participant| participant.user_id == usr.id }.any?
+  end
+
   # Returns true if usr or current user is allowed to view the issue
   def visible?(usr=nil)
-    (usr || User.current).allowed_to?(:view_issues, self.project) do |role, user|
+    u = (usr || User.current)
+    participanted?(u) || u.allowed_to?(:view_issues, self.project) do |role, user|
       visible =
         if user.logged?
           case role.issues_visibility
@@ -227,26 +245,34 @@ class Issue < ActiveRecord::Base
     end
   end
 
+  def checklistable?(user=User.current)
+    attributes_checklistable?(user) || participanted?(user)
+  end
+
+  def attributes_checklistable?(user=User.current)
+    user_tracker_permission?(user, :view_checklists)
+  end
+
   # Returns true if user or current user is allowed to edit or add notes to the issue
   def editable?(user=User.current)
-    attributes_editable?(user) || notes_addable?(user)
+    attributes_editable?(user) || notes_addable?(user) || participanted?(user)
   end
 
   # Returns true if user or current user is allowed to edit the issue
   def attributes_editable?(user=User.current)
     user_tracker_permission?(user, :edit_issues) || (
       user_tracker_permission?(user, :edit_own_issues) && author == user
-    )
+    ) || participanted?(user)
   end
 
   # Overrides Redmine::Acts::Attachable::InstanceMethods#attachments_editable?
   def attachments_editable?(user=User.current)
-    attributes_editable?(user)
+    attributes_editable?(user) || participanted?(user)
   end
 
   # Returns true if user or current user is allowed to add notes to the issue
   def notes_addable?(user=User.current)
-    user_tracker_permission?(user, :add_issue_notes)
+    user_tracker_permission?(user, :add_issue_notes) || participanted?(user)
   end
 
   # Returns true if user or current user is allowed to delete the issue
@@ -1605,7 +1631,7 @@ class Issue < ActiveRecord::Base
   def self.allowed_target_trackers(project, user=User.current, current_tracker=nil)
     if project
       scope = project.trackers.sorted
-      unless user.admin?
+      unless user.admin? || project.cross_collaboration
         roles = user.roles_for_project(project).select {|r| r.has_permission?(:add_issues)}
         unless roles.any? {|r| r.permissions_all_trackers?(:add_issues)}
           tracker_ids = roles.map {|r| r.permissions_tracker_ids(:add_issues)}.flatten.uniq

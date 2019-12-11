@@ -161,7 +161,7 @@ class IssuesController < ApplicationController
   end
 
   def create
-    unless User.current.allowed_to?(:add_issues, @issue.project, :global => true)
+    unless User.current.allowed_to?(:add_issues, @issue.project, :global => true) || (@issue.project && @issue.project.cross_collaboration)
       raise ::Unauthorized
     end
 
@@ -585,9 +585,9 @@ class IssuesController < ApplicationController
         return
       end
     end
-    @issue.project = @project
+    @issue.project = @project || Project.all_cross_collaboration.find_by_id((params[:issue] || {})[:project_id])
     if request.get?
-      @issue.project ||= @issue.allowed_target_projects.first
+      @issue.project ||= (@issue.allowed_target_projects + Project.all_cross_collaboration).uniq.first
     end
     @issue.author ||= User.current
     @issue.start_date ||= User.current.today if Setting.default_issue_start_date_to_creation_date?

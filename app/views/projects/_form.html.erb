@@ -14,6 +14,7 @@
   <%= f.check_box :is_public %>
   <em class="info"><%= Setting.login_required? ? l(:text_project_is_public_non_member) : l(:text_project_is_public_anonymous) %></em>
 </p>
+<p><%= f.check_box :cross_collaboration %></p>
 
 <% unless @project.allowed_parents.compact.empty? %>
     <p><%= label(:project, :parent_id, l(:field_parent)) %><%= parent_project_select_tag(@project) %></p>
