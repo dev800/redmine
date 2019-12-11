@@ -1973,16 +1973,6 @@ table.bordered-table tr td {
   content: "";
 }
 
-.checklists-list td.project,
-.issues-list td.project {
-  width: 100px;
-}
-
-.checklists-list td.status,
-.issues-list td.status {
-  width: 62px;
-}
-
 .content-title {
   color: #000;
 }
@@ -1991,7 +1981,25 @@ table.bordered-table tr td {
   float: right;
 }
 
+.list-filter select {
+  margin-left: 0.5em;
+}
+
+.list-empty {
+  color: #999;
+}
+
+.checklists-list td.project,
+.issues-list td.project {
+  width: 92px;
+}
+
+.checklists-list td.status,
+.issues-list td.status {
+  width: 62px;
+}
+
 h3.list-title {
-  padding-bottom: 0;
+  padding-bottom: 4px;
   color: #000;
 }

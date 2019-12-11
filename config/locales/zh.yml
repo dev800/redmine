@@ -1354,6 +1354,7 @@ zh:
   label_participanted_checklists: 检查项
   label_checklists: 检查列表
   label_checklists_empty: 检查列表为空
+  label_issues_empty: 问题列表为空
   label_search_users_empty: 没有匹配的用户
   label_participants_empty: 暂未设置参与者
   wrong_rgb_value: 错误的颜色值

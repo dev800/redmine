@@ -156,18 +156,22 @@
     <%= select_tag :checklists_status, options_for_select(checklist_status_options, params[:checklists_status] || Issue::DEFAULT_CHECKLISTS_STATUS), :class => "filter-trigger" %>
   </div>
   <h3 class="list-title"><%= l(:label_participanted_checklists) %></h3>
-  <table class="list checklists-list">
-    <tr>
-      <th><%= l(:field_project) %></th>
-      <th><%= l(:field_status) %></th>
-      <th><%= l(:field_title) %></th>
-    </tr>
-    <% @checklists.each do |checklist| %>
-      <tr class="<%= checklist.css_classes %>">
-        <td class="project"><%= link_to_project(checklist.project) %></td>
-        <td class="status"><%= checklist.status.name %></td>
-        <td class="subject"><%= link_to_checklist(checklist) %></td>
+  <% if @checklists.any? %>
+    <table class="list checklists-list">
+      <tr>
+        <th><%= l(:field_project) %></th>
+        <th><%= l(:field_status) %></th>
+        <th><%= l(:field_title) %></th>
       </tr>
-    <% end %>
-  </table>
+      <% @checklists.each do |checklist| %>
+        <tr class="<%= checklist.css_classes %>">
+          <td class="project"><%= link_to_project(checklist.project) %></td>
+          <td class="status"><%= checklist.status.name %></td>
+          <td class="subject"><%= link_to_checklist(checklist) %></td>
+        </tr>
+      <% end %>
+    </table>
+  <% else %>
+    <div class="list-empty"><%= l(:label_checklists_empty) %></div>
+  <% end %>
 </div>

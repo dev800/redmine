@@ -1642,13 +1642,16 @@ module ApplicationHelper
     options = sources.last.is_a?(Hash) ? sources.pop : {}
     plugin = options.delete(:plugin)
     sources = sources.map do |source|
-      if plugin
-        "/plugin_assets/#{plugin}/stylesheets/#{source}"
-      elsif current_theme && current_theme.stylesheets.include?(source)
-        current_theme.stylesheet_path(source)
-      else
-        source
-      end
+      src =
+        if plugin
+          "/plugin_assets/#{plugin}/stylesheets/#{source}"
+        elsif current_theme && current_theme.stylesheets.include?(source)
+          current_theme.stylesheet_path(source)
+        else
+          source
+        end
+
+      "#{src}?v=201912111921"
     end
     super *sources, options
   end
@@ -1674,15 +1677,21 @@ module ApplicationHelper
   #
   def javascript_include_tag(*sources)
     options = sources.last.is_a?(Hash) ? sources.pop : {}
+
     if plugin = options.delete(:plugin)
       sources = sources.map do |source|
-        if plugin
-          "/plugin_assets/#{plugin}/javascripts/#{source}"
-        else
-          source
-        end
+          if plugin
+            "/plugin_assets/#{plugin}/javascripts/#{source}"
+          else
+            source
+          end
       end
     end
+
+    sources = sources.map do |source|
+      "#{source}?v=201912111921"
+    end
+
     super *sources, options
   end
 

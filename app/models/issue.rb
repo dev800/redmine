@@ -231,7 +231,7 @@ class Issue < ActiveRecord::Base
       .joins(:status)
       .joins(:tracker)
       .preload(:project, :status, :tracker, :priority, :author, :assigned_to, {:custom_values => :custom_field})
-      .order(:id => :asc)
+      .order("#{IssueStatus.table_name}.position" => :desc, :id => :asc)
 
     if issues_status === 'status:open'
       issues = issues.where({IssueStatus.table_name => {is_closed: false}})
