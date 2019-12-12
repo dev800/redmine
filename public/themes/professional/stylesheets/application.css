@@ -1,4 +1,4 @@
-@import url(../../../stylesheets/application.css?v=201912111921);
+@import url(../../../stylesheets/application.css?v=201912121606);
 
 body{ color:#303030; background:#e8eaec; }
 
@@ -666,6 +666,36 @@ div.wiki th {
   margin-top: 1.2em;
 }
 
+#main .wiki ol + a + h1,
+#main .wiki ol + a + h2,
+#main .wiki ol + a + h3,
+#main .wiki ol + a + h4,
+#main .wiki ol + a + h5,
+#main .wiki ol + a + h6,
+#main .wiki ul + a + h1,
+#main .wiki ul + a + h2,
+#main .wiki ul + a + h3,
+#main .wiki ul + a + h4,
+#main .wiki ul + a + h5,
+#main .wiki ul + a + h6 {
+  margin-top: 0;
+}
+
+#main .wiki h1 + ol,
+#main .wiki h2 + ol,
+#main .wiki h3 + ol,
+#main .wiki h4 + ol,
+#main .wiki h5 + ol,
+#main .wiki h6 + ol,
+#main .wiki h1 + ul,
+#main .wiki h2 + ul,
+#main .wiki h3 + ul,
+#main .wiki h4 + ul,
+#main .wiki h5 + ul,
+#main .wiki h6 + ul {
+  margin-top: 0;
+}
+
 #main .wiki h1:last-child,
 #main .wiki h2:last-child,
 #main .wiki h3:last-child,
@@ -719,7 +749,7 @@ div.wiki th {
 #main .wiki ul {
   padding-left: 2em;
   margin-top: 1em;
-  margin-bottom: 1.5em;
+  margin-bottom: 1em;
 }
 
 #main .wiki ol:first-child,
@@ -1096,14 +1126,10 @@ h6.icon,
   padding-bottom: 0;
 }
 
-#main,
-#main .wiki,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
+h1, h2, h3, h4 {
+  margin: 0.8em 0 0.4em;
+}
+
 #main .wiki h1,
 #main .wiki h2,
 #main .wiki h3 {
@@ -1143,6 +1169,7 @@ h6,
 #header h1 {
   margin-bottom: 0;
   padding-bottom: 0;
+  margin-top: 0;
 }
 
 #header h1 .breadcrumbs {
@@ -1174,7 +1201,9 @@ table.list td {
 }
 
 #main h2.content-title {
-  margin-bottom: 0.18em;
+  margin-bottom: 0.28em;
+  margin-top: 0;
+  padding-top: 0;
 }
 
 #main .content h2.content-title {
@@ -1389,6 +1418,7 @@ select#checklist_done_ratio { width: 95px; }
   color: #ffffff;
   padding: 4px 8px 8px 12px;
   margin-bottom: 0;
+  margin-top: 0;
 }
 
 #dialog-modal > .content-wrapper {
@@ -1428,7 +1458,10 @@ select#checklist_done_ratio { width: 95px; }
 .checklist-show .checklist-info.overdue .due-date .value { color: #c22; }
 
 .checklist-show .checklist-info .checklist-title {
-  border-left-width: 8px; border-left-style: solid; padding-left: 8px;
+  border-left-width: 8px;
+  border-left-style: solid;
+  padding-left: 8px;
+  margin-top: 0;
 }
 
 .checklist-show .checklist-info,
@@ -1560,7 +1593,7 @@ tr.issue td.last_updated_by {
 #main .journal ul.details,
 #main ul.revision-info {
   color: #959595;
-  margin-bottom: 0.6em;
+  margin-bottom: 0.8em;
   padding-left: 2em;
   padding-right: 0.6em;
 }
@@ -1785,6 +1818,10 @@ div#activity dd,
 
 #sidebar {
   padding-left: 12px;
+}
+
+p.buttons {
+  margin-bottom: 1em;
 }
 
 .version-article .wiki-page {
