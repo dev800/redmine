@@ -103,7 +103,7 @@ class ApplicationController < ActionController::Base
   # and starts a session if needed
   def find_current_user
     user = nil
-    unless api_request?
+    # unless api_request?
       if session[:user_id]
         # existing session
         user = (User.active.find(session[:user_id]) rescue nil)
@@ -113,7 +113,7 @@ class ApplicationController < ActionController::Base
         # RSS key authentication does not start a session
         user = User.find_by_rss_key(params[:key])
       end
-    end
+    # end
     if user.nil? && Setting.rest_api_enabled? && accept_api_auth?
       if (key = api_key_from_request)
         # Use API key
@@ -265,6 +265,7 @@ class ApplicationController < ActionController::Base
 
   # Authorize the user for the requested action
   def authorize(ctrl = params[:controller], action = params[:action], global = false)
+    return if ctrl == 'upload_files' && action == 'upload'
     return true if @project && @project.cross_collaboration_allows_to?(ctrl, action)
 
     allowed = User.current.allowed_to?({:controller => ctrl, :action => action}, @project || @projects, :global => global)

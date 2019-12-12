@@ -80,6 +80,10 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
   vertical-align: text-bottom;
 }
 
+#main .wiki del {
+  color: #999;
+}
+
 #main .wiki .anchor {
   float: left;
   line-height: 1;
