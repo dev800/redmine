@@ -532,7 +532,7 @@ div.issue.overdue .due-date .value { color: #c22; }
 #trackers_description dt {font-weight: bold; text-decoration: underline;}
 #trackers_description dd {margin: 0; padding: 0 0 1em 0;}
 
-fieldset.collapsible {border-width: 1px 0 0 0;}
+fieldset.collapsible {border-width: 1px 0 0 0; margin-top: 1em}
 fieldset.collapsible>legend { cursor:pointer; padding-left: 18px; background-position: 4px;}
 
 fieldset#date-range p { margin: 2px 0 2px 0; }

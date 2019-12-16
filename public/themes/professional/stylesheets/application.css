@@ -133,6 +133,7 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
   font-size: 14px;
   line-height: 1.5;
   word-wrap: break-word;
+  padding-bottom: 0.25em;
 }
 
 #main .wiki .pl-c {
