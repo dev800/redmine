@@ -629,7 +629,7 @@ div.wiki th {
 #main .wiki blockquote {
   border-left: .25em solid #8d8f91;
   color: #6a737d;
-  padding: 0 1em;
+  padding: 0.5em 1em;
   font-size: 12px;
 }
 
@@ -1136,7 +1136,7 @@ h1, h2, h3, h4 {
 #main .wiki h3 {
   word-break: normal;
   padding-bottom: 0.48em;
-  margin-bottom: 0.48em;
+  margin-bottom: 0;
 }
 
 #main .wiki h1,
