@@ -1,4 +1,4 @@
-@import url(../../../stylesheets/application.css?v=201912121606);
+@import url(../../../stylesheets/application.css?v=201912181900);
 
 body{ color:#303030; background:#e8eaec; }
 
@@ -1133,14 +1133,6 @@ h1, h2, h3, h4 {
 
 #main .wiki h1,
 #main .wiki h2,
-#main .wiki h3 {
-  word-break: normal;
-  padding-bottom: 0.48em;
-  margin-bottom: 0;
-}
-
-#main .wiki h1,
-#main .wiki h2,
 #main .wiki h3,
 #main .wiki h4,
 #main .wiki h5,
@@ -1149,6 +1141,19 @@ h1, h2, h3, h4 {
   padding-left: 0.48em;
   padding-top: 0.48em;
   margin-top: 0.48em;
+}
+
+#main .wiki h1,
+#main .wiki h2,
+#main .wiki h3 {
+  word-break: normal;
+  padding-bottom: 0.48em;
+  margin-bottom: 0.48em;
+}
+
+#main .wiki h3 {
+  margin-bottom: 0.24em;
+  margin-top: 0.72em;
 }
 
 #main .tabular .wiki-preview p {
@@ -1239,6 +1244,8 @@ select#checklist_done_ratio { width: 95px; }
 .form-actions > *:first-child {
   margin-left: 0;
 }
+
+fieldset.collapsible { margin-top: 1em; padding-top: 0.52em; }
 
 /** ################################# Begin checklist ################################# */
 .checklists {

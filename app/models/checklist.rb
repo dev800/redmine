@@ -220,12 +220,14 @@ class Checklist < ActiveRecord::Base
   end
 
   def participanted?(usr=nil)
-    self.participants.select { |participant| participant.user_id == usr.id }.any?
+    u = (usr || User.current)
+    self.participants.select { |participant| participant.user_id == u.id }.any?
   end
 
   # Returns true if usr or current user is allowed to view the checklist
   def visible?(usr=nil)
-    issue.visible?(usr) || participanted?(usr)
+    u = (usr || User.current)
+    issue.visible?(u) || participanted?(u)
   end
 
   # Returns true if user or current user is allowed to edit or add notes to the checklist

@@ -259,7 +259,8 @@ class Issue < ActiveRecord::Base
   end
 
   def participanted?(usr=nil)
-    self.participants.select { |participant| participant.user_id == usr.id }.any?
+    u = (usr || User.current)
+    self.participants.select { |participant| participant.user_id == u.id }.any?
   end
 
   # Returns true if usr or current user is allowed to view the issue
