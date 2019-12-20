@@ -265,10 +265,11 @@ class ApplicationController < ActionController::Base
 
   # Authorize the user for the requested action
   def authorize(ctrl = params[:controller], action = params[:action], global = false)
-    return if ctrl == 'upload_files' && action == 'upload'
+    return true if ctrl == 'upload_files' && action == 'upload'
     return true if @project && @project.cross_collaboration_allows_to?(ctrl, action)
 
     allowed = User.current.allowed_to?({:controller => ctrl, :action => action}, @project || @projects, :global => global)
+
     if allowed
       true
     else
@@ -308,11 +309,19 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def find_optional_issue
+    if params[:issue_id].present?
+      @issue = Issue.find(params[:issue_id])
+    end
+  end
+
   # Find a project based on params[:project_id]
   # and authorize the user for the requested action
   def find_optional_project
     if params[:project_id].present?
       find_project(params[:project_id])
+    elsif @issue
+      @project = @issue.project
     end
     authorize_global
   end

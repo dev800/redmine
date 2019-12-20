@@ -3,9 +3,10 @@ class ChecklistsController < ApplicationController
   default_search_scope :checklist
 
   before_action :find_checklist, :only => [:show, :edit, :update]
+  before_action :find_optional_issue, :only => [:index]
   before_action :find_optional_project, :only => [:index, :new, :create]
-  before_action :authorize, :except => [:index, :show, :edit, :new, :create, :sort, :participated]
   before_action :find_issue, :only => [:new, :create]
+  before_action :authorize, :except => [:index, :show, :edit, :new, :create, :sort, :participated]
   before_action :build_new_checklist_from_params, :only => [:new, :create]
   accept_rss_auth :index, :show
   accept_api_auth :index, :show, :create, :update, :destroy, :sort

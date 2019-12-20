@@ -227,7 +227,9 @@ class Checklist < ActiveRecord::Base
   # Returns true if usr or current user is allowed to view the checklist
   def visible?(usr=nil)
     u = (usr || User.current)
-    issue.visible?(u) || participanted?(u)
+    issue.visible?(u) || participanted?(u) || u.allowed_to?(:view_checklists, self.project) do |role, user|
+      role.permissions_tracker_ids?(:view_checklists, tracker_id)
+    end
   end
 
   # Returns true if user or current user is allowed to edit or add notes to the checklist
