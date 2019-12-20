@@ -1326,7 +1326,7 @@ h1:hover a.wiki-anchor, h2:hover a.wiki-anchor, h3:hover a.wiki-anchor, h4:hover
   border:1px dashed #777;
   margin-bottom: 20px;
 }
-.mypage-box {
+#main .mypage-box {
   border:1px solid #ddd;
   padding:8px;
   margin:0 0 20px 0;
@@ -1334,9 +1334,21 @@ h1:hover a.wiki-anchor, h2:hover a.wiki-anchor, h3:hover a.wiki-anchor, h4:hover
   line-height:1.5em;
   border-radius: 3px;
 }
-
-.mypage-box>.contextual {opacity:0.001; transition: opacity 0.2s;}
-.mypage-box:hover>.contextual {opacity:1;}
+#main .mypage-box .icon-close {
+  display: none;
+}
+#main .mypage-box .autoscroll {
+  margin-bottom: 0;
+}
+#main .mypage-box h3 {
+  margin-top: 0;
+}
+#main .mypage-box .contextual {
+  top: -6px;
+  position: relative;
+}
+#main .mypage-box>.contextual {opacity:0.001; transition: opacity 0.2s;}
+#main .mypage-box:hover>.contextual {opacity:1;}
 
 .handle {cursor: move;}
 

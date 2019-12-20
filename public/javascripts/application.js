@@ -415,7 +415,7 @@ $(document).on('change', '#participated-issues .filter-trigger', function() {
   var href = $option.attr("href");
   var dataHref = $option.attr("data-href");
 
-  replaceInHistory(href)
+  pushHistory(href)
 
   $.ajax({
     method: "GET",
@@ -435,7 +435,7 @@ $(document).on('change', '#participated-checklists .filter-trigger', function() 
   var href = $option.attr("href");
   var dataHref = $option.attr("data-href");
 
-  replaceInHistory(href)
+  pushHistory(href)
 
   $.ajax({
     method: "GET",
@@ -472,6 +472,12 @@ $(document).on('change', '.checklists-filter .filter-trigger', function() {
 function replaceInHistory(url) {
   if ("replaceState" in window.history) {
     window.history.replaceState(null, document.title, url);
+  }
+}
+
+function pushHistory(url) {
+  if ("pushState" in window.history) {
+    window.history.pushState(null, document.title, url);
   }
 }
 
