@@ -1404,7 +1404,7 @@ function bindChecklistSortable() {
 }
 
 function setHeaderClass() {
-  if ($("#main-menu").length === 0) {
+  if ($("#main-menu > ul").length === 0) {
     $("body").removeClass("has-main-menu");
   }
 }
