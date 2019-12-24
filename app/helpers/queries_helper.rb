@@ -266,6 +266,15 @@ module QueriesHelper
     case column.name
     when :attachments
       value.to_a.map {|a| a.filename}.join("\n")
+    when :importance
+      case object.class.name
+      when 'Issue'
+        object.importance_human
+      when 'Checklist'
+        object.importance_human
+      else
+        value
+      end
     else
       format_object(value, false) do |value|
         case value.class.name

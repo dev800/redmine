@@ -426,6 +426,7 @@ $(document).on('change', '#participated-issues .filter-trigger', function() {
     }
   }).success(function(html) {
     $("#participated-issues").replaceWith(html);
+    showTooltip();
   })
 })
 
@@ -446,6 +447,7 @@ $(document).on('change', '#participated-checklists .filter-trigger', function() 
     }
   }).success(function(html) {
     $("#participated-checklists").replaceWith(html);
+    showTooltip();
   })
 })
 
@@ -464,7 +466,9 @@ $(document).on('change', '.checklists-filter .filter-trigger', function() {
     headers: {
       "X-Request-URL": window.location.href
     }
-  }).success(function(res) { })
+  }).success(function(res) {
+    showTooltip();
+  })
 })
 
 //replaces current URL with the "href" attribute of the current link
@@ -1162,16 +1166,20 @@ $(document).ready(function() {
   });
 });
 
+function showTooltip() {
+  $('[title]').tooltip({
+      show: {
+        delay: 400
+      },
+      position: {
+        my: "center bottom-5",
+        at: "center top"
+      }
+  });
+}
+
 $(function () {
-    $('[title]').tooltip({
-        show: {
-          delay: 400
-        },
-        position: {
-          my: "center bottom-5",
-          at: "center top"
-        }
-    });
+  showTooltip();
 });
 
 function inlineAutoComplete(element) {
@@ -1381,7 +1389,9 @@ function syncData() {
       headers: {
         "X-Request-URL": window.location.href
       }
-    }).success(function(res) { })
+    }).success(function(res) {
+      showTooltip();
+    })
   })
 }
 
@@ -1419,6 +1429,7 @@ function loadParticipatedIssues() {
   if ($('#participated-issues[data-loaded="false"]').length > 0) {
     $.get("/issues/participated", {}, function(html) {
       $('#participated-issues').replaceWith(html);
+      showTooltip();
     })
   }
 }
@@ -1427,6 +1438,7 @@ function loadParticipatedChecklists() {
   if ($('#participated-checklists[data-loaded="false"]').length > 0) {
     $.get("/checklists/participated", {}, function(html) {
       $('#participated-checklists').replaceWith(html);
+      showTooltip();
     })
   }
 }

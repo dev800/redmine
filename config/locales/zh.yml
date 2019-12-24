@@ -704,6 +704,11 @@ zh:
   label_participant_type_resolver: 执行者
   label_participant_type_tester: 测试员
   label_participant_type_tracker: 跟踪者
+  label_participant_type_short_leader: 责
+  label_participant_type_short_requester: 需
+  label_participant_type_short_resolver: 执
+  label_participant_type_short_tester: 测
+  label_participant_type_short_tracker: 踪
   label_watched_issues: 关注的问题
   label_related_issues: 相关的问题
   label_applied_status: 应用后的状态
@@ -1348,6 +1353,7 @@ zh:
   field_checklists: 检查列表
   field_checklist_new: 新建检查项
   field_checklist_edit: 编辑检查项
+  field_participanted_roles: 角色
   label_issues: 问题
   label_as: 作为
   label_participanted_issues: 问题

@@ -147,6 +147,14 @@
   else
     default_issue_status_options
   end
+
+  participants = Participant.where(
+    :partable_type => Issue.to_s,
+    :partable_id => @issues.map(&:id),
+    :user_id => User.current.id
+  ).all
+
+  participants_index = participants.index_by(&:partable_id)
 %>
 
 <div id="participated-issues">
@@ -164,10 +172,18 @@
         <th><%= l(:field_issue) %></th>
       </tr>
       <% @issues.each do |issue| %>
+        <% participant = participants_index[issue.id] %>
         <tr class="<%= issue.css_classes %>">
           <td class="project"><%= link_to_project(issue.project) %></td>
           <td class="status"><%= issue.status.name %></td>
-          <td class="subject"><%= link_to_issue(issue) %></td>
+          <td class="subject">
+            <%= link_to_issue(issue) %>
+            <% if participant.try(:roles_description_short).present? %>
+              <span class="roles-description with-help" title="<%= participant.try(:roles_description) %>">
+                【<%= participant.try(:roles_description_short) %>】
+              </span>
+            <% end %>
+          </td>
         </tr>
       <% end %>
     </table>

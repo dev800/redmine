@@ -2011,6 +2011,21 @@ table.bordered-table tr td {
   width: 62px;
 }
 
+#participated-checklists .checklists-list .subject .checklist,
+#participated-issues .issues-list .subject .issue {
+  display: inline;
+}
+
+#participated-checklists .roles-description,
+#participated-issues .roles-description {
+  color: #999;
+}
+
+.with-help {
+  border-bottom: 1px dotted #aaa;
+  cursor: help;
+}
+
 h3.list-title {
   padding-bottom: 4px;
   color: #000;

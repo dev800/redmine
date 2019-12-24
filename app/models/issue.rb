@@ -128,8 +128,8 @@ class Issue < ActiveRecord::Base
   end
 
   def set_default_participants
-    # 创建者默认为需求方
-    Participant.update(self, {:user_id => self.author_id, :roles => [:is_requester], :checked => true})
+    # # 创建者默认为需求方
+    # Participant.update(self, {:user_id => self.author_id, :roles => [:is_requester], :checked => true})
 
     # 被指派者默认为负责人
     if self.assigned_to_id

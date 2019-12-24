@@ -18,6 +18,16 @@ class Participant < ActiveRecord::Base
     roles.join(", ")
   end
 
+  def roles_description_short
+    roles = []
+    roles.push(l(:label_participant_type_short_leader)) if self.is_leader
+    roles.push(l(:label_participant_type_short_requester)) if self.is_requester
+    roles.push(l(:label_participant_type_short_resolver)) if self.is_resolver
+    roles.push(l(:label_participant_type_short_tester)) if self.is_tester
+    roles.push(l(:label_participant_type_short_tracker)) if self.is_tracker
+    roles.join(",")
+  end
+
   # Participant.update(issue, {:user_id => 1, :roles => :is_requester, :checked => true})
   def self.update(partable, opts = {})
     checked = opts[:checked]

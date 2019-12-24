@@ -1,4 +1,4 @@
-@import url(../../../stylesheets/application.css?v=201912201445);
+@import url(../../../stylesheets/application.css?v=201912231334);
 
 body{ color:#303030; background:#e8eaec; }
 
@@ -1629,7 +1629,6 @@ div.issue .tabular .attributes p {
 }
 
 tr.time-entry td.issue,
-tr.time-entry td.comments,
 tr.time-entry td.subject,
 tr.time-entry td.activity,
 tr.time-entry td.project {
@@ -1653,10 +1652,6 @@ tr.time-entry td.subject {
 
 fieldset {
   margin-bottom: 8px;
-}
-
-.autoscroll {
-  overflow-x: initial;
 }
 
 .attachments {
@@ -1849,11 +1844,11 @@ table.issue-report td.name {
 }
 
 @media screen and (min-width: 0px) and (max-width: 1089px) {#sidebar{width: 15%;}}
-@media screen and (min-width: 1090px) and (max-width: 1279px) {#sidebar{width: 240px;}}
-@media screen and (min-width: 1280px) and (max-width: 1599px) {#sidebar{width: 280px;}}
-@media screen and (min-width: 1600px) and (max-width: 1919px) {#sidebar{width: 320px;}}
-@media screen and (min-width: 1920px) and (max-width: 2559px) {#sidebar{width: 360px;}}
-@media screen and (min-width: 2560px) {#sidebar{width: 380px;}}
+@media screen and (min-width: 1090px) and (max-width: 1279px) {#sidebar{width: 180px;}}
+@media screen and (min-width: 1280px) and (max-width: 1599px) {#sidebar{width: 200px;}}
+@media screen and (min-width: 1600px) and (max-width: 1919px) {#sidebar{width: 280px;}}
+@media screen and (min-width: 1920px) and (max-width: 2559px) {#sidebar{width: 320px;}}
+@media screen and (min-width: 2560px) {#sidebar{width: 360px;}}
 
 /**
   #################################################
