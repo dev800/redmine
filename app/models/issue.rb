@@ -989,8 +989,10 @@ class Issue < ActiveRecord::Base
   # Returns the journals that are visible to user with their index
   # Used to display the issue history
   def visible_journals_with_index(user=User.current)
-    result = journals.
+    result = Journal.
+      where(:issue_id => self.id).
       preload(:details).
+      preload(:checklist).
       preload(:user => :email_address).
       reorder(:created_on, :id).to_a
 

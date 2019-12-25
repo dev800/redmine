@@ -23,9 +23,8 @@ class Journal < ActiveRecord::Base
   belongs_to :journalized, :polymorphic => true
   # added as a quick fix to allow eager loading of the polymorphic association
   # since always associated to an issue, for now
-  belongs_to :issue, :foreign_key => :journalized_id
-  belongs_to :checklist, :foreign_key => :journalized_id
-
+  belongs_to :issue
+  belongs_to :checklist
   belongs_to :user
   has_many :details, :class_name => "JournalDetail", :dependent => :delete_all, :inverse_of => :journal
   attr_accessor :indice
@@ -47,6 +46,24 @@ class Journal < ActiveRecord::Base
   before_create :split_private_notes
   after_create_commit :send_notification
   acts_as_paranoid :column => 'deleted_at', :column_type => 'time'
+
+  before_save do |r|
+    if r.journalized
+      if r.journalized.is_a?(Issue)
+        r.issue_id = r.journalized_id
+      elsif r.journalized.respond_to?(:issue_id)
+        r.issue_id = r.journalized.issue_id
+      end
+
+      if r.journalized.is_a?(Checklist)
+        r.checklist_id = r.journalized_id
+      elsif r.journalized.respond_to?(:checklist_id)
+        r.checklist_id = r.journalized.checklist_id
+      end
+    end
+
+    true
+  end
 
   scope :visible, lambda {|*args|
     user = args.shift || User.current

@@ -2,6 +2,6 @@
 
 <%= render_settings_error @setting_errors %>
 
-<%= render_tabs administration_settings_tabs %>
+<%= render_tabs administration_settings_tabs, params[:tab] %>
 
 <% html_title(l(:label_settings), l(:label_administration)) -%>

@@ -10,4 +10,4 @@
   page_title.insert(page_title.rindex(' ') + 1, avatar(@user))
 %>
 
-<%= render_tabs user_settings_tabs %>
+<%= render_tabs user_settings_tabs, params[:tab] %>

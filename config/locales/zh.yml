@@ -471,6 +471,7 @@ zh:
     other: "%{count} 个项目"
   label_project_all: 所有的项目
   label_project_latest: 最近的项目
+  label_checklist: 检查项
   label_checklist_new: 新建检查项
   label_checklist_edit: 编辑检查项
   label_checklist_plural: 检查列表

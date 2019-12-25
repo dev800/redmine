@@ -1583,27 +1583,44 @@ tr.issue td.last_updated_by {
   position: relative;
 }
 
+#main div.journal ul.details + .wiki,
+#main ul.revision-info + .wiki {
+  padding-bottom: 0.4em;
+}
+
 #replies .message h4.reply-header,
 #main .journal.time_entry > h4,
 #main .journal h4.note-header {
   border-bottom: dotted 1px #c0c0c0;
   padding: 0.58em 0.8em;
+  margin-top: 0.25em;
   margin-bottom: 0;
 }
 
+#main .journal .checklist-row {
+  padding: 0.8em;
+  margin-left: 0.8em;
+}
+
+#main .journal .checklist-row + .wiki,
+#main .journal .checklist-row + .details {
+  margin-top: 0;
+  padding-top: 0;
+}
+
 #main .journal.time_entry > p {
-  padding-left: 0.4em;
-  padding-right: 0.4em;
+  padding-left: 0.8em;
+  padding-right: 0.8em;
   margin-top: 0.4em;
-  margin-bottom: 0.4em;
+  margin-bottom: 0.8em;
 }
 
 #main .journal ul.details,
 #main ul.revision-info {
   color: #959595;
   margin-bottom: 0.8em;
-  padding-left: 2em;
-  padding-right: 0.6em;
+  padding-left: 2.5em;
+  padding-right: 0.8em;
 }
 
 #content .tabs ul li a {

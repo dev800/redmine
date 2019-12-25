@@ -5,6 +5,7 @@
 
 <% reply_links = issue.notes_addable? -%>
 <% for journal in journals %>
+  <% checklist = journal.checklist %>
   <div id="change-<%= journal.id %>" class="<%= journal.css_classes %>">
     <div id="note-<%= journal.indice %>">
     <div class="contextual">
@@ -16,7 +17,9 @@
       <%= authoring journal.created_on, journal.user, :label => :label_updated_time_by %>
       <%= render_private_notes_indicator(journal) %>
     </h4>
-
+    <% if checklist && checklist.is_a?(Checklist) %>
+      <div class="checklist-row icon icon-checklist"><%= link_to_checklist(checklist) %></div>
+    <% end %>
     <% if journal.details.any? %>
     <ul class="details">
       <% details_to_strings(journal.visible_details).each do |string| %>
