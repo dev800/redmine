@@ -25,6 +25,7 @@ class TimelogController < ApplicationController
   before_action :find_time_entries, :only => [:bulk_edit, :bulk_update, :destroy]
   before_action :authorize, :only => [:show, :edit, :update, :bulk_edit, :bulk_update, :destroy]
 
+  before_action :find_optional_checklist, :only => [:new, :create]
   before_action :find_optional_issue, :only => [:new, :create]
   before_action :find_optional_project, :only => [:index, :report]
 
@@ -46,7 +47,7 @@ class TimelogController < ApplicationController
     retrieve_time_entry_query
     scope = time_entry_scope.
       preload(:issue => [:project, :tracker, :status, :assigned_to, :priority]).
-      preload(:project, :user)
+      preload(:project, :user, :checklist)
 
     respond_to do |format|
       format.html {
@@ -94,12 +95,12 @@ class TimelogController < ApplicationController
   end
 
   def new
-    @time_entry ||= TimeEntry.new(:project => @project, :issue => @issue, :author => User.current, :spent_on => User.current.today)
+    @time_entry ||= TimeEntry.new(:project => @project, :issue => @issue, :checklist => @checklist, :author => User.current, :spent_on => User.current.today)
     @time_entry.safe_attributes = params[:time_entry]
   end
 
   def create
-    @time_entry ||= TimeEntry.new(:project => @project, :issue => @issue, :author => User.current, :user => User.current, :spent_on => User.current.today)
+    @time_entry ||= TimeEntry.new(:project => @project, :issue => @issue, :checklist => @checklist, :author => User.current, :user => User.current, :spent_on => User.current.today)
     @time_entry.safe_attributes = params[:time_entry]
 
     if @time_entry.project && !User.current.allowed_to?(:log_time, @time_entry.project)
@@ -118,6 +119,7 @@ class TimelogController < ApplicationController
               :time_entry => {
                 :project_id => params[:time_entry][:project_id],
                 :issue_id => @time_entry.issue_id,
+                :checklist_id => @time_entry.checklist_id,
                 :spent_on => @time_entry.spent_on,
                 :activity_id => @time_entry.activity_id
               },

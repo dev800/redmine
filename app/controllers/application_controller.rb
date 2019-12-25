@@ -309,6 +309,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def find_optional_checklist
+    if params[:checklist].present?
+      @checklist = Checklist.find(params[:checklist_id])
+    end
+  end
+
   def find_optional_issue
     if params[:issue_id].present?
       @issue = Issue.find(params[:issue_id])

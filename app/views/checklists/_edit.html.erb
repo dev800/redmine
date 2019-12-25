@@ -27,6 +27,25 @@
         </p>
       </fieldset>
 
+      <% if User.current.allowed_to?(:log_time, project) && @time_entry %>
+        <fieldset class="tabular"><legend><%= l(:button_log_time) %></legend>
+          <%= labelled_fields_for :time_entry, @time_entry do |time_entry| %>
+          <div class="splitcontent">
+          <div class="splitcontentleft">
+          <p><%= time_entry.hours_field :hours, :size => 6, :label => :label_spent_time %> <%= l(:field_hours) %></p>
+          </div>
+          <div class="splitcontentright">
+          <p><%= time_entry.select :activity_id, activity_collection_for_select_options %></p>
+          </div>
+          </div>
+          <p><%= time_entry.text_field :comments, :size => 60 %></p>
+          <% @time_entry.custom_field_values.each do |value| %>
+            <p><%= custom_field_tag_with_label :time_entry, value %></p>
+          <% end %>
+          <% end %>
+        </fieldset>
+      <% end %>
+
       <% if checklist.notes_addable? %>
         <fieldset><legend><%= l(:field_notes) %></legend>
         <%= f.text_area :notes, :cols => 60, :rows => 4, :class => 'wiki-edit',

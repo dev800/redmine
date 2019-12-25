@@ -89,6 +89,8 @@ class ChecklistsController < ApplicationController
   end
 
   def edit
+    return unless update_checklist_from_params
+
     @project = @issue.project
     @priorities = IssuePriority.active
     @allowed_statuses = IssueStatus.for_checklists_enable
@@ -102,8 +104,25 @@ class ChecklistsController < ApplicationController
     call_hook(:controller_checklists_edit_before_save, { :params => params, :checklist => @checklist })
     @checklist.save_attachments(params[:attachments] || (params[:checklist] && params[:checklist][:uploads]))
 
-    if @checklist.save
-      call_hook(:controller_checklists_edit_after_save, { :params => params, :checklist => @checklist})
+    Checklist.transaction do
+      if params[:time_entry] &&
+           (params[:time_entry][:hours].present? || params[:time_entry][:comments].present?) &&
+           User.current.allowed_to?(:log_time, @issue.project)
+        time_entry = @time_entry || TimeEntry.new
+        time_entry.project = @issue.project
+        time_entry.issue = @issue
+        time_entry.checklist = @checklist
+        time_entry.user ||= User.current
+        time_entry.spent_on = User.current.today
+        time_entry.safe_attributes = params[:time_entry]
+        @issue.time_entries << time_entry
+      end
+
+      if @checklist.save
+        call_hook(:controller_checklists_edit_after_save, { :params => params, :checklist => @checklist})
+      else
+        raise ActiveRecord::Rollback
+      end
     end
   end
 

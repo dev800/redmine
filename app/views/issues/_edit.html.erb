@@ -10,7 +10,7 @@
         </fieldset>
     <% end %>
     <% if User.current.allowed_to?(:log_time, @project) %>
-        <fieldset class="tabular"><legend><%= l(:button_log_time) %></legend>
+      <fieldset class="tabular"><legend><%= l(:button_log_time) %></legend>
         <%= labelled_fields_for :time_entry, @time_entry do |time_entry| %>
         <div class="splitcontent">
         <div class="splitcontentleft">
@@ -25,7 +25,7 @@
           <p><%= custom_field_tag_with_label :time_entry, value %></p>
         <% end %>
         <% end %>
-    </fieldset>
+      </fieldset>
     <% end %>
     <% if @issue.notes_addable? %>
       <fieldset><legend><%= l(:field_notes) %></legend>
