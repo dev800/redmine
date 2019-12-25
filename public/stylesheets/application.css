@@ -234,6 +234,7 @@ div + .drdn-items {border-top:1px solid #ccc;}
 
 /***** Tables *****/
 table.list, .table-list { border: 1px solid #e4e4e4; width: 100%; margin-bottom: 4px; border-radius: 3px; border-spacing: 0; overflow: hidden;}
+table.list tr.group td, .table-list tr.group td { height: 16px; padding: 0.8em 0 0.5em 0.3em }
 table.list th, .table-list-header { background-color:#EEEEEE; padding: 4px; white-space:nowrap; font-weight:bold; }
 table.list td {text-align:center; vertical-align:middle; padding-right:10px;}
 table.list td.id { width: 2%; text-align: center;}

@@ -144,7 +144,11 @@ module QueriesHelper
           if group.blank? && group != false
             group_name = "(#{l(:label_blank_value)})"
           else
-            group_name = format_object(group)
+            if query && query.group_by == 'importance'
+              group_name = Issue.importance_human(group)
+            else
+              group_name = format_object(group)
+            end
           end
           group_name ||= ""
           group_count = result_count_by_group ? result_count_by_group[group] : nil
