@@ -474,14 +474,18 @@ $(document).on('change', '.checklists-filter .filter-trigger', function() {
 //replaces current URL with the "href" attribute of the current link
 //(only triggered if supported by browser)
 function replaceInHistory(url) {
-  if ("replaceState" in window.history) {
-    window.history.replaceState(null, document.title, url);
+  if (url) {
+    if ("replaceState" in window.history) {
+      window.history.replaceState(null, document.title, url);
+    }
   }
 }
 
 function pushHistory(url) {
-  if ("pushState" in window.history) {
-    window.history.pushState(null, document.title, url);
+  if (url) {
+    if ("pushState" in window.history) {
+      window.history.pushState(null, document.title, url);
+    }
   }
 }
 
