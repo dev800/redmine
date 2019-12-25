@@ -1337,6 +1337,10 @@ $(document).on('click', '[remote-href]', function(event) {
   $.get($target.attr('remote-href'), {})
     .success(function(html) {
       showHTMLDialog(html)
+
+      if ($("#dialog-modal").find(".form-actions").length > 0) {
+        $("#dialog-modal").addClass("with-form-actions")
+      }
     })
     .fail(function(res) {
       $.Toast.showToast({
