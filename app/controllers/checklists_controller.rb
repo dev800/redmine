@@ -28,7 +28,7 @@ class ChecklistsController < ApplicationController
   helper :timelog
 
   def participated
-    @user = User.current
+    @user = params[:checklists_user_id] ? User.find_by_id(params[:checklists_user_id]) : User.current
 
     @checklists = Checklist.participants_of_user(@user, {
       tracker: params[:checklists_tracker],

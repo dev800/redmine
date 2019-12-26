@@ -8,12 +8,10 @@
 
 <div id="my-page" class="splitcontent">
   <div class="splitcontentleft">
-    <div id="participated-issues" data-loaded="false">
-    </div>
+    <div id="participated-issues" data-loaded="false"></div>
   </div>
   <div class="splitcontentright">
-    <div id="participated-checklists" data-loaded="false">
-    </div>
+    <div id="participated-checklists" data-loaded="false"></div>
   </div>
 </div>
 
@@ -22,14 +20,6 @@
     <% @groups.each do |group| %>
       <div id="list-<%= group %>" class="block-receiver splitcontent<%= group %>">
         <%= render_blocks(@blocks[group], @user) %>
-        <div class="splitcontentleft">
-          <div id="participated-issues" data-loaded="false">
-          </div>
-        </div>
-        <div class="splitcontentright">
-          <div id="participated-checklists" data-loaded="false">
-          </div>
-        </div>
       </div>
     <% end %>
   </div>

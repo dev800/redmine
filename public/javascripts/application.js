@@ -414,18 +414,25 @@ $(document).on('change', '#participated-issues .filter-trigger', function() {
   var $option = $this.find('option[value="' + $this.val() + '"]');
   var href = $option.attr("href");
   var dataHref = $option.attr("data-href");
+  var userId = $("#participated-issues").attr("data-user-id");
+  var params = {_t: (new Date()).valueOf()};
+
+  if (userId) {
+    params["issues_user_id"] = userId;
+  }
 
   pushHistory(href)
 
   $.ajax({
     method: "GET",
     url: dataHref,
-    data: {_t: (new Date()).valueOf()},
+    data: params,
     headers: {
       "X-Request-URL": window.location.href
     }
   }).success(function(html) {
     $("#participated-issues").replaceWith(html);
+    $("#participated-issues").attr("data-user-id", userId);
     showTooltip();
   })
 })
@@ -435,18 +442,25 @@ $(document).on('change', '#participated-checklists .filter-trigger', function() 
   var $option = $this.find('option[value="' + $this.val() + '"]');
   var href = $option.attr("href");
   var dataHref = $option.attr("data-href");
+  var userId = $("#participated-checklists").attr("data-user-id");
+  var params = {_t: (new Date()).valueOf()};
+
+  if (userId) {
+    params["checklists_user_id"] = userId;
+  }
 
   pushHistory(href)
 
   $.ajax({
     method: "GET",
     url: dataHref,
-    data: {_t: (new Date()).valueOf()},
+    data: params,
     headers: {
       "X-Request-URL": window.location.href
     }
   }).success(function(html) {
     $("#participated-checklists").replaceWith(html);
+    $("#participated-checklists").attr("data-user-id", userId);
     showTooltip();
   })
 })
@@ -1427,6 +1441,16 @@ function bindChecklistSortable() {
   });
 }
 
+function getParameterByName(name, url) {
+  if (!url) url = window.location.href;
+  name = name.replace(/[\[\]]/g, '\\$&');
+  var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+      results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
 function setHeaderClass() {
   if ($("#main-menu > ul").length === 0) {
     $("body").removeClass("has-main-menu");
@@ -1435,8 +1459,38 @@ function setHeaderClass() {
 
 function loadParticipatedIssues() {
   if ($('#participated-issues[data-loaded="false"]').length > 0) {
-    $.get("/issues/participated", {}, function(html) {
-      $('#participated-issues').replaceWith(html);
+    var userId = $("#participated-issues").attr("data-user-id");
+    var params = {_t: (new Date()).valueOf()};
+    var participantsType = getParameterByName("issues_participants_type");
+    var issuesTracker = getParameterByName("issues_tracker");
+    var issuesStatus = getParameterByName("issues_status");
+
+    if (userId) {
+      params["issues_user_id"] = userId;
+    }
+
+    if (participantsType) {
+      params["issues_participants_type"] = participantsType;
+    }
+
+    if (issuesTracker) {
+      params["issues_tracker"] = issuesTracker;
+    }
+
+    if (issuesStatus) {
+      params["issues_status"] = issuesStatus;
+    }
+
+    $.ajax({
+      method: "GET",
+      url: "/issues/participated",
+      data: params,
+      headers: {
+        "X-Request-URL": window.location.href
+      }
+    }).success(function(html) {
+      $("#participated-issues").replaceWith(html);
+      $("#participated-issues").attr("data-user-id", userId);
       showTooltip();
     })
   }
@@ -1444,8 +1498,38 @@ function loadParticipatedIssues() {
 
 function loadParticipatedChecklists() {
   if ($('#participated-checklists[data-loaded="false"]').length > 0) {
-    $.get("/checklists/participated", {}, function(html) {
-      $('#participated-checklists').replaceWith(html);
+    var userId = $("#participated-checklists").attr("data-user-id");
+    var params = {_t: (new Date()).valueOf()};
+    var participantsType = getParameterByName("checklists_participants_type");
+    var checklistsTracker = getParameterByName("checklists_tracker");
+    var checklistStatus = getParameterByName("checklists_issue");
+
+    if (userId) {
+      params["checklists_user_id"] = userId;
+    }
+
+    if (participantsType) {
+      params["checklists_participants_type"] = participantsType;
+    }
+
+    if (checklistsTracker) {
+      params["checklists_tracker"] = issuesTracker;
+    }
+
+    if (checklistStatus) {
+      params["checklists_status"] = checklistStatus;
+    }
+
+    $.ajax({
+      method: "GET",
+      url: "/checklists/participated",
+      data: params,
+      headers: {
+        "X-Request-URL": window.location.href
+      }
+    }).success(function(html) {
+      $("#participated-checklists").replaceWith(html);
+      $("#participated-checklists").attr("data-user-id", userId);
       showTooltip();
     })
   }

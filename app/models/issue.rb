@@ -194,7 +194,7 @@ class Issue < ActiveRecord::Base
   DEFAULT_CHECKLISTS_TRACKER = nil
 
   def queried_checklists(options = {})
-    Checklist.scope_of(self.checklists, options)
+    Checklist.order(:position => :asc).scope_of(self.checklists, options)
   end
 
   #

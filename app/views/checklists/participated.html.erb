@@ -1,10 +1,14 @@
 <%
-  request_url ||= request.url
+  request_url ||= (request.headers['x-request-url'] || request.url)
 
   # locals: { checklists, issue }
 
   ######################### participated #################################
   participated_type_params = {}
+
+  if params[:checklists_user_id]
+    participated_type_params.merge!(checklists_user_id: params[:checklists_user_id])
+  end
 
   if params[:checklists_status]
     participated_type_params.merge!(checklists_status: params[:checklists_status])
@@ -44,6 +48,10 @@
 
   ######################### tracker #################################
   tracker_params = {}
+
+  if params[:checklists_user_id]
+    tracker_params.merge!(checklists_user_id: params[:checklists_user_id])
+  end
 
   if params[:checklists_status]
     tracker_params.merge!(checklists_status: params[:checklists_status])
@@ -151,7 +159,7 @@
   participants = Participant.where(
     :partable_type => Checklist.to_s,
     :partable_id => @checklists.map(&:id),
-    :user_id => User.current.id
+    :user_id => @user.id
   ).all
 
   participants_index = participants.index_by(&:partable_id)

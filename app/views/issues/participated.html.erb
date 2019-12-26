@@ -1,10 +1,14 @@
 <%
-  request_url ||= request.url
+  request_url ||= (request.headers['x-request-url'] || request.url)
 
   # locals: { issues, issue }
 
   ######################### participated #################################
   participated_type_params = {}
+
+  if params[:issues_user_id]
+    participated_type_params.merge!(issues_user_id: params[:issues_user_id])
+  end
 
   if params[:issues_status]
     participated_type_params.merge!(issues_status: params[:issues_status])
@@ -44,6 +48,10 @@
 
   ######################### tracker #################################
   tracker_params = {}
+
+  if params[:issues_user_id]
+    tracker_params.merge!(issues_user_id: params[:issues_user_id])
+  end
 
   if params[:issues_status]
     tracker_params.merge!(issues_status: params[:issues_status])
@@ -151,7 +159,7 @@
   participants = Participant.where(
     :partable_type => Issue.to_s,
     :partable_id => @issues.map(&:id),
-    :user_id => User.current.id
+    :user_id => @user.id
   ).all
 
   participants_index = participants.index_by(&:partable_id)

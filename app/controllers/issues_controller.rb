@@ -42,7 +42,7 @@ class IssuesController < ApplicationController
   helper :timelog
 
   def participated
-    @user = User.current
+    @user = params[:issues_user_id] ? User.find_by_id(params[:issues_user_id]) : User.current
 
     @issues = Issue.participants_of_user(@user, {
       tracker: params[:issues_tracker],

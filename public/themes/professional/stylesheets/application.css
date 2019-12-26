@@ -1,4 +1,4 @@
-@import url(../../../stylesheets/application.css?v=201912231340);
+@import url(../../../stylesheets/application.css?v=201912232349);
 
 body{ color:#303030; background:#e8eaec; }
 
@@ -1182,6 +1182,12 @@ h1, h2, h3, h4 {
   display: inline-block;
   font-size: 0.8em;
   margin-right: 0.2em;
+}
+
+table.issue-report.list tr td.name,
+table.projects.list tr td.name,
+table.projects.list tr td.roles {
+  text-align: center;
 }
 
 input[type="submit"] {
