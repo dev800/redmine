@@ -118,10 +118,10 @@ class ChecklistsController < ApplicationController
         @issue.time_entries << time_entry
       end
 
-      if @checklist.save
-        call_hook(:controller_checklists_edit_after_save, { :params => params, :checklist => @checklist})
-      else
+      if @checklist.errors.any?
         raise ActiveRecord::Rollback
+      else
+        call_hook(:controller_checklists_edit_after_save, { :params => params, :checklist => @checklist})
       end
     end
   end

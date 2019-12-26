@@ -1,4 +1,4 @@
-@import url(../../../stylesheets/application.css?v=201912232349);
+@import url(../../../stylesheets/application.css?v=201912232350);
 
 body{ color:#303030; background:#e8eaec; }
 
@@ -1627,6 +1627,7 @@ tr.issue td.last_updated_by {
   margin-bottom: 0.8em;
   padding-left: 2.5em;
   padding-right: 0.8em;
+  line-height: 1.8em;
 }
 
 #content .tabs ul li a {
