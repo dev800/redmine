@@ -322,7 +322,7 @@ class Issue < ActiveRecord::Base
 
   # Returns true if user or current user is allowed to delete the issue
   def deletable?(user=User.current)
-    user_tracker_permission?(user, :delete_issues) || participanted?(user)
+    false && user_tracker_permission?(user, :delete_issues)
   end
 
   def initialize(attributes=nil, *args)
