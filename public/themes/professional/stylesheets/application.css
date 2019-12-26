@@ -1,4 +1,4 @@
-@import url(../../../stylesheets/application.css?v=201912232350);
+@import url(../../../stylesheets/application.css?v=201912232352);
 
 body{ color:#303030; background:#e8eaec; }
 
@@ -1724,6 +1724,16 @@ h3.documents-group-title {
   box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.1);
   padding: 8px;
   margin: 2px 4px 8px;
+}
+
+.documents .document > h4,
+.news-article header > h3 {
+  margin-top: 0;
+  padding-bottom: 0.6em;
+}
+
+.version-article header > h3 {
+  margin-top: 0;
 }
 
 div#roadmap .related-issues {
