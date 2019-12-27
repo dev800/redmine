@@ -304,7 +304,7 @@ module IssuesHelper
 
   def render_half_width_custom_fields_rows(issue)
     values = issue.visible_custom_field_values.reject {|value| value.custom_field.full_width_layout?}
-    values = values.select { |value| value.value.respond_to?(:compact) ? value.value.compact.present? : value.value.present? }
+    values = values.select { |value| value.value.respond_to?(:compact) ? value.value.select { |value| value.present? }.present? : value.value.present? }
     return if values.empty?
     half = (values.size / 2.0).ceil
     issue_fields_rows do |rows|
@@ -317,7 +317,7 @@ module IssuesHelper
 
   def render_full_width_custom_fields_rows(issue)
     values = issue.visible_custom_field_values.select {|value| value.custom_field.full_width_layout?}
-    values = values.select { |value| value.value.respond_to?(:compact) ? value.value.compact.present? : value.value.present? }
+    values = values.select { |value| value.value.respond_to?(:compact) ? value.value.select { |value| value.present? }.present? : value.value.present? }
     return if values.empty?
     s = ''.html_safe
     values.each_with_index do |value, i|
