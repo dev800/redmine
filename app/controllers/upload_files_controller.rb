@@ -57,19 +57,33 @@ class UploadFilesController < ApplicationController
   end
 
   def upload
-    upload_file = params[:uploadFile]
+    upload_file = params[:uploadFile] || request.raw_post
 
     @upload_file = UploadFile.new(:file => upload_file)
     @upload_file.author = User.current
-    @upload_file.filename = upload_file.original_filename.presence || Redmine::Utils.random_hex(16)
-    @upload_file.content_type = upload_file.content_type.presence
+
+    if upload_file.is_a?(String)
+      @upload_file.filename = params[:filename] || Redmine::Utils.random_hex(16)
+      @upload_file.content_type = params[:content_type]
+    else
+      @upload_file.filename = upload_file.original_filename.presence || Redmine::Utils.random_hex(16)
+      @upload_file.content_type = upload_file.content_type.presence
+    end
+
     saved = @upload_file.save
     @upload_file.move_to_target_directory!
 
     if saved
+      pn = Pathname.new(@upload_file.filename)
+      path_opts = {:id => @upload_file.id, :secret => @upload_file.secret}
+
+      if pn.extname.present?
+        path_opts.merge!(:extname => pn.extname.sub(".", ""))
+      end
+
       render :json => {
         :error => 0,
-        :url => upload_file_download_path(:id => @upload_file.id, :secret => @upload_file.secret),
+        :url => upload_file_download_path(path_opts),
         :filename => @upload_file.filename,
         :title => @upload_file.filename
       }

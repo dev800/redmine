@@ -36,7 +36,6 @@ function addFile(inputEl, file, eagerUpload) {
 addFile.nextAttachmentId = 1;
 
 function ajaxUpload(file, attachmentId, fileSpan, inputEl) {
-
   function onLoadstart(e) {
     fileSpan.removeClass('ajax-waiting');
     fileSpan.addClass('ajax-loading');
@@ -50,7 +49,6 @@ function ajaxUpload(file, attachmentId, fileSpan, inputEl) {
   }
 
   function actualUpload(file, attachmentId, fileSpan, inputEl) {
-
     ajaxUpload.uploading++;
 
     uploadBlob(file, $(inputEl).data('upload-path'), attachmentId, {
@@ -58,7 +56,7 @@ function ajaxUpload(file, attachmentId, fileSpan, inputEl) {
         progressEventHandler: onProgress.bind(progressSpan)
       })
       .done(function(result) {
-        addInlineAttachmentMarkup(file);
+        addInlineAttachmentMarkup(file, result, 'filename');
         progressSpan.progressbar( 'value', 100 ).remove();
         fileSpan.find('input.description, a').css('display', 'inline-block');
       })
@@ -81,10 +79,11 @@ function ajaxUpload(file, attachmentId, fileSpan, inputEl) {
 
   var maxSyncUpload = $(inputEl).data('max-concurrent-uploads');
 
-  if(maxSyncUpload == null || maxSyncUpload <= 0 || ajaxUpload.uploading < maxSyncUpload)
+  if(maxSyncUpload == null || maxSyncUpload <= 0 || ajaxUpload.uploading < maxSyncUpload) {
     actualUpload(file, attachmentId, fileSpan, inputEl);
-  else
+  } else {
     $(inputEl).parents('form').queue('upload', actualUpload.bind(this, file, attachmentId, fileSpan, inputEl));
+  }
 }
 
 ajaxUpload.uploading = 0;
@@ -96,7 +95,6 @@ function removeFile() {
 }
 
 function uploadBlob(blob, uploadUrl, attachmentId, options) {
-
   var actualOptions = $.extend({
     loadstartEventHandler: $.noop,
     progressEventHandler: $.noop
@@ -154,30 +152,34 @@ function addInputFiles(inputEl) {
 }
 
 function uploadAndAttachFiles(files, inputEl) {
-
   var maxFileSize = $(inputEl).data('max-file-size');
   var maxFileSizeExceeded = $(inputEl).data('max-file-size-message');
 
   var sizeExceeded = false;
+
   $.each(files, function() {
     if (this.size && maxFileSize != null && this.size > parseInt(maxFileSize)) {sizeExceeded=true;}
   });
+
   if (sizeExceeded) {
     alert(maxFileSizeExceeded);
   } else {
     $.each(files, function() {addFile(inputEl, this, true);});
   }
+
   return sizeExceeded;
 }
 
 function handleFileDropEvent(e) {
-
   $(this).removeClass('fileover');
   blockEventPropagation(e);
 
   if ($.inArray('Files', e.dataTransfer.types) > -1) {
     handleFileDropEvent.target = e.target;
-    uploadAndAttachFiles(e.dataTransfer.files, $('input:file.filedrop').first());
+
+    for (var i = 0; i < e.dataTransfer.files.length; i++) {
+      handleUploadFile(e.dataTransfer.files[i]);
+    }
   }
 }
 handleFileDropEvent.target = '';
@@ -194,7 +196,6 @@ function dragOutHandler(e) {
 
 function setupFileDrop() {
   if (window.File && window.FileList && window.ProgressEvent && window.FormData) {
-
     $.event.fixHooks.drop = { props: [ 'dataTransfer' ] };
 
     $('form div.box:not(.filedroplistner)').has('input:file.filedrop').each(function() {
@@ -208,15 +209,23 @@ function setupFileDrop() {
   }
 }
 
-function addInlineAttachmentMarkup(file) {
+function addInlineAttachmentMarkup(file, result, field) {
   // insert uploaded image inline if dropped area is currently focused textarea
   if($(handleFileDropEvent.target).hasClass('wiki-edit') && $.inArray(file.type, window.wikiImageMimeTypes) > -1) {
     var $textarea = $(handleFileDropEvent.target);
     var cursorPosition = $textarea.prop('selectionStart');
     var description = $textarea.val();
-    var sanitizedFilename = file.name.replace(/[\/\?\%\*\:\|\"\'<>\n\r]+/, '_');
-    var inlineFilename = encodeURIComponent(sanitizedFilename)
-      .replace(/[!()]/g, function(match) { return "%" + match.charCodeAt(0).toString(16) });
+    var sanitizedFilename;
+    var inlineFilename;
+
+    if (field === 'url') {
+      sanitizedFilename = result.url;
+      inlineFilename = sanitizedFilename.replace(/[!()]/g, function(match) { return "%" + match.charCodeAt(0).toString(16) });
+    } else {
+      sanitizedFilename = file.name.replace(/[\/\?\%\*\:\|\"\'<>\n\r]+/, '_');
+      inlineFilename = encodeURIComponent(sanitizedFilename).replace(/[!()]/g, function(match) { return "%" + match.charCodeAt(0).toString(16) });
+    }
+
     var newLineBefore = true;
     var newLineAfter = true;
     if(cursorPosition === 0 || description.substr(cursorPosition-1,1).match(/\r|\n/)) {
@@ -238,16 +247,18 @@ function addInlineAttachmentMarkup(file) {
       'selectionStart': cursorPosition + newLineBefore,
       'selectionEnd': cursorPosition + inlineFilename.length + newLineBefore
     });
-    $textarea.parents('.jstBlock')
-      .find('.jstb_img').click();
+
+    window._currentEditFilename = result.filename;
+    $textarea.parents('.jstBlock').find('.jstb_img').click();
+    delete window._currentEditFilename;
 
     // move cursor into next line
     cursorPosition = $textarea.prop('selectionStart');
+
     $textarea.prop({
       'selectionStart': cursorPosition + 1,
       'selectionEnd': cursorPosition + 1
     });
-
   }
 }
 
@@ -272,10 +283,21 @@ function copyImageFromClipboard(e) {
         + '-' + randomKey(5).toLocaleLowerCase()
         + '.' + blob.name.split('.').pop();
       var file = new File([blob], filename, {type: blob.type});
-      var inputEl = $('input:file.filedrop').first()
       handleFileDropEvent.target = e.target;
-      addFile(inputEl, file, true);
+      handleUploadFile(file);
     }
+  }
+}
+
+function handleUploadFile(file) {
+  if (file && $.inArray(file.type, window.wikiImageMimeTypes) > -1) {
+    uploadBlob(file, "/files/upload.json?dir=image", (new Date()).valueOf(), {})
+      .done(function(result) {
+        addInlineAttachmentMarkup(file, result, 'url');
+      })
+      .fail(function(result) {
+        console.log("fail: ", result)
+      });
   }
 }
 

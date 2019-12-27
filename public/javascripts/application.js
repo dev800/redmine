@@ -1308,7 +1308,6 @@ $(document).on('ajax:success', 'form.with-indicator', function(event) {
 })
 
 function imagePopup(image) {
-  // $("body").addClass("overflow-none");
   var $popupPanel = $(".image-popup-panel");
 
   if ($popupPanel.length === 0) {
@@ -1318,9 +1317,7 @@ function imagePopup(image) {
 
   $popupPanel.html('<div class="image-popup-panel__inner"><img class="image-popup-panel__img" src="' + image.src + '"/></div>');
 
-  var $image = $popupPanel.find(".image-popup-panel__img");
-
-  $image.load(function() {
+  $popupPanel.find(".image-popup-panel__img").load(function() {
     var $this = $(this);
     var height = $this.get(0).height;
     var padding = 12;
@@ -1332,9 +1329,24 @@ function imagePopup(image) {
   })
 }
 
+$(document).on('click', '[action-usage="target-document-new-and-add"]', function() {
+  showHTMLDialog('<div>hello world</div>');
+})
+
+$(document).on('click', '[action-usage="target-document-add"]', function() {
+
+})
+
+$(document).on('click', '[action-usage="target-document-edit"]', function() {
+
+})
+
+$(document).on('click', '[action-usage="target-document-remove"]', function() {
+
+})
+
 $(document).on("click", ".image-popup-panel", function() {
   $(this).remove();
-  // $("body").removeClass("overflow-none");
 })
 
 $(document).on("click", ".wiki img", function() {

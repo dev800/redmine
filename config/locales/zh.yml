@@ -817,6 +817,12 @@ zh:
   label_project_copy_notifications: 复制项目时发送邮件通知
   label_principal_search: "搜索用户或组："
   label_user_search: "搜索用户："
+  label_document_number: 编号
+  label_document_new_and_associate: 创建新文档并关联
+  label_document_relate: 关联已存在的文档
+  label_document_edit: 编辑
+  label_document_disassociate: 取消关联
+  label_related_document: 相关文档
 
   button_login: 登录
   button_submit: 提交

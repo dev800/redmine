@@ -211,7 +211,13 @@ jsToolBar.prototype.elements.img = {
   type: 'button',
   title: 'Image',
   fn: {
-    wiki: function() { this.encloseSelection("![](", ")") }
+    wiki: function() {
+      if (window._currentEditFilename) {
+        this.encloseSelection("![" + escapeHTML(window._currentEditFilename) + "](", ")")
+      } else {
+        this.encloseSelection("![](", ")")
+      }
+    }
   }
 }
 
@@ -232,6 +238,8 @@ jsToolBar.prototype.elements.uploadImg = {
             editor.hideDialog();
           }
         });
+
+        $(".ke-upload-file").click();
       });
     }
   }

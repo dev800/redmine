@@ -1,0 +1,22 @@
+<% if false %>
+<div class="wiki-pages-form-fields clearfix">
+  <div class="section clearfix">
+    <label><%= l(:label_related_document) %></label>
+    <div class="form-fields bordered-table">
+      <ul class="documents-list">
+      <% 5.times do %>
+        <li class="document-item">
+          技术文档(doc1)：测试方法大法师法师的法师打发第三方开
+          <%= link_to l(:label_document_edit), "javascript:;", :class => "icon icon-edit", :"action-usage" => "target-document-edit" %>
+          <%= link_to l(:label_document_disassociate), "javascript:;", :class => "icon icon-link-break", :"action-usage" => "target-document-remove" %>
+        </li>
+      <% end %>
+      </ul>
+      <div class="document-actions">
+        <%= link_to l(:label_document_new_and_associate), "javascript:;", :class => "icon icon-add", :"action-usage" => "target-document-new-and-add" %>
+        <%= link_to l(:label_document_relate), "javascript:;", :class => "icon icon-add", :"action-usage" => "target-document-add" %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

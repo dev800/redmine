@@ -293,7 +293,7 @@ Rails.application.routes.draw do
   patch 'attachments/:object_type/:object_id', :to => 'attachments#update_all', :as => :object_attachments
 
   resources :upload_files, :only => [:show]
-  get 'uploads/v/:id-:secret', :to => 'upload_files#download', :id => /\d+/, :as => :upload_file_download
+  get 'uploads/v/:id-:secret(.:extname)', :to => 'upload_files#download', :id => /\d+/, :as => :upload_file_download
 
   resources :groups do
     resources :memberships, :controller => 'principal_memberships'

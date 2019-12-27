@@ -1081,6 +1081,12 @@ en:
   label_display_type_list: List
   label_display_type_board: Board
   label_my_bookmarks: My bookmarks
+  label_document_number: no.
+  label_document_new_and_associate: New and associate
+  label_document_relate: Associate
+  label_document_edit: Edit
+  label_document_disassociate: Disassociate
+  label_related_document: Related wiki
 
   button_login: Login
   button_submit: Submit

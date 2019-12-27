@@ -52,6 +52,7 @@ class WikiPage < ActiveRecord::Base
   validates_associated :content
 
   validate :validate_parent_title
+  before_save :handle_set_name
   before_destroy :delete_redirects
   before_save :handle_rename_or_move, :update_wiki_start_page
   after_save :handle_children_move, :delete_selected_attachments
@@ -103,6 +104,10 @@ class WikiPage < ActiveRecord::Base
     end
 
     super attrs, user
+  end
+
+  def handle_set_name
+
   end
 
   # Manages redirects if page is renamed or moved

@@ -58,7 +58,9 @@
     </p>
     <hr />
 <% end %>
-
+<div class="wiki-info">
+  <%= l(:label_document_number) %>：<%= @page.id %>
+</div>
 <%= render(:partial => "wiki/content", :locals => {:content => @content}) %>
 
 <fieldset class="collapsible collapsed hide-when-print">

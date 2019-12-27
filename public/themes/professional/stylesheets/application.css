@@ -1,4 +1,4 @@
-@import url(../../../stylesheets/application.css?v=201912232352);
+@import url(../../../stylesheets/application.css?v=201912271844);
 
 body{ color:#303030; background:#e8eaec; }
 
@@ -1640,6 +1640,34 @@ div.issue .splitcontent {
   width: 650px;
 }
 
+table.bordered-table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  min-width: 280px;
+}
+
+.wiki-pages-form-fields .form-fields {
+  line-height: 24px;
+}
+
+.wiki-pages-form-fields .documents-list {
+  margin: 0;
+  padding-left: 2.5em;
+}
+
+.wiki-pages-form-fields .document-actions .icon,
+.wiki-pages-form-fields .documents-list .document-item .icon {
+  padding-right: 0.5em;
+}
+
+#issue-form .tabular .section,
+#checklist-form .tabular .section,
+div.checklist-show .tabular .section,
+div.issue .tabular .section,
+#issue-form .tabular .attributes .section,
+#checklist-form .tabular .attributes .section,
+div.checklist-show .tabular .attributes .section,
+div.issue .tabular .attributes .section,
 #issue-form .tabular p,
 #checklist-form .tabular p,
 div.checklist-show .tabular p,
@@ -1648,6 +1676,7 @@ div.issue .tabular p,
 #checklist-form .tabular .attributes p,
 div.checklist-show .tabular .attributes p,
 div.issue .tabular .attributes p {
+  padding: 3px 0 3px 0;
   padding-left: 90px;
 }
 
