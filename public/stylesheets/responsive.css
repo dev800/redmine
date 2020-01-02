@@ -666,7 +666,7 @@
   #login-form input#password,
   #login-form input#openid_url {
     width: 100%;
-    height: auto;
+    /* height: auto; */
   }
 
   /* some themes add a margin to login page, remove it on mobile */

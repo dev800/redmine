@@ -1,4 +1,4 @@
-@import url(../../../stylesheets/application.css?v=201912301029);
+@import url(../../../stylesheets/application.css?v=202001021117);
 
 body{ color:#303030; background:#e8eaec; }
 
@@ -1531,6 +1531,7 @@ tr.time-entry td.issue a,
 tr.time-entry td.subject a,
 tr.issue td.subject a {
   min-width: 150px;
+  display: inline-block;
 }
 
 tr.issue td.parent,
@@ -1841,9 +1842,8 @@ fieldset.tabular {
 }
 
 #checklist_is_private_wrap {
-  position: absolute;
-  right: 0.6em;
-  top: 1.6em;
+  position: relative;
+  top: -6px;
   padding: 0;
 }
 
@@ -2062,12 +2062,16 @@ table.issue-report td.name {
     display: inline-block !important;
   }
 
+  #main #issue_tree .issue > td.subject,
+  #main #relations .issue > td.subject {
+    padding-right: 42px;
+  }
+
   .checklists .checklist .checklist-subject {
     font-size: 1em !important;
   }
 
   .checklists-filter {
-    padding-top: 0.6em;
     display: block;
   }
 
