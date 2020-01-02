@@ -259,7 +259,7 @@ zh:
   field_is_default: 默认值
   field_tracker: 跟踪
   field_subject: 主题
-  field_due_date: 计划完成日期
+  field_due_date: 截止日期
   field_assigned_to: 指派给
   field_priority: 优先级
   field_fixed_version: 目标版本
