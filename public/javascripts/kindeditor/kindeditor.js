@@ -3606,7 +3606,7 @@ function _getInitHtml(themesPath, bodyClass, cssPath, cssData) {
 		'body, p, div {word-wrap: break-word;}',
 		'p {margin:5px 0;}',
 		'table {border-collapse:collapse;}',
-		'img {border:0;max-width:100%}',
+		'img {border:0;max-width:100%;max-height:120px}',
 		'noscript {display:none;}',
 		'table.ke-zeroborder td {border:1px dotted #AAA;}',
 		'pre, code {border: 1px solid #eee;padding: 12px;background: #f0f0f0;border-radius: 5px;}',

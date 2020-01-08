@@ -1,4 +1,4 @@
-@import url(../../../stylesheets/application.css?v=202001021117);
+@import url(../../../stylesheets/application.css?v=202001081119);
 
 body{ color:#303030; background:#e8eaec; }
 
@@ -829,7 +829,8 @@ div.wiki th {
   background-color: #fff;
   box-sizing: content-box;
   max-width: 61.8%;
-  max-height: calc(100vh - 24px);
+  /* max-height: calc(100vh - 24px); */
+  max-height: 120px;
 }
 
 #main .wiki img[align=right] {
@@ -1587,6 +1588,11 @@ tr.issue td.last_updated_by {
 #main .checklist-show .contextual {
   top: -6px;
   position: relative;
+}
+
+#main .issue .journal .contextual,
+#main .checklist-show .journal .contextual {
+  top: 0;
 }
 
 #main div.journal ul.details + .wiki,

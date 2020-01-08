@@ -486,6 +486,7 @@ zh:
   label_document_new: 新建文档
   label_document_plural: 文档
   label_document_added: 文档已添加
+  label_default_watched: 默认关注
   label_role: 角色
   label_role_plural: 角色
   label_role_new: 新建角色

@@ -7,10 +7,10 @@
 <% for journal in journals %>
   <% checklist = journal.checklist %>
   <div id="change-<%= journal.id %>" class="<%= journal.css_classes %>">
-    <div id="note-<%= journal.indice %>">
+    <div id="note-<%= journal.id %>">
     <div class="contextual">
       <span class="journal-actions"><%= render_journal_actions(issue, journal, :reply_links => reply_links) %></span>
-      <a href="#note-<%= journal.indice %>" class="journal-link">#<%= journal.indice %></a>
+      <a href="#note-<%= journal.id %>" class="journal-link">#<%= journal.indice %></a>
     </div>
     <h4 class='note-header'>
       <%= avatar(journal.user) %>

@@ -2,7 +2,15 @@
                       :as => :membership,
                       :remote => request.xhr?,
                       :method => :put) do |f| %>
-  <p>
+  <p style="padding: 0.5em 0">
+    <label class="block">
+      <%= check_box_tag('membership[default_watched]',
+                        true, @member.default_watched,
+                        :id => nil) %>
+      <%= l(:label_default_watched) %>
+    </label>
+  </p>
+  <p style="padding: 0.5em 0">
     <% @roles.each do |role| %>
     <label class="block">
       <%= check_box_tag('membership[role_ids][]',
@@ -14,7 +22,7 @@
     <% end %>
   </p>
   <%= hidden_field_tag 'membership[role_ids][]', '', :id => nil %>
-  <p>
+  <p style="padding: 0.5em 0">
     <%= submit_tag l(:button_save) %>
     <%= link_to_function l(:button_cancel),
                          "$('#member-#{@member.id}-roles').show(); $('#member-#{@member.id}-form').empty(); return false;" if request.xhr? %>

@@ -598,6 +598,7 @@ en:
   label_document_new: New document
   label_document_plural: Documents
   label_document_added: Document added
+  label_default_watched: Default watched
   label_role: Role
   label_role_plural: Roles
   label_role_new: New role

@@ -89,6 +89,7 @@ class MembersController < ApplicationController
   def update
     if params[:membership]
       @member.set_editable_role_ids(params[:membership][:role_ids])
+      @member.default_watched = params[:membership][:default_watched] == 'true'
     end
     saved = @member.save
     respond_to do |format|

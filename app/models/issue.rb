@@ -123,9 +123,20 @@ class Issue < ActiveRecord::Base
   after_destroy :update_parent_attributes
   after_create_commit :send_notification
   after_create :set_default_participants
+  after_save :add_watchers
 
   def self.participants_of_user(user, options={})
     self.joins(:participants).where({:participants => {:user_id => user.id}})
+  end
+
+  def add_watchers
+    if self.author
+      self.add_watcher(self.author)
+    end
+
+    if self.assigned_to
+      self.add_watcher(self.assigned_to)
+    end
   end
 
   def set_default_participants

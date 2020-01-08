@@ -10,6 +10,7 @@
   <thead>
     <tr>
       <th><%= l(:label_user) %> / <%= l(:label_group) %></th>
+      <th><%= l(:label_default_watched) %></th>
       <th><%= l(:label_role_plural) %></th>
       <th style="width:15%"></th>
       <%= call_hook(:view_projects_settings_members_table_header, :project => @project) %>
@@ -20,6 +21,7 @@
   <% next if member.new_record? %>
   <tr id="member-<%= member.id %>" class="member">
   <td class="name icon icon-<%= member.principal.class.name.downcase %>"><%= link_to_user member.principal %></td>
+  <td class="default-watched"><%= member.default_watched ? l(:general_text_yes) : l(:general_text_no) %></td>
   <td class="roles">
     <span id="member-<%= member.id %>-roles"><%= member.roles.sort.collect(&:to_s).join(', ') %></span>
     <div id="member-<%= member.id %>-form"></div>

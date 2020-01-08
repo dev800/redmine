@@ -431,9 +431,9 @@ class Project < ActiveRecord::Base
       ['timelog', 'create'],
       ['timelog', 'index'],
       ['timelog', 'report']
-      true
-    else
       self.cross_collaboration
+    else
+      false
     end
   end
 
