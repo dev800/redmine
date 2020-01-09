@@ -82,6 +82,10 @@ class QueryColumn
   def css_classes
     name
   end
+
+  def caption_key
+    @caption_key
+  end
 end
 
 class TimestampQueryColumn < QueryColumn

@@ -123,17 +123,21 @@ class Issue < ActiveRecord::Base
   after_destroy :update_parent_attributes
   after_create_commit :send_notification
   after_create :set_default_participants
-  after_save :add_watchers
+
+  after_create :add_watchers_after_create
+  after_save :add_watchers_after_save
 
   def self.participants_of_user(user, options={})
     self.joins(:participants).where({:participants => {:user_id => user.id}})
   end
 
-  def add_watchers
+  def add_watchers_after_create
     if self.author
       self.add_watcher(self.author)
     end
+  end
 
+  def add_watchers_after_save
     if self.assigned_to
       self.add_watcher(self.assigned_to)
     end
@@ -186,8 +190,24 @@ class Issue < ActiveRecord::Base
 
   DEFAULT_IMPORTANCE = 3
 
+  def self.importance_color(value)
+    if value == 2
+      '999999'
+    elsif value == 3
+      '666666'
+    elsif value == 4
+      'db7f18'
+    elsif value == 5
+      'eb3204'
+    end
+  end
+
   def self.importance_human(value)
     l("label_importance_#{value}")
+  end
+
+  def importance_color
+    self.class.importance_color(importance)
   end
 
   def importance_human

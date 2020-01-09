@@ -29,6 +29,7 @@
 <p class="subtitle"><%= @board.description %></p>
 
 <% if @topics.any? %>
+<div class="autoscroll">
 <table class="list messages">
   <thead><tr>
     <th><%= l(:field_subject) %></th>
@@ -54,6 +55,7 @@
   <% end %>
   </tbody>
 </table>
+</div>
 <span class="pagination"><%= pagination_links_full @topic_pages, @topic_count %></span>
 <% else %>
 <p class="nodata"><%= l(:label_no_data) %></p>

@@ -553,6 +553,10 @@ class Checklist < ActiveRecord::Base
     names
   end
 
+  def importance_color
+    Issue.importance_color(importance)
+  end
+
   def importance_human
     Issue.importance_human(importance)
   end

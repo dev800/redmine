@@ -169,7 +169,7 @@ module Redmine
               :position => 1,
               :color => '000000',
               :background_color => 'ddeaf7',
-              :flag_color => '03a9f4',
+              :flag_color => '32bd79',
               :flag_value => 'requirement'
             )
 
@@ -179,7 +179,7 @@ module Redmine
               :position => 2,
               :color => '000000',
               :background_color => 'f7e2d6',
-              :flag_color => 'ff9800',
+              :flag_color => '1962ec',
               :flag_value => 'pending'
             )
 
@@ -189,7 +189,7 @@ module Redmine
               :position => 3,
               :color => '000000',
               :background_color => 'ffcca7',
-              :flag_color => 'ff9800',
+              :flag_color => '470bcf',
               :flag_value => 'rejected'
             )
 
@@ -199,7 +199,7 @@ module Redmine
               :position => 4,
               :color => '000000',
               :background_color => 'ffeadc',
-              :flag_color => 'ff9800',
+              :flag_color => '9c1890',
               :flag_value => 'unsolved'
             )
 
@@ -209,7 +209,7 @@ module Redmine
               :position => 5,
               :color => '000000',
               :background_color => 'e1efda',
-              :flag_color => '4caf50',
+              :flag_color => 'c81c1c',
               :flag_value => 'solving'
             )
 
@@ -219,7 +219,7 @@ module Redmine
               :position => 6,
               :color => '000000',
               :background_color => 'ebf3e5',
-              :flag_color => '4caf50',
+              :flag_color => 'da4d00',
               :flag_value => 'alpha'
             )
 
@@ -229,7 +229,7 @@ module Redmine
               :position => 7,
               :color => '000000',
               :background_color => 'ecffde',
-              :flag_color => '4caf50',
+              :flag_color => 'db7f18',
               :flag_value => 'bate'
             )
 
@@ -237,7 +237,7 @@ module Redmine
               :name => l(:default_issue_status_qualified),
               :is_closed => false,
               :position => 8,
-              :color => '000000',
+              :color => 'cce40a',
               :background_color => 'f3e4ff',
               :flag_color => '9c27b0',
               :flag_value => 'qualified'
@@ -249,7 +249,7 @@ module Redmine
               :position => 9,
               :color => '000000',
               :background_color => 'efd9ff',
-              :flag_color => '9c27b0',
+              :flag_color => '90d105',
               :flag_value => 'released'
             )
 
@@ -259,7 +259,7 @@ module Redmine
               :position => 10,
               :color => '000000',
               :background_color => 'e3ffd0',
-              :flag_color => '009688',
+              :flag_color => '2dd42e',
               :flag_value => 'finished'
             )
 
@@ -269,7 +269,7 @@ module Redmine
               :position => 11,
               :color => '000000',
               :background_color => 'e8e8e8',
-              :flag_color => '9e9e9e',
+              :flag_color => 'c0c0c0',
               :flag_value => 'cancel'
             )
 
@@ -391,7 +391,7 @@ module Redmine
               :name => l(:default_priority_low),
               :color => 'e6e8e8',
               :background_color => '97FFFF',
-              :flag_color => '97FFFF',
+              :flag_color => '999999',
               :flag_value => 'low',
               :position => 1
             )
@@ -400,7 +400,7 @@ module Redmine
               :name => l(:default_priority_normal),
               :color => '00CD66',
               :background_color => '43CD80',
-              :flag_color => '43CD80',
+              :flag_color => '666666',
               :flag_value => 'normal',
               :position => 2,
               :is_default => true
@@ -410,7 +410,7 @@ module Redmine
               :name => l(:default_priority_high),
               :color => 'EEB422',
               :background_color => 'EEB422',
-              :flag_color => 'EEB422',
+              :flag_color => 'db7f18',
               :flag_value => 'high',
               :position => 3
             )
@@ -419,7 +419,7 @@ module Redmine
               :name => l(:default_priority_urgent),
               :color => 'FA8072',
               :background_color => 'FA8072',
-              :flag_color => 'FA8072',
+              :flag_color => 'eb3204',
               :flag_value => 'urgent',
               :position => 4
             )
@@ -428,7 +428,7 @@ module Redmine
               :name => l(:default_priority_immediate),
               :color => 'FF4500',
               :background_color => 'FF4500',
-              :flag_color => 'FF4500',
+              :flag_color => '9c1890',
               :flag_value => 'immediate',
               :position => 5
             )

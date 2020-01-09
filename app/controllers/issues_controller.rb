@@ -244,7 +244,7 @@ class IssuesController < ApplicationController
       end
       respond_to do |format|
         format.html do
-          issue_query = @issue.current_journal ? {:anchor => "note-#{@issue.current_journal.id}"} : {}
+          issue_query = @issue.current_journal ? {:anchor => "change-#{@issue.current_journal.id}"} : {}
           redirect_back_or_default(issue_path(@issue, issue_query))
         end
         format.api  {render_api_ok}

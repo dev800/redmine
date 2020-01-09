@@ -1541,6 +1541,12 @@ tr.issue td.last_updated_by {
   white-space: nowrap;
 }
 
+tr.issue td.assigned_to .arrow {
+  color: #999;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
 #main a.checklist.closed,
 #main a.checklist.closed:link,
 #main a.checklist.closed:visited,

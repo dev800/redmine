@@ -130,7 +130,11 @@ module IssuesHelper
              content_tag('td', h(child.status), :class => 'status') +
              content_tag('td', format_date(child.start_date), :class => 'start_date') +
              content_tag('td', format_date(child.due_date), :class => 'due_date') +
-             content_tag('td', link_to_user(child.assigned_to), :class => 'assigned_to') +
+             content_tag('td', :class => 'assigned_to') do
+               link_to_user(child.author) +
+                content_tag('span', "➤", :class => "arrow") +
+                link_to_user(child.assigned_to)
+             end +
              content_tag('td',
                          (if child.disabled_core_fields.include?('done_ratio')
                             ''
@@ -183,10 +187,14 @@ module IssuesHelper
                          }.html_safe,
                          :class => 'subject',
                          :style => 'width: 50%') +
-             content_tag('td', other_issue.status, :class => 'status') +
+             content_tag('td', other_issue.status, :class => 'status', :style => "color: ##{other_issue.status.try(:flag_color)};") +
              content_tag('td', format_date(other_issue.start_date), :class => 'start_date') +
              content_tag('td', format_date(other_issue.due_date), :class => 'due_date') +
-             content_tag('td', link_to_user(other_issue.assigned_to), :class => 'assigned_to') +
+             content_tag('td', :class => 'assigned_to') do
+               link_to_user(other_issue.author) +
+                content_tag('span', "➤", :class => "arrow") +
+                link_to_user(other_issue.assigned_to)
+             end +
              content_tag('td',
                          (if other_issue.disabled_core_fields.include?('done_ratio')
                             ''

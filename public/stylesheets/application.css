@@ -313,7 +313,7 @@ table.members td.roles, table.memberships td.roles { width: 45%; }
 
 table.messages td.last_message {text-align:left;}
 tr.message { height: 2.6em; }
-tr.message td.created_on { white-space: nowrap; }
+tr.message td.author, tr.message td.created_on { white-space: nowrap; }
 tr.message td.last_message { font-size: 80%; white-space: nowrap; }
 tr.message.sticky td.subject { font-weight: bold; }
 
@@ -670,6 +670,7 @@ ul.projects div.description li {list-style-type:initial;}
   page-break-inside:avoid;
   -webkit-column-break-inside: avoid;
   -moz-column-break-inside: avoid;
+  display: block;
   width: 100%;
 }
 #projects-index ul.projects li.child {margin-top: 1em;}
