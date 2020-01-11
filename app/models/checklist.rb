@@ -114,6 +114,21 @@ class Checklist < ActiveRecord::Base
     r.save!
   end
 
+  before_save :set_done_ratio
+  before_save :set_due_date
+
+  def set_done_ratio
+    if self.status && self.status.done_ratio_changed
+      self.done_ratio = self.status.done_ratio
+    end
+  end
+
+  def set_due_date
+    if self.status && self.status.flag_value == 'finished' && self.due_date.blank?
+      self.due_date = Date.today
+    end
+  end
+
   def set_default_participants
     # 创建者默认为追踪者
     Participant.update(self, {:user_id => self.author_id, :roles => [:is_tracker], :checked => true})

@@ -18,8 +18,8 @@ RUN set -eux; \
 	chown redmine:redmine "$HOME"; \
 	chmod 1777 "$HOME"
 
-ENV REDMINE_VERSION 4.0.25
-ENV REDMINE_DOWNLOAD_MD5 fb8bfeb815e0c90b8e6fc3c7cc73c300
+ENV REDMINE_VERSION 4.0.26
+ENV REDMINE_DOWNLOAD_MD5 eb49e4d413dcfbf07ef0c11c6c0b711f
 
 RUN set -eux; \
 	wget -O redmine.tar.gz "https://github.com/dev800/redmine/archive/v${REDMINE_VERSION}.tar.gz"; \

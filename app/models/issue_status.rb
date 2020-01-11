@@ -49,6 +49,8 @@ class IssueStatus < ActiveRecord::Base
     'color',
     'background_color',
     'is_closed',
+    'done_ratio',
+    'done_ratio_changed',
     'checklists_enable',
     'position',
     'default_done_ratio')

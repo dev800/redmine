@@ -49,7 +49,7 @@
     <p><%= f.hours_field :estimated_hours, :size => 10, :required => checklist.required_attribute?('estimated_hours') %> <%= l(:field_hours) %></p>
     <% end %>
 
-    <% if checklist.safe_attribute?('done_ratio') && Issue.use_field_for_done_ratio? %>
+    <% if false && checklist.safe_attribute?('done_ratio') && Issue.use_field_for_done_ratio? %>
     <p><%= f.select :done_ratio, ((0..10).to_a.collect {|r| ["#{r*10} %", r*10] }), :required => checklist.required_attribute?('done_ratio') %></p>
     <% end %>
   </div>

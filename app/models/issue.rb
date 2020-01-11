@@ -127,6 +127,21 @@ class Issue < ActiveRecord::Base
   after_create :add_watchers_after_create
   after_save :add_watchers_after_save
 
+  before_save :set_done_ratio
+  before_save :set_due_date
+
+  def set_done_ratio
+    if self.status && self.status.done_ratio_changed
+      self.done_ratio = self.status.done_ratio
+    end
+  end
+
+  def set_due_date
+    if self.status && self.status.flag_value == 'finished' && self.due_date.blank?
+      self.due_date = Date.today
+    end
+  end
+
   def self.participants_of_user(user, options={})
     self.joins(:participants).where({:participants => {:user_id => user.id}})
   end
@@ -623,7 +638,7 @@ class Issue < ActiveRecord::Base
     'description',
     'start_date',
     'due_date',
-    'done_ratio',
+    # 'done_ratio',
     'estimated_hours',
     'custom_field_values',
     'custom_fields',

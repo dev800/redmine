@@ -169,6 +169,8 @@ module Redmine
               :position => 1,
               :color => '000000',
               :background_color => 'ddeaf7',
+              :done_ratio => 10,
+              :done_ratio_changed => true,
               :flag_color => '32bd79',
               :flag_value => 'requirement'
             )
@@ -179,6 +181,8 @@ module Redmine
               :position => 2,
               :color => '000000',
               :background_color => 'f7e2d6',
+              :done_ratio => 20,
+              :done_ratio_changed => true,
               :flag_color => '1962ec',
               :flag_value => 'pending'
             )
@@ -189,6 +193,8 @@ module Redmine
               :position => 3,
               :color => '000000',
               :background_color => 'ffcca7',
+              :done_ratio => 0,
+              :done_ratio_changed => false,
               :flag_color => '470bcf',
               :flag_value => 'rejected'
             )
@@ -199,6 +205,8 @@ module Redmine
               :position => 4,
               :color => '000000',
               :background_color => 'ffeadc',
+              :done_ratio => 0,
+              :done_ratio_changed => false,
               :flag_color => '9c1890',
               :flag_value => 'unsolved'
             )
@@ -209,6 +217,8 @@ module Redmine
               :position => 5,
               :color => '000000',
               :background_color => 'e1efda',
+              :done_ratio => 40,
+              :done_ratio_changed => true,
               :flag_color => 'c81c1c',
               :flag_value => 'solving'
             )
@@ -219,6 +229,8 @@ module Redmine
               :position => 6,
               :color => '000000',
               :background_color => 'ebf3e5',
+              :done_ratio => 50,
+              :done_ratio_changed => true,
               :flag_color => 'da4d00',
               :flag_value => 'alpha'
             )
@@ -229,6 +241,8 @@ module Redmine
               :position => 7,
               :color => '000000',
               :background_color => 'ecffde',
+              :done_ratio => 60,
+              :done_ratio_changed => true,
               :flag_color => 'db7f18',
               :flag_value => 'bate'
             )
@@ -239,6 +253,8 @@ module Redmine
               :position => 8,
               :color => 'cce40a',
               :background_color => 'f3e4ff',
+              :done_ratio => 70,
+              :done_ratio_changed => true,
               :flag_color => '9c27b0',
               :flag_value => 'qualified'
             )
@@ -249,6 +265,8 @@ module Redmine
               :position => 9,
               :color => '000000',
               :background_color => 'efd9ff',
+              :done_ratio => 90,
+              :done_ratio_changed => true,
               :flag_color => '90d105',
               :flag_value => 'released'
             )
@@ -259,6 +277,8 @@ module Redmine
               :position => 10,
               :color => '000000',
               :background_color => 'e3ffd0',
+              :done_ratio => 100,
+              :done_ratio_changed => true,
               :flag_color => '2dd42e',
               :flag_value => 'finished'
             )
@@ -269,6 +289,8 @@ module Redmine
               :position => 11,
               :color => '000000',
               :background_color => 'e8e8e8',
+              :done_ratio => 0,
+              :done_ratio_changed => false,
               :flag_color => 'c0c0c0',
               :flag_value => 'cancel'
             )

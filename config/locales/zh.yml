@@ -228,6 +228,7 @@ zh:
   field_flag_value: 标识
   field_flag_color: 标识颜色
   field_background_color: 背景颜色
+  field_checklists_enable: 检查列表启用
   field_name: 名称
   field_description: 描述
   field_summary: 摘要
@@ -293,6 +294,7 @@ zh:
   field_onthefly: 即时用户生成
   field_start_date: 开始日期
   field_done_ratio: "% 完成"
+  field_done_ratio_changed: "改变完成度"
   field_auth_source: 认证模式
   field_hide_mail: 隐藏我的邮件地址
   field_comments: 注释
