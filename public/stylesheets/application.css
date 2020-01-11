@@ -129,6 +129,18 @@ div.modal h3.title {display:none;}
 div.modal p.buttons {text-align:right; margin-bottom:0;}
 div.modal .box p {margin: 0.3em 0;}
 
+#main .box {
+  padding: 8px;
+}
+
+.box > h3:first-child {
+  margin-top: 0;
+}
+
+.box > p:last-child {
+  margin-bottom: 0;
+}
+
 .clear:after{ content: "."; display: block; height: 0; clear: both; visibility: hidden; }
 
 .mobile-show {display: none;}

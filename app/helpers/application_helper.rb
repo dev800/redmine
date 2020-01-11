@@ -739,11 +739,41 @@ module ApplicationHelper
     if args.empty?
       title = @html_title || []
       title << @project.name if @project
-      title << Setting.app_title unless Setting.app_title == title.last
+      title << Setting.app_seo_title unless Setting.app_seo_title == title.last
       title.reject(&:blank?).join(' - ')
     else
       @html_title ||= []
       @html_title += args
+    end
+  end
+
+  def html_description(*args)
+    if args.empty?
+      description = (@html_description || []).reject(&:blank?)
+
+      if description.blank?
+        Setting.app_seo_description
+      else
+        description.join(' ').to_s.truncate(160)
+      end
+    else
+      @html_description ||= []
+      @html_description += args
+    end
+  end
+
+  def html_keywords(*args)
+    if args.empty?
+      keywords = (@html_keywords || []).reject(&:blank?)
+
+      if keywords.blank?
+        Setting.app_seo_keywords
+      else
+        keywords.join(',')
+      end
+    else
+      @html_keywords ||= []
+      @html_keywords += args
     end
   end
 

@@ -19,6 +19,12 @@
 # DO NOT MODIFY THIS FILE !!!
 # Settings can be defined through the application in Admin -> Settings
 
+app_seo_title:
+  default:
+app_seo_keywords:
+  default:
+app_seo_description:
+  default:
 app_title:
   default: Redmine
 welcome_text:

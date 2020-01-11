@@ -329,7 +329,13 @@ zh:
   field_assigned_to_role: 角色的成员
   field_text: 文本字段
   field_visible: 可见的
+  field_seo_title: SEO标题
+  field_seo_keywords: SEO关键词
+  field_seo_description: SEO描述
 
+  setting_app_seo_description: 应用SEO描述
+  setting_app_seo_keywords: 应用SEO关键词
+  setting_app_seo_title: 应用SEO标题
   setting_app_title: 应用程序标题
   setting_welcome_text: 欢迎文字
   setting_default_language: 默认语言

@@ -3,3 +3,5 @@
 <%= render_tabs project_settings_tabs, params[:tab] %>
 
 <% html_title(l(:label_settings)) -%>
+<% html_keywords(@project.seo_keywords) -%>
+<% html_description(@project.seo_description) -%>

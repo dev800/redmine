@@ -27,6 +27,10 @@
 
 <p><%= setting_text_field :feeds_limit, :size => 6 %></p>
 
+<p><%= setting_text_field :app_seo_title, :size => 120 %>
+<p><%= setting_text_area :app_seo_keywords, :cols => 60, :rows => 3 %></p>
+<p><%= setting_text_area :app_seo_description, :cols => 60, :rows => 3 %></p>
+
 <%= call_hook(:view_settings_general_form) %>
 </div>
 

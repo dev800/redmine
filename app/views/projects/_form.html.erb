@@ -15,6 +15,9 @@
   <em class="info"><%= Setting.login_required? ? l(:text_project_is_public_non_member) : l(:text_project_is_public_anonymous) %></em>
 </p>
 <p><%= f.check_box :cross_collaboration %></p>
+<p><%= f.text_field :seo_title, :size => 120 %></p>
+<p><%= f.text_area :seo_keywords, :rows => 3 %></p>
+<p><%= f.text_area :seo_description, :rows => 3 %></p>
 
 <% unless @project.allowed_parents.compact.empty? %>
     <p><%= label(:project, :parent_id, l(:field_parent)) %><%= parent_project_select_tag(@project) %></p>

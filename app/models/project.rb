@@ -791,6 +791,9 @@ class Project < ActiveRecord::Base
     'tracker_ids',
     'issue_custom_field_ids',
     'parent_id',
+    'seo_title',
+    'seo_keywords',
+    'seo_description',
     'default_version_id',
     'default_assigned_to_id')
 

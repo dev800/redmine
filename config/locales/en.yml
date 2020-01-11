@@ -389,7 +389,13 @@ en:
   field_recently_used_projects: Number of recently used projects in jump box
   field_history_default_tab: Issue's history default tab
   field_unique_id: Unique ID
+  field_seo_title: SEO Title
+  field_seo_keywords: SEO Keywords
+  field_seo_description: SEO description
 
+  setting_app_seo_description: Application SEO description
+  setting_app_seo_keywords: Application SEO keywords
+  setting_app_seo_title: Application SEO title
   setting_app_title: Application title
   setting_welcome_text: Welcome text
   setting_default_language: Default language
