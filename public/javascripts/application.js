@@ -489,7 +489,7 @@ $(document).on('change', '.checklists-filter .filter-trigger', function() {
 //(only triggered if supported by browser)
 function replaceInHistory(url) {
   if (url) {
-    if ("replaceState" in window.history) {
+    if ("replaceState" in window.history && url !== undefined) {
       window.history.replaceState(null, document.title, url);
     }
   }
