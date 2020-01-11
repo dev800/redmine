@@ -98,7 +98,7 @@ module FixedIssuesExtension
     @issues_progress[open] ||= begin
       progress = 0
       if count > 0
-        ratio = open ? 'done_ratio' : 100
+        ratio = open ? "#{Issue.table_name}.done_ratio" : 100
 
         done = open(open).sum("COALESCE(estimated_hours, #{estimated_average}) * #{ratio}").to_f
         progress = done / (estimated_average * count)
