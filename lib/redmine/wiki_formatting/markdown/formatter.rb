@@ -26,6 +26,14 @@ module Redmine
         include ActionView::Helpers::TagHelper
         include Redmine::Helpers::URL
 
+        def only_path= only_path
+          @only_path = only_path
+        end
+
+        def only_path
+          @only_path
+        end
+
         def list_item(text, list_type)
           is_task_item = text.start_with?("[x]", "[X]", "[ ]")
 
@@ -65,6 +73,7 @@ module Redmine
         def image(link, title, alt_text)
           return unless uri_with_safe_scheme?(link)
 
+          link = @only_path ? link : "#{Setting.base_url}#{link}"
           tag('img', :src => link, :alt => alt_text || "", :title => title)
         end
       end
@@ -73,8 +82,9 @@ module Redmine
         include Redmine::WikiFormatting::LinksHelper
         alias :inline_restore_redmine_links :restore_redmine_links
 
-        def initialize(text)
+        def initialize(text, opts = {})
           @text = text
+          @only_path = opts.fetch(:only_path, true)
         end
 
         def to_html(*args)
@@ -138,23 +148,30 @@ module Redmine
         private
 
         def formatter
-          @@formatter ||= Redcarpet::Markdown.new(
-            Redmine::WikiFormatting::Markdown::HTML.new(
+          if @formatter
+            @formatter
+          else
+            render = Redmine::WikiFormatting::Markdown::HTML.new(
               :with_toc_data => true,
               :filter_html => false,
               :hard_wrap => true
-            ),
-            :autolink => true,
-            :fenced_code_blocks => true,
-            :space_after_headers => true,
-            :tables => true,
-            :strikethrough => true,
-            :superscript => true,
-            :no_intra_emphasis => true,
-            :footnotes => true,
-            :lax_spacing => true,
-            :underline => true
-          )
+            )
+
+            render.only_path = @only_path
+
+            @formatter = Redcarpet::Markdown.new(render,
+              :autolink => true,
+              :fenced_code_blocks => true,
+              :space_after_headers => true,
+              :tables => true,
+              :strikethrough => true,
+              :superscript => true,
+              :no_intra_emphasis => true,
+              :footnotes => true,
+              :lax_spacing => true,
+              :underline => true
+            )
+          end
         end
       end
     end

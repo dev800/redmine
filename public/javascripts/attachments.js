@@ -198,7 +198,7 @@ function setupFileDrop() {
   if (window.File && window.FileList && window.ProgressEvent && window.FormData) {
     $.event.fixHooks.drop = { props: [ 'dataTransfer' ] };
 
-    $('form div.box:not(.filedroplistner)').has('input:file.filedrop').each(function() {
+    $('form div.box:not(.filedroplistner),form#checklist-form fieldset').has('input:file.filedrop').each(function() {
       $(this).on({
           dragover: dragOverHandler,
           dragleave: dragOutHandler,
@@ -303,9 +303,12 @@ function handleUploadFile(file) {
   }
 }
 
-$(document).ready(setupFileDrop);
-$(document).ready(function(){
+function setupAttachmentEvents() {
+  setupFileDrop();
+
   $("input.deleted_attachment").change(function(){
     $(this).parents('.existing-attachment').toggleClass('deleted', $(this).is(":checked"));
   }).change();
-});
+}
+
+$(document).ready(setupAttachmentEvents);

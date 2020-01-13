@@ -312,6 +312,10 @@ class Setting < ActiveRecord::Base
   load_available_settings
   load_plugin_settings
 
+  def self.base_url
+    "#{self.protocol}://#{self.host_name}"
+  end
+
   private
 
   def force_utf8_strings(arg)

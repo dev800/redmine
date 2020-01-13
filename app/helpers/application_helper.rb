@@ -847,7 +847,7 @@ module ApplicationHelper
       if obj.respond_to?(:formatting) && obj.formatting == 'richtext'
         text = text
       else
-        text = Redmine::WikiFormatting.to_html(formatting, text, :object => obj, :attribute => attr)
+        text = Redmine::WikiFormatting.to_html(formatting, text, :object => obj, :attribute => attr, :only_path => @only_path)
       end
     end
 
@@ -1681,7 +1681,7 @@ module ApplicationHelper
           source
         end
 
-      "#{src}?v=202001081119"
+      "#{src}?v=202001131720"
     end
     super *sources, options
   end
@@ -1719,7 +1719,7 @@ module ApplicationHelper
     end
 
     sources = sources.map do |source|
-      "#{source}?v=202001081119"
+      "#{source}?v=202001131720"
     end
 
     super *sources, options

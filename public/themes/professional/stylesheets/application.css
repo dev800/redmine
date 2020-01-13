@@ -1566,6 +1566,11 @@ tr.issue td.assigned_to .arrow {
   color: #467aa7;
 }
 
+#content .message .wiki p {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 #replies .message,
 #main .journal {
   overflow: auto;

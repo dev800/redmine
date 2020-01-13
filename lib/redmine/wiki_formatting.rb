@@ -87,10 +87,10 @@ module Redmine
             # Text retrieved from the cache store may be frozen
             # We need to dup it so we can do in-place substitutions with gsub!
             cache_store.fetch cache_key do
-              formatter_for(format).new(text).to_html
+              formatter_for(format).new(text, :only_path => options.fetch(:only_path, true)).to_html
             end.dup
           else
-            formatter_for(format).new(text).to_html
+            formatter_for(format).new(text, :only_path => options.fetch(:only_path, true)).to_html
           end
         text
       end

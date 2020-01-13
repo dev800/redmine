@@ -48,6 +48,7 @@ module Redmine
 
           left = []
           left << [l(:field_status), issue.status]
+          left << [l(:field_importance), issue.importance_human]
           left << [l(:field_priority), issue.priority]
           left << [l(:field_assigned_to), issue.assigned_to] unless issue.disabled_core_fields.include?('assigned_to_id')
           left << [l(:field_category), issue.category] unless issue.disabled_core_fields.include?('category_id')
@@ -124,8 +125,9 @@ module Redmine
               :only_path => false,
               :edit_section_links => false,
               :headings => false,
-              :inline_attachments => false
+              :inline_attachments => true
             )
+
           pdf.RDMwriteFormattedCell(35+155, 5, '', '', text, issue.attachments, "LRB")
 
           custom_field_values = issue.visible_custom_field_values.select {|value| value.custom_field.full_width_layout?}
@@ -228,7 +230,7 @@ module Redmine
                     :only_path => false,
                     :edit_section_links => false,
                     :headings => false,
-                    :inline_attachments => false
+                    :inline_attachments => true
                   )
                 pdf.RDMwriteFormattedCell(190,5,'','', text, issue.attachments, "")
               end

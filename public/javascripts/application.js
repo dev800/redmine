@@ -1367,6 +1367,8 @@ $(document).on('click', '[remote-href]', function(event) {
       if ($("#dialog-modal").find(".form-actions").length > 0) {
         $("#dialog-modal").addClass("with-form-actions")
       }
+
+      setupAttachmentEvents();
     })
     .fail(function(res) {
       $.Toast.showToast({
