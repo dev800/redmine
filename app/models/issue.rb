@@ -160,12 +160,12 @@ class Issue < ActiveRecord::Base
 
   def set_default_participants
     # 创建者默认为追踪者
-    Participant.update(self, {:user_id => self.author_id, :roles => [:is_tracker], :checked => true})
+    Participant.update(self, {:user => self.author, :roles => [:is_tracker], :checked => true})
 
     # 被指派者默认为负责人
     if self.assigned_to_id
-      Participant.update(self, {:user_id => self.assigned_to_id, :roles => [:is_leader], :checked => true})
-      Participant.update(self, {:user_id => self.assigned_to_id, :roles => [:is_tracker], :checked => true})
+      Participant.update(self, {:user => self.assigned_to, :roles => [:is_leader], :checked => true})
+      Participant.update(self, {:user => self.assigned_to, :roles => [:is_tracker], :checked => true})
     end
 
     true

@@ -1,3 +1,5 @@
 $('#participants.participants-container[partable-type="<%= @partable.class.to_s %>"][partable-id="<%= @partable.id %>"]').replaceWith('<%= j(
   render(:partial => "participants/participants", :locals => { :partable => @partable })
 ) %>')
+
+$('#watchers').html('<%= escape_javascript(render(:partial => 'watchers/watchers', :locals => {:watched => @partable})) %>');

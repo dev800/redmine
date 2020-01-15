@@ -2,6 +2,8 @@ class ParticipantsController < ApplicationController
   before_action :require_login, :find_partable, :only => [:edit, :update, :index, :complete]
   before_action :find_participants, :only => [:edit, :index, :complete]
 
+  helper :watchers
+
   def edit
     render :action => 'edit', :layout => !request.xhr?
   end
@@ -16,7 +18,7 @@ class ParticipantsController < ApplicationController
   def update
     Participant.update(@partable, {
       :roles => params[:role],
-      :user_id => params[:user_id].to_i,
+      :user => User.find(params[:user_id].to_i),
       :checked => params[:checked] == 'true'
     })
   end

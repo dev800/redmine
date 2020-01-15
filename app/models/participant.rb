@@ -28,11 +28,11 @@ class Participant < ActiveRecord::Base
     roles.join(",")
   end
 
-  # Participant.update(issue, {:user_id => 1, :roles => :is_requester, :checked => true})
+  # Participant.update(issue, {:user => user, :roles => :is_requester, :checked => true})
   def self.update(partable, opts = {})
     checked = opts[:checked]
-    user_id = opts[:user_id]
-    scope = partable.participants.where(:user_id => user_id)
+    user = opts[:user]
+    scope = partable.participants.where(:user_id => user.id)
     participant = scope.first()
     roles = Array.wrap(opts[:roles]).map(&:to_sym)
 
@@ -58,6 +58,11 @@ class Participant < ActiveRecord::Base
         participant.is_resolver ||
         participant.is_tester ||
         participant.is_tracker
+
+        if partable.is_a?(Issue)
+          partable.add_watcher(user)
+        end
+
         participant
       else
         participant.destroy
