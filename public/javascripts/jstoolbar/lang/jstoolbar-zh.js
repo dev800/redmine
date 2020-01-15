@@ -15,6 +15,6 @@ jsToolBar.strings['Unquote'] = '删除引用';
 jsToolBar.strings['Preformatted text'] = '格式化文本';
 jsToolBar.strings['Wiki link'] = '连接到 Wiki 页面';
 jsToolBar.strings['Image'] = '插入图片';
-jsToolBar.strings['Upload image'] = '上传图片并插入';
+jsToolBar.strings['Upload file'] = '上传文件并插入';
 jsToolBar.strings['Edit'] = '编辑';
 jsToolBar.strings['Preview'] = '预览';

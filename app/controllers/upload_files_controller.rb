@@ -85,7 +85,8 @@ class UploadFilesController < ApplicationController
         :error => 0,
         :url => upload_file_download_path(path_opts),
         :filename => @upload_file.filename,
-        :title => @upload_file.filename
+        :title => @upload_file.filename,
+        :content_type => @upload_file.content_type
       }
     else
       render :json => {:error => 1}

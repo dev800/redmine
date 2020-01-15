@@ -7383,7 +7383,7 @@ KindEditor.plugin('image', function(K) {
 						self.afterUpload.call(self, url, data, name);
 					}
 					if (!fillDescAfterUploadImage) {
-						clickFn.call(self, url, data.title, data.width, data.height, data.border, data.align);
+						clickFn.call(self, url, data.title, data.width, data.height, data.border, data.align, {contentType: data.content_type});
 					} else {
 						K(".ke-dialog-row #remoteUrl", div).val(url);
 						K(".ke-tabs-li", div)[0].click();

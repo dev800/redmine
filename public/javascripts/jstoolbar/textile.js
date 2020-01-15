@@ -213,10 +213,10 @@ jsToolBar.prototype.elements.img = {
   }
 }
 
-// uploadImage
-jsToolBar.prototype.elements.uploadImg = {
+// uploadFile
+jsToolBar.prototype.elements.uploadFile = {
   type: 'button',
-  title: 'Upload image',
+  title: 'Upload file',
   fn: {
     wiki: function() {
       var editor = window.kindEditor;

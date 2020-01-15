@@ -222,9 +222,9 @@ jsToolBar.prototype.elements.img = {
 }
 
 // uploadImage
-jsToolBar.prototype.elements.uploadImg = {
+jsToolBar.prototype.elements.uploadFile = {
   type: 'button',
-  title: 'Upload image',
+  title: 'Upload file',
   fn: {
     wiki: function() {
       var editor = window.kindEditor;
@@ -233,8 +233,15 @@ jsToolBar.prototype.elements.uploadImg = {
       editor.loadPlugin('image', function() {
         editor.plugin.imageDialog({
           showRemote : false,
-          clickFn : function(url, title, width, height, border, align) {
-            self.encloseSelection("![" + escapeHTML(title) + "](" + url + ")");
+          clickFn : function(url, title, width, height, border, align, opts) {
+            var opts = opts || {};
+
+            if (opts['contentType'] && opts['contentType'].startsWith('image/')) {
+              self.encloseSelection("![" + escapeHTML(title) + "](" + url + ")");
+            } else {
+              self.encloseSelection("[File: " + escapeHTML(title) + "](" + url + ")");
+            }
+
             editor.hideDialog();
           }
         });
