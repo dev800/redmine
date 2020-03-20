@@ -1259,11 +1259,15 @@ $(document).ready(setupFilePreviewNavigation);
 
 // Begin happy add /////////////////////////////////////////
 function escapeHTML(html) {
-  return html.replace(/&/g, '&amp;')
-  .replace(/>/g, '&gt;')
-  .replace(/</g, '&lt;')
-  .replace(/"/g, '&quot;')
-  .replace(/'/g, '&apos;')
+  if (html) {
+    return html.replace(/&/g, '&amp;')
+      .replace(/>/g, '&gt;')
+      .replace(/</g, '&lt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;')
+  } else {
+    return html;
+  }
 }
 
 function alert(msg, opts) {

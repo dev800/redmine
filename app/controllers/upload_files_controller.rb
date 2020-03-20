@@ -89,7 +89,7 @@ class UploadFilesController < ApplicationController
         :content_type => @upload_file.content_type
       }
     else
-      render :json => {:error => 1}
+      render :json => {:error => 1, message: @upload_file.errors.full_messages.join("; ")}
     end
   end
 
