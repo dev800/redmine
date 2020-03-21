@@ -40,7 +40,7 @@ class VersionsController < ApplicationController
 
         @versions = @project.shared_versions.preload(:custom_values)
         @versions += @project.rolled_up_versions.visible.preload(:custom_values) if @with_subprojects
-        @versions = @versions.to_a.uniq.sort
+        @versions = @versions.to_a.uniq
         unless params[:completed]
           @completed_versions = @versions.select(&:completed?).reverse
           @versions -= @completed_versions

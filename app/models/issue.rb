@@ -1139,7 +1139,7 @@ class Issue < ActiveRecord::Base
         versions << fixed_version
       end
     end
-    @assignable_versions = versions.uniq.sort
+    @assignable_versions = versions.uniq
   end
 
   # Returns true if this issue is blocked by another issue that is still open

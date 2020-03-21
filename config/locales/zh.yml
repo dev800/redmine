@@ -224,6 +224,7 @@ zh:
   mail_body_wiki_content_updated: "'%{id}' wiki页面已由 %{author} 更新。"
 
 
+  field_position: 排序
   field_formatting: 格式
   field_flag_value: 标识
   field_flag_color: 标识颜色

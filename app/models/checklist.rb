@@ -1038,7 +1038,7 @@ class Checklist < ActiveRecord::Base
         versions << fixed_version
       end
     end
-    @assignable_versions = versions.uniq.sort
+    @assignable_versions = versions.uniq
   end
 
   # Returns the default status of the checklist based on its tracker

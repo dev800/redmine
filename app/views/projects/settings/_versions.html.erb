@@ -28,18 +28,20 @@
     <th><%= l(:field_description) %></th>
     <th><%= l(:field_status) %></th>
     <th><%= l(:field_sharing) %></th>
+    <th><%= l(:field_position) %></th>
     <th><%= l(:label_wiki_page) %></th>
     <th style="width:15%"></th>
     </tr></thead>
   <tbody>
 <% @versions.each do |version| %>
     <tr class="version <%=h version.status %> <%= 'shared' if version.project != @project %>">
-    <td class="name <%= 'icon icon-shared' if version.project != @project %>"><%= link_to_version version %></td>
+    <td class="name <%= 'icon icon-shared' if version.project != @project %>" style="word-break: keep-all;"><%= link_to_version version %></td>
     <td class="tick"><%= checked_image(version.id == @project.default_version_id) %></td>
     <td class="date"><%= format_date(version.effective_date) %></td>
     <td class="description"><%= version.description %></td>
     <td class="status"><%= l("version_status_#{version.status}") %></td>
     <td class="sharing"><%=h format_version_sharing(version.sharing) %></td>
+    <td class="position"><%= version.position %></td>
     <td><%= link_to_if_authorized(version.wiki_page_title, {:controller => 'wiki', :action => 'show', :project_id => version.project, :id => Wiki.titleize(version.wiki_page_title)}) || h(version.wiki_page_title) unless version.wiki_page_title.blank? || version.project.wiki.nil? %></td>
     <td class="buttons">
       <% if version.project == @project && User.current.allowed_to?(:manage_versions, @project) %>

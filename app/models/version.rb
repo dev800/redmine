@@ -134,6 +134,8 @@ class Version < ActiveRecord::Base
   validates_inclusion_of :status, :in => VERSION_STATUSES
   validates_inclusion_of :sharing, :in => VERSION_SHARINGS
 
+  default_scope lambda { order(:position) }
+
   scope :named, lambda {|arg| where("LOWER(#{table_name}.name) = LOWER(?)", arg.to_s.strip)}
   scope :like, lambda {|arg|
     if arg.present?
@@ -157,6 +159,7 @@ class Version < ActiveRecord::Base
                   'effective_date',
                   'due_date',
                   'wiki_page_title',
+                  'position',
                   'status',
                   'sharing',
                   'default_project_version',

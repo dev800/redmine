@@ -255,6 +255,7 @@ en:
   mail_body_settings_updated: "The following settings were changed:"
   mail_body_password_updated: "Your password has been changed."
 
+  field_position: Position
   field_name: Name
   field_description: Description
   field_summary: Summary
