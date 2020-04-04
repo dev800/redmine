@@ -101,6 +101,7 @@ class Setup < ActiveRecord::Migration[4.2]
     end
 
     create_table "issue_categories", :force => true do |t|
+      t.column "position", :integer, :default => 0, :null => false
       t.column "project_id", :integer, :default => 0, :null => false
       t.column "name", :string, :limit => 30, :default => "", :null => false
     end
