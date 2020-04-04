@@ -231,6 +231,7 @@ class Setup < ActiveRecord::Migration[4.2]
     end
 
     create_table "versions", :force => true do |t|
+      t.column "position", :integer, :default => 0, :null => false
       t.column "project_id", :integer, :default => 0, :null => false
       t.column "name", :string, :limit => 30, :default => "", :null => false
       t.column "description", :string, :default => ""
