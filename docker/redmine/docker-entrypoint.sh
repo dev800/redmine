@@ -136,7 +136,6 @@ if [ -n "$isLikelyRedmine" ]; then
 	cp "Gemfile.lock.${adapter}" Gemfile.lock
 	# install additional gems for Gemfile.local and plugins
 	bundle check || bundle install --without development test
-	rake db:create
 
 	if [ ! -s config/secrets.yml ]; then
 		file_env 'REDMINE_SECRET_KEY_BASE'
@@ -149,11 +148,14 @@ if [ -n "$isLikelyRedmine" ]; then
 			rake generate_secret_token
 		fi
 	fi
+
 	if [ "$1" != 'rake' -a -z "$REDMINE_NO_DB_MIGRATE" ]; then
+	  rake db:create
 		rake db:migrate
 	fi
 
 	if [ "$1" != 'rake' -a -n "$REDMINE_PLUGINS_MIGRATE" ]; then
+	  rake db:create
 		rake redmine:plugins:migrate
 	fi
 
