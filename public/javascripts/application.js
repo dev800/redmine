@@ -1096,9 +1096,12 @@ $(document).ready(function(){
   toggleDisabledInit();
 
   $(document).on('click', '#history .tabs a', function(e){
-    var tab = $(e.target).attr('id').replace('tab-','');
-    document.cookie = 'history_last_tab=' + tab
-  });
+    var id = $(e.target).attr('id');
+    if (id) {
+      var tab = id.replace('tab-','');
+      document.cookie = 'history_last_tab=' + tab
+    }
+ });
 });
 
 $(document).ready(function(){
