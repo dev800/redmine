@@ -989,9 +989,88 @@ function toggleNewObjectDropdown() {
   }
 }
 
+function truncateString(text, length) {
+  if (text.length > length) {
+    return text.slice(0, length) + '...';
+  } else {
+    return text;
+  }
+}
+
 $(document).ready(function() {
   // https://jmblog.github.io/color-themes-for-google-code-prettify/
   prettyPrint();
+})
+
+$(document).on('click', '.copy-text-report[attr-copy-for]', function() {
+  var copyFor = $(this).attr('attr-copy-for');
+  var $copyFor = $(copyFor);
+
+  if ($copyFor.length > 0 && copyFor === '#time-entries-table') {
+    $('body').append('<table class="temp-copy-html" style="display: none"></table>')
+    $('body').append('<textarea type="text" class="temp-copy-input" style="position: fixed; left: 100000000px; bottom: 100000000px"></textarea>')
+
+    var $tempCopyHTML = $('.temp-copy-html');
+    var $tempCopyInput = $('.temp-copy-input');
+    var value = '';
+    var headers = [];
+
+    $tempCopyHTML.html($copyFor.html());
+
+    $tempCopyHTML.find('tr:eq(0)').find('th:gt(0)').each(function() {
+      headers.push($(this))
+    })
+
+    $tempCopyHTML.find('.buttons').remove();
+    $tempCopyHTML.find('.toggle-all').remove();
+    $tempCopyHTML.find('.checkbox').remove();
+    $tempCopyHTML.find('.hide-when-print').remove();
+
+    $tempCopyHTML.find('tr:gt(0)').each(function() {
+      var $tr = $(this);
+
+      if ($tr.hasClass('group')) {
+        value = value + $tr.find('.name').text() + ' ' + $tr.find('.total-for-hours').text();
+        value = value + '\n' + '= = = = = = =' + '\n';
+      } else {
+        var tds = '';
+        var index = 0;
+
+        $tr.find('td').each(function() {
+          var td = headers[index].text().trim() + ': ' + $(this).text().trim();
+          var clazz = $(this).attr('class')
+
+          if (['project', 'spent_on', 'user', 'activity'].includes(clazz)) {
+            tds = tds + td + '    ';
+          } else {
+            if (clazz === 'issue') {
+              td = truncateString(td, 46);
+            }
+
+            tds = tds + td + '\n';
+          }
+
+          index = index + 1;
+        })
+
+        value = value + tds + '\n';
+      }
+    })
+
+    $tempCopyInput.val(value);
+    $tempCopyInput.get(0).select();
+    document.execCommand("copy");
+
+    $.Toast.showToast({
+      title: 'Copy OK',
+      duration: 800,
+      icon: 'success',
+      image: ''
+    });
+
+    $tempCopyHTML.remove();
+    $tempCopyInput.remove();
+  }
 })
 
 $(document).on("change", '#issue_formatting_field select', function(e) {

@@ -160,12 +160,20 @@ module QueriesHelper
     end
   end
 
-  def render_query_totals(query)
+  def render_query_totals(query, opts = {})
     return unless query.totalable_columns.present?
     totals = query.totalable_columns.map do |column|
       total_tag(column, query.total_for(column))
     end
-    content_tag('p', totals.join(" ").html_safe, :class => "query-totals")
+
+    html = ''
+
+    if opts[:copy_text_report]
+      html += link_to(l('label_copy_text_report'), 'javascript:;', :class => "copy-text-report", :'attr-copy-for' => opts[:copy_for])
+    end
+
+    html += totals.join(" ").html_safe
+    content_tag('p', html.html_safe, :class => "query-totals")
   end
 
   def total_tag(column, value)

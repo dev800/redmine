@@ -462,6 +462,7 @@ zh:
   project_module_calendar: 日历
   project_module_gantt: 甘特图
 
+  label_copy_text_report: '复制文本报告'
   label_importance_5: '很重要'
   label_importance_4: '重要'
   label_importance_3: '一般'
