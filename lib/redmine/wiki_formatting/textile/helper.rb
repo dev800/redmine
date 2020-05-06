@@ -21,7 +21,9 @@ module Redmine
   module WikiFormatting
     module Textile
       module Helper
-        def wikitoolbar_for(field_id, preview_url = preview_text_path)
+        def wikitoolbar_for(field_id, *args)
+          preview_url = args.first || preview_text_path
+          options = args.extract_options!
           heads_for_wiki_formatter
           # Is there a simple way to link to a public resource?
           url = "#{Redmine::Utils.relative_url_root}/help/#{current_language.to_s.downcase}/wiki_syntax_textile.html"

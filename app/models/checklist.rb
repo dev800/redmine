@@ -124,9 +124,9 @@ class Checklist < ActiveRecord::Base
   end
 
   def set_due_date
-    if self.status && self.status.flag_value == 'finished' && self.due_date.blank?
-      self.due_date = Date.today
-    end
+    # if self.status && self.status.flag_value == 'finished' && self.due_date.blank?
+    #   self.due_date = Date.today
+    # end
   end
 
   def set_default_participants

@@ -29,7 +29,7 @@
     <% end %>
     <% if @issue.notes_addable? %>
       <fieldset><legend><%= l(:field_notes) %></legend>
-      <%= f.text_area :notes, :cols => 60, :rows => 5, :class => 'wiki-edit',
+      <%= f.text_area :notes, :cols => 60, :rows => 8, :class => 'wiki-edit',
             :data => {
                 :auto_complete => true,
                 :issues_url => auto_complete_issues_path(:project_id => @issue.project, :q => '')

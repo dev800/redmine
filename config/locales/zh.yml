@@ -261,7 +261,7 @@ zh:
   field_is_default: 默认值
   field_tracker: 跟踪
   field_subject: 主题
-  field_due_date: 截止日期
+  field_due_date: 计划完成日期
   field_assigned_to: 指派给
   field_priority: 优先级
   field_fixed_version: 目标版本
@@ -293,7 +293,7 @@ zh:
   field_attr_lastname: 姓氏属性
   field_attr_mail: 邮件属性
   field_onthefly: 即时用户生成
-  field_start_date: 开始日期
+  field_start_date: 计划开始日期
   field_done_ratio: "% 完成"
   field_done_ratio_changed: "改变完成度"
   field_auth_source: 认证模式
@@ -1059,7 +1059,7 @@ zh:
   label_parent_revision: 父修订
   label_child_revision: 子修订
   error_scm_annotate_big_text_file: 输入文本内容超长，无法输入。
-  setting_default_issue_start_date_to_creation_date: 使用当前日期作为新问题的开始日期
+  setting_default_issue_start_date_to_creation_date: 使用当前日期作为新问题的计划开始日期
   button_edit_section: 编辑此区域
   setting_repositories_encodings: 附件和版本库编码
   description_all_columns: 所有列

@@ -1269,11 +1269,11 @@ $(document).ready(function() {
 function showTooltip() {
   $('[title]').tooltip({
       show: {
-        delay: 400
+        delay: 200
       },
       position: {
-        my: "center bottom-5",
-        at: "center top"
+        my: "left bottom-5",
+        at: "left top"
       }
   });
 }

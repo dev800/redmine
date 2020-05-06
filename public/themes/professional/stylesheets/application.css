@@ -133,7 +133,7 @@ h4 { border-bottom: dotted 1px #c0c0c0; }
   -webkit-text-size-adjust: 100%;
   color: #24292e;
   line-height: 1.5;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
   font-size: 14px;
   line-height: 1.5;
   word-wrap: break-word;
@@ -1955,6 +1955,10 @@ p.buttons {
 
 table.issue-report td.name {
   word-break: keep-all;
+}
+
+.attributes .jstEditor textarea {
+  height: 7.2em;
 }
 
 @media screen and (min-width: 0px) and (max-width: 1089px) {#sidebar{width: 15%;}}

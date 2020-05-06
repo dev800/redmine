@@ -218,7 +218,7 @@ module Redmine
       end
 
       module Helper
-        def wikitoolbar_for(field_id, preview_url = preview_text_path)
+        def wikitoolbar_for(field_id, *args)
         end
 
         def heads_for_wiki_formatter
