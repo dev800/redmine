@@ -1077,6 +1077,7 @@ p.cal.legend span {display:block;}
 }
 
 div.tooltip:hover span.tip{
+  left: 0;
 display:block;
 position:absolute;
 top:12px; width:270px;
@@ -1088,7 +1089,7 @@ color:#505050;
 }
 
 table.cal div.tooltip:hover span.tip {
-  top: 25px;
+  top: 5.2em;
 }
 
 img.ui-datepicker-trigger {

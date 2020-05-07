@@ -397,7 +397,7 @@ module IssuesHelper
       end
     end
     issue.visible_custom_field_values(user).each do |value|
-      cf_value = show_value(value, false)
+      cf_value = show_value(value, true)
       next if cf_value.blank?
       if html
         items << content_tag('strong', "#{value.custom_field.name}: ") + cf_value

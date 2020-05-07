@@ -118,6 +118,7 @@ module ApplicationHelper
     title = nil
     subject = nil
     text = options[:tracker] == false ? "##{issue.id}" : "#{issue.tracker} ##{issue.id}"
+    text = options[:status] == true ? "【#{issue.status.try(:name)}】#{text}" : "#{text}"
     if options[:subject] == false
       title = issue.subject.truncate(60)
     else
@@ -1719,7 +1720,7 @@ module ApplicationHelper
     end
 
     sources = sources.map do |source|
-      "#{source}?v=202005041658"
+      "#{source}?v=202005041659"
     end
 
     super *sources, options

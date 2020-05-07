@@ -15,7 +15,7 @@ while day <= calendar.enddt %>
   <% if i.is_a? Issue %>
   <div class="<%= i.css_classes %> <%= 'starting' if day == i.start_date %> <%= 'ending' if day == i.due_date %> tooltip hascontextmenu">
   <%= "#{i.project} -" unless @project && @project == i.project %>
-  <%= link_to_issue i, :truncate => 30 %>
+  <%= link_to_issue i, :truncate => 30, :status => true %>
   <span class="tip"><%= render_issue_tooltip i %></span>
   <%= check_box_tag 'ids[]', i.id, false, :style => 'display:none;', :id => nil %>
   </div>

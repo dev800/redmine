@@ -114,14 +114,14 @@ class Checklist < ActiveRecord::Base
     r.save!
   end
 
-  before_save :set_done_ratio
+  # before_save :set_done_ratio
   before_save :set_due_date
 
-  def set_done_ratio
-    if self.status && self.status.done_ratio_changed
-      self.done_ratio = self.status.done_ratio
-    end
-  end
+  # def set_done_ratio
+  #   if self.status && self.status.done_ratio_changed
+  #     self.done_ratio = self.status.done_ratio
+  #   end
+  # end
 
   def set_due_date
     # if self.status && self.status.flag_value == 'finished' && self.due_date.blank?
