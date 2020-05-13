@@ -445,6 +445,17 @@
     border-top: 1px solid rgba(255,255,255,.1);
   }
 
+  .flyout-menu ul li a.icon-clear-query {
+    display: block;
+    float: right;
+    width: 46px;
+    padding-left: 16px;
+  }
+
+  .flyout-menu ul li a.icon-clear-query:after {
+    display: none;
+  }
+
   .flyout-menu ul li:first-child a {
     line-height: 39px;
     height: 39px;

@@ -1957,6 +1957,10 @@ table.issue-report td.name {
   word-break: keep-all;
 }
 
+.box.spent_time ul {
+  padding-left: 1.8em;
+}
+
 /* @media screen and (min-width: 0px) and (max-width: 1089px) {#sidebar{width: 15%;}}
 @media screen and (min-width: 1090px) and (max-width: 1279px) {#sidebar{width: 180px;}}
 @media screen and (min-width: 1280px) and (max-width: 1599px) {#sidebar{width: 200px;}}

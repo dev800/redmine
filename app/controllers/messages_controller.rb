@@ -66,7 +66,7 @@ class MessagesController < ApplicationController
         call_hook(:controller_messages_new_after_save, { :params => params, :message => @message})
         render_attachment_warning_if_needed(@message)
         flash[:notice] = l(:notice_successful_create)
-        redirect_to board_message_path(@board, @message)
+        redirect_to board_message_path(@board, @message, :anchor => "message-#{@message.id}")
       end
     end
   end
@@ -84,7 +84,8 @@ class MessagesController < ApplicationController
       render_attachment_warning_if_needed(@reply)
     end
     flash[:notice] = l(:notice_successful_update)
-    redirect_to board_message_path(@board, @topic, :r => @reply)
+    # redirect_to board_message_path(@board, @topic, :r => @reply)
+    redirect_to board_message_path(@board, @topic, :anchor => "message-#{@reply.id}")
   end
 
   # Edit a message
@@ -96,7 +97,8 @@ class MessagesController < ApplicationController
       render_attachment_warning_if_needed(@message)
       flash[:notice] = l(:notice_successful_update)
       @message.reload
-      redirect_to board_message_path(@message.board, @message.root, :r => (@message.parent_id && @message.id))
+      # redirect_to board_message_path(@message.board, @message.root, :r => (@message.parent_id && @message.id))
+      redirect_to board_message_path(@message.board, @message.root, :anchor => "message-#{@message.parent_id && @message.id}")
     end
   end
 
@@ -107,7 +109,8 @@ class MessagesController < ApplicationController
     @message.destroy
     flash[:notice] = l(:notice_successful_delete)
     if @message.parent
-      redirect_to board_message_path(@board, @message.parent, :r => r)
+      # redirect_to board_message_path(@board, @message.parent, :r => r)
+      redirect_to board_message_path(@board, @message.parent, :anchor => "message-#{r.id}")
     else
       redirect_to project_board_path(@project, @board)
     end
