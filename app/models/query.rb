@@ -1117,6 +1117,10 @@ class Query < ActiveRecord::Base
     filter = available_filters[field]
     target_class = filter[:through].format.target_class
 
+    if target_class == User
+      target_class = Principal
+    end
+
     "#{queried_table_name}.id #{not_in} IN (" +
       "SELECT customized_id FROM #{CustomValue.table_name}" +
       " WHERE customized_type='#{queried_class}' AND custom_field_id=#{custom_field_id}" +
