@@ -49,6 +49,7 @@ class VersionsController < ApplicationController
         @issues_by_version = {}
         if @selected_tracker_ids.any? && @versions.any?
           issues = Issue.visible.
+            where(:closed_on => nil).
             includes(:project, :tracker).
             preload(:status, :priority, :fixed_version).
             where(:tracker_id => @selected_tracker_ids, :project_id => project_ids, :fixed_version_id => @versions.map(&:id)).

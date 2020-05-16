@@ -1953,6 +1953,11 @@ p.buttons {
   padding-bottom: 0;
 }
 
+table.list.issues tr td.user {
+  white-space: break-spaces;
+  word-break: keep-all;
+}
+
 table.issue-report td.name {
   word-break: keep-all;
 }
