@@ -1682,7 +1682,7 @@ module ApplicationHelper
           source
         end
 
-      "#{src}?v=202005161010"
+      "#{src}?v=2020070320"
     end
     super *sources, options
   end

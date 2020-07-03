@@ -1115,6 +1115,8 @@ class Query < ActiveRecord::Base
     end
 
     filter = available_filters[field]
+
+
     target_class = filter[:through].format.target_class
 
     if target_class == User
