@@ -68,6 +68,7 @@ class VersionsController < ApplicationController
     respond_to do |format|
       format.html {
         @issues = @version.fixed_issues.visible.
+          where(:closed_on => nil).
           includes(:status, :tracker, :priority).
           preload(:project).
           reorder("#{Tracker.table_name}.position, #{Issue.table_name}.id").
