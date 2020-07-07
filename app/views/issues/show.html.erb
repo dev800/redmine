@@ -144,8 +144,10 @@ end %>
 <%= render :partial => 'relations' %>
 </div>
 <% end %>
+<% if false %>
 <hr />
 <%= render :partial => "participants/participants", :locals => { :partable => @issue } %>
+<% end %>
 </div>
 
 <%= render partial: 'action_menu_edit' if User.current.wants_comments_in_reverse_order? %>

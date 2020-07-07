@@ -314,7 +314,8 @@ class Issue < ActiveRecord::Base
   # Returns true if usr or current user is allowed to view the issue
   def visible?(usr=nil)
     u = (usr || User.current)
-    participanted?(u) || u.allowed_to?(:view_issues, self.project) do |role, user|
+
+    watched_by?(u) || u.allowed_to?(:view_issues, self.project) do |role, user|
       visible =
         if user.logged?
           case role.issues_visibility
@@ -338,7 +339,8 @@ class Issue < ActiveRecord::Base
   end
 
   def checklistable?(user=User.current)
-    attributes_checklistable?(user) || participanted?(user)
+    # attributes_checklistable?(user) || participanted?(user)
+    attributes_checklistable?(user) || watched_by?(user)
   end
 
   def attributes_checklistable?(user=User.current)
@@ -347,24 +349,35 @@ class Issue < ActiveRecord::Base
 
   # Returns true if user or current user is allowed to edit or add notes to the issue
   def editable?(user=User.current)
-    attributes_editable?(user) || notes_addable?(user) || participanted?(user)
+    # attributes_editable?(user) || notes_addable?(user) || participanted?(user)
+    attributes_editable?(user) || notes_addable?(user) || watched_by?(user)
   end
 
   # Returns true if user or current user is allowed to edit the issue
   def attributes_editable?(user=User.current)
+    # user_tracker_permission?(user, :edit_issues) || (
+    #   user_tracker_permission?(user, :edit_own_issues) && author == user
+    # ) || participanted?(user)
+
     user_tracker_permission?(user, :edit_issues) || (
       user_tracker_permission?(user, :edit_own_issues) && author == user
-    ) || participanted?(user)
+    ) || watched_by?(user)
   end
 
   # Overrides Redmine::Acts::Attachable::InstanceMethods#attachments_editable?
   def attachments_editable?(user=User.current)
-    attributes_editable?(user) || participanted?(user)
+    # attributes_editable?(user) || participanted?(user)
+    attributes_editable?(user) || watched_by?(user)
   end
 
   # Returns true if user or current user is allowed to add notes to the issue
   def notes_addable?(user=User.current)
-    user_tracker_permission?(user, :add_issue_notes) || participanted?(user)
+    # user_tracker_permission?(user, :add_issue_notes) || participanted?(user)
+    user_tracker_permission?(user, :add_issue_notes) || watched_by?(user)
+  end
+
+  def watched_by?(user=User.current)
+    ::Watcher.any_watched?([self], user)
   end
 
   # Returns true if user or current user is allowed to delete the issue

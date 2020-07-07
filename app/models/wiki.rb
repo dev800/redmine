@@ -36,7 +36,15 @@ class Wiki < ActiveRecord::Base
   safe_attributes 'start_page'
 
   def visible?(user=User.current)
-    !user.nil? && user.allowed_to?(:view_wiki_pages, project)
+    !user.nil? && (
+      user.allowed_to?(:manage_wiki, project)
+      (self.visile_scope == 'project_members' && user.allowed_to?(:view_wiki_pages, project)) ||
+        (self.visile_scope == 'watchers' && self.watched_by?(user))
+      )
+  end
+
+  def watched_by?(user=User.current)
+    ::Watcher.any_watched?([self], user)
   end
 
   # Returns the wiki page that acts as the sidebar content
