@@ -1,4 +1,4 @@
-@import url(../../../stylesheets/application.css?v=202001081120);
+@import url(../../../stylesheets/application.css?v=202007080922);
 
 body{ color:#303030; background:#e8eaec; }
 
@@ -2085,6 +2085,10 @@ input, select, button {height: 26px;}
 
   fieldset#filters td.values select {
     min-width: auto !important;
+  }
+
+  fieldset#filters td.values select[multiple=multiple] {
+    height: 120px;
   }
 
   #issue-form .splitcontent,
