@@ -1,4 +1,4 @@
-@import url(../../../stylesheets/application.css?v=202007080922);
+@import url(../../../stylesheets/application.css?v=202009090823);
 
 body{ color:#303030; background:#e8eaec; }
 
@@ -1300,6 +1300,48 @@ fieldset.collapsible { margin-top: 1em; padding-top: 0.52em; }
 
 .checklists .checklist ._unit:last-child {
   padding-right: 0;
+}
+
+#participated-checklists {
+  overflow-x: auto;
+}
+
+#participated-checklists .checklists-list .checklist td.checklist-status {
+  width: 98px;
+}
+
+#participated-checklists .checklists-list .checklist td.checklist-issue {
+  width: 128px;
+}
+
+#participated-checklists .checklists-list .checklist td.checklist-project {
+  width: 138px;
+}
+
+#participated-checklists .checklists-list .checklist td.checklist-user {
+  width: 152px;
+}
+
+#participated-checklists .checklists-list .checklist td.checklist-date {
+  width: 196px;
+}
+
+#participated-checklists .checklists-list .checklist td.checklist-issue,
+#participated-checklists .checklists-list .checklist td.checklist-subject {
+  text-align: left;
+}
+
+#participated-checklists .checklists-list .checklist td.checklist-date,
+#participated-checklists .checklists-list .checklist td.checklist-user,
+#participated-checklists .checklists-list .checklist td.checklist-status,
+#participated-checklists .checklists-list .checklist td.checklist-issue,
+#participated-checklists .checklists-list .checklist td.checklist-project {
+  word-break: keep-all;
+  white-space: nowrap;
+}
+
+#checklist-form .wiki-preview p {
+  padding: 0.2em 0 !important;
 }
 
 #main .checklists .checklist a.checklist-edit {

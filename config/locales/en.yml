@@ -293,6 +293,7 @@ en:
   field_priority: Priority
   field_fixed_version: Target version
   field_user: User
+  field_date: Date
   field_principal: Principal
   field_role: Role
   field_homepage: Homepage

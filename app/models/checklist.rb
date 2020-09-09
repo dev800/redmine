@@ -161,6 +161,10 @@ class Checklist < ActiveRecord::Base
     case options[:participants_type]
     when 'type:all'
       checklists
+    when 'type:is_author'
+      checklists.where({:author_id => user.id})
+    when 'type:is_assigned_to'
+      checklists.where({:assigned_to_id => user.id})
     when 'type:is_leader'
       checklists.where({:participants => {:is_leader => true}})
     when 'type:is_requester'

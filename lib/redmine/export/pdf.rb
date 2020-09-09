@@ -38,7 +38,7 @@ module Redmine
           @font_for_content = l(:general_pdf_fontname)
           @monospaced_font_for_content = l(:general_pdf_monospaced_fontname)
           @font_for_footer  = l(:general_pdf_fontname)
-          set_creator(Redmine::Info.app_name)
+          set_author(Redmine::Info.app_name)
           set_font(@font_for_content)
 
           set_header_font([@font_for_content, '', 10])

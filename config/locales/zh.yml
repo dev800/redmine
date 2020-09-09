@@ -266,6 +266,7 @@ zh:
   field_priority: 优先级
   field_fixed_version: 目标版本
   field_user: 用户
+  field_date: 时间
   field_principal: 用户/用户组
   field_role: 角色
   field_homepage: 主页
@@ -711,6 +712,8 @@ zh:
   label_permissions_report: 权限报表
   label_users_search: 用户搜索
   label_participants: 参与者
+  label_participant_type_author: 创建人
+  label_participant_type_assigned_to: 被指派人
   label_participant_type_leader: 负责人
   label_participant_type_requester: 需求方
   label_participant_type_resolver: 执行者
