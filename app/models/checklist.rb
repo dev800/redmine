@@ -153,28 +153,16 @@ class Checklist < ActiveRecord::Base
     offset = options.fetch(:offset, 0).to_i
 
     checklists = self.scope_of(self, options)
-      .joins(:participants)
-      .where({:participants => {:user_id => user.id}})
       .offset(offset)
       .limit(limit)
 
     case options[:participants_type]
     when 'type:all'
-      checklists
+      checklists.where("#{Checklist.table_name}.author_id = ? OR #{Checklist.table_name}.assigned_to_id = ?", user.id, user.id)
     when 'type:is_author'
       checklists.where({:author_id => user.id})
     when 'type:is_assigned_to'
       checklists.where({:assigned_to_id => user.id})
-    when 'type:is_leader'
-      checklists.where({:participants => {:is_leader => true}})
-    when 'type:is_requester'
-      checklists.where({:participants => {:is_requester => true}})
-    when 'type:is_resolver'
-      checklists.where({:participants => {:is_resolver => true}})
-    when 'type:is_tester'
-      checklists.where({:participants => {:is_tester => true}})
-    when 'type:is_tracker'
-      checklists.where({:participants => {:is_tracker => true}})
     else
       checklists
     end

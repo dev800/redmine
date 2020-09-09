@@ -18,7 +18,7 @@
     participated_type_params.merge!(checklists_tracker: params[:checklists_tracker])
   end
 
-  checklists_participants_type_options = (['author', 'assigned_to'] + Participant::ROLES).map do |role|
+  checklists_participants_type_options = (['author', 'assigned_to']).map do |role|
     [
       l(:"label_participant_type_#{role}"),
       "type:is_#{role}",
@@ -98,6 +98,10 @@
   ######################### status #################################
   status_params = {}
 
+  if params[:checklists_user_id]
+    status_params.merge!(checklists_user_id: params[:checklists_user_id])
+  end
+
   if params[:checklists_tracker]
     status_params.merge!(checklists_tracker: params[:checklists_tracker])
   end
@@ -159,6 +163,7 @@
 
 <div id="participated-checklists">
   <div class="list-filter">
+    <%= link_to_user(@user) %>&nbsp;&nbsp;
     <label class="list-filter-label"><%= l(:label_as) %>：</label><%= select_tag :checklists_participants_type, options_for_select(checklists_participants_type_options, params[:checklists_participants_type] || "type:all"), :class => "filter-trigger" %>
     <%= select_tag :checklists_tracker, options_for_select(checklist_tracker_options, params[:checklists_tracker] || Issue::DEFAULT_CHECKLISTS_TRACKER), :class => "filter-trigger" %>
     <%= select_tag :checklists_status, options_for_select(checklist_status_options, params[:checklists_status] || Issue::DEFAULT_CHECKLISTS_STATUS), :class => "filter-trigger" %>
