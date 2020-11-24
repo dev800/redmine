@@ -1255,15 +1255,12 @@ div.wiki *:not(pre)>code, div.wiki>code {
 
 @media screen and (min-width: 899px) {
   #main #content.with-toc {
-    padding-left: 244px;
+    padding-left: 300px;
     margin-left: 12px;
   }
 
   #main #content.with-toc .toc {
-    width: 220px;
-  }
-
-  #main #content.with-toc .toc {
+    width: 275px;
     margin-bottom: 0;
     position: fixed;
     max-height: calc(100vh - 176px);
