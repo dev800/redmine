@@ -762,6 +762,8 @@ div.wiki th {
   margin-top: 0;
 }
 
+.jstEditor .wiki ol:last-child,
+.jstEditor .wiki ul:last-child
 #main .wiki ol:last-child,
 #main .wiki ul:last-child {
   margin-bottom: 0;
@@ -876,6 +878,8 @@ div.wiki th {
   word-break: normal;
 }
 
+.jstEditor .wiki .highlight pre,
+.jstEditor .wiki pre
 #main .wiki .highlight pre,
 #main .wiki pre {
   background-color: #ffffff;

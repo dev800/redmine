@@ -1245,6 +1245,11 @@ div.wiki pre {
   width:auto;
   overflow-x: auto;
   overflow-y: hidden;
+  border-radius: 3px;
+  font-size: 85%;
+  line-height: 1.45;
+  overflow: auto;
+  padding: 10px;
 }
 
 div.wiki *:not(pre)>code, div.wiki>code {
