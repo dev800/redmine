@@ -6,15 +6,16 @@
 
 <h2 class="content-title"><%=l(:label_my_page)%></h2>
 
+<div id="participated-checklists" data-loaded="false"></div>
 <% if false %>
-<div id="my-page" class="splitcontent">
-  <div class="splitcontentleft">
-    <div id="participated-issues" data-loaded="false"></div>
+  <div id="my-page" class="splitcontent">
+    <div class="splitcontentleft">
+      <div id="participated-issues" data-loaded="false"></div>
+    </div>
+    <div class="splitcontentright">
+      <div id="participated-checklists" data-loaded="false"></div>
+    </div>
   </div>
-  <div class="splitcontentright">
-    <div id="participated-checklists" data-loaded="false"></div>
-  </div>
-</div>
 <% end %>
 
 <% if @groups.any? %>

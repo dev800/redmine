@@ -1,4 +1,4 @@
-@import url(../../../stylesheets/application.css?v=202010110700);
+@import url(../../../stylesheets/application.css?v=202012111536);
 
 body{ color:#303030; background:#e8eaec; }
 
@@ -1308,6 +1308,13 @@ fieldset.collapsible { margin-top: 1em; padding-top: 0.52em; }
 
 #participated-checklists {
   overflow-x: auto;
+  position: relative;
+}
+
+#participated-checklists .list-filter {
+  position: absolute;
+  top: 12px;
+  right: 0;
 }
 
 #participated-checklists .checklists-list .checklist td.checklist-status {
@@ -1330,9 +1337,14 @@ fieldset.collapsible { margin-top: 1em; padding-top: 0.52em; }
   width: 196px;
 }
 
-#participated-checklists .checklists-list .checklist td.checklist-issue,
 #participated-checklists .checklists-list .checklist td.checklist-subject {
   text-align: left;
+  min-width: 120px;
+}
+
+#participated-checklists .checklists-list .checklist td.checklist-issue {
+  text-align: left;
+  min-width: 64px;
 }
 
 #participated-checklists .checklists-list .checklist td.checklist-date,
@@ -1977,6 +1989,7 @@ div#activity dd,
 
 #sidebar {
   padding-left: 12px;
+  padding-bottom: 64px;
 }
 
 #sidebar ul.queries li {
@@ -2040,6 +2053,11 @@ input, select, button {height: 26px;}
   #################################################
 */
 @media screen and (max-width: 899px) {
+  .checklist-show .checklist-info .attributes .attribute,
+  div.issue .attributes .attribute {
+    padding-left: 110px;
+  }
+
   #main #content>.contextual {
     /* width: auto; */
     padding-top: 0;

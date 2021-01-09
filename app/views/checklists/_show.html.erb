@@ -31,14 +31,6 @@
           rows.left l(:field_assigned_to), (@checklist.assigned_to ? link_to_user(@checklist.assigned_to) : "-"), :class => 'assigned-to'
         end
 
-        unless @checklist.disabled_core_fields.include?('category_id') || (@checklist.category.nil? && @checklist.project.issue_categories.none?)
-          rows.left l(:field_category), (@checklist.category ? @checklist.category.name : "-"), :class => 'category'
-        end
-
-        unless @checklist.disabled_core_fields.include?('fixed_version_id') || (@checklist.fixed_version.nil? && @checklist.assignable_versions.none?)
-          rows.left l(:field_fixed_version), (@checklist.fixed_version ? link_to_version(@checklist.fixed_version) : "-"), :class => 'fixed-version'
-        end
-
         unless @checklist.disabled_core_fields.include?('start_date')
           rows.right l(:field_start_date), format_date(@checklist.start_date), :class => 'start-date'
         end

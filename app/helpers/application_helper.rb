@@ -1682,7 +1682,7 @@ module ApplicationHelper
           source
         end
 
-      "#{src}?v=202010110700"
+      "#{src}?v=202012111536"
     end
     super *sources, options
   end
@@ -1720,7 +1720,7 @@ module ApplicationHelper
     end
 
     sources = sources.map do |source|
-      "#{source}?v=202010110700"
+      "#{source}?v=202012111536"
     end
 
     super *sources, options

@@ -163,7 +163,7 @@
 
 <div id="participated-checklists">
   <div class="list-filter">
-    <%= link_to_user(@user) %>&nbsp;&nbsp;
+    <%= link_to_user(@user) %>
     <label class="list-filter-label"><%= l(:label_as) %>：</label><%= select_tag :checklists_participants_type, options_for_select(checklists_participants_type_options, params[:checklists_participants_type] || "type:all"), :class => "filter-trigger" %>
     <%= select_tag :checklists_tracker, options_for_select(checklist_tracker_options, params[:checklists_tracker] || Issue::DEFAULT_CHECKLISTS_TRACKER), :class => "filter-trigger" %>
     <%= select_tag :checklists_status, options_for_select(checklist_status_options, params[:checklists_status] || Issue::DEFAULT_CHECKLISTS_STATUS), :class => "filter-trigger" %>

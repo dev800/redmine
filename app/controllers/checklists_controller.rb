@@ -33,8 +33,8 @@ class ChecklistsController < ApplicationController
     @checklists = Checklist.participants_of_user(@user, {
       tracker: params[:checklists_tracker],
       status: params[:checklists_status],
-      participants_type: params[:checklists_participants_type],
-      limit: (params[:checklists_limit] || 500).to_i
+      participants_type: params[:checklists_participants_type] || 'type:all',
+      limit: (params[:checklists_limit] || 2000).to_i
     }).includes([:project, :issue, :status, :tracker])
 
     render :action => 'participated', :layout => !request.xhr?

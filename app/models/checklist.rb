@@ -149,12 +149,13 @@ class Checklist < ActiveRecord::Base
   #   :status
   #   :participants_type
   def self.participants_of_user(user, options={})
-    limit = options.fetch(:limit, 20).to_i
-    offset = options.fetch(:offset, 0).to_i
-
     checklists = self.scope_of(self, options)
-      .offset(offset)
-      .limit(limit)
+
+    if options[:limit]
+      limit = options[:limit].to_i
+      offset = options.fetch(:offset, 0).to_i
+      checklists = checklists.limit(limit).offset(offset)
+    end
 
     case options[:participants_type]
     when 'type:all'

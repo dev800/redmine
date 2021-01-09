@@ -252,14 +252,15 @@ class Issue < ActiveRecord::Base
   #   :participants_type
   #   :limit, :offset
   def self.participants_of_user(user, options={})
-    limit = options.fetch(:limit, 200).to_i
-    offset = options.fetch(:offset, 0).to_i
-
     issues = self.scope_of(self, options)
       .joins(:participants)
       .where({:participants => {:user_id => user.id}})
-      .offset(offset)
-      .limit(limit)
+
+    if options[:limit]
+      limit = options[:limit].to_i
+      offset = options.fetch(:offset, 0).to_i
+      issues = issues.limit(limit).offset(offset)
+    end
 
     case options[:participants_type]
     when 'type:all'
