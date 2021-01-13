@@ -343,6 +343,7 @@ module QueriesHelper
       @query ||= klass.new(:name => "_", :filters => session[session_key][:filters], :group_by => session[session_key][:group_by], :column_names => session[session_key][:column_names], :totalable_names => session[session_key][:totalable_names], :sort_criteria => session[session_key][:sort])
       @query.project = @project
     end
+
     if params[:sort].present?
       @query.sort_criteria = params[:sort]
       if use_session
@@ -350,6 +351,7 @@ module QueriesHelper
         session[session_key][:sort] = @query.sort_criteria.to_a
       end
     end
+
     @query
   end
 

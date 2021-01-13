@@ -152,8 +152,8 @@ class UploadFile < ActiveRecord::Base
     )
   end
 
-  def visible?
-    true
+  def visible?(user=User.current)
+    !!user
   end
 
   # Returns the full path the upload_file thumbnail, or nil

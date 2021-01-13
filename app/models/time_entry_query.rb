@@ -45,6 +45,7 @@ class TimeEntryQuery < Query
 
   def initialize_available_filters
     add_available_filter "spent_on", :type => :date_past
+
     add_available_filter(
       "project_id",
       :type => :list, :values => lambda { project_values }
@@ -55,41 +56,52 @@ class TimeEntryQuery < Query
         :type => :list_subprojects,
         :values => lambda { subproject_values })
     end
+
     add_available_filter("issue_id", :type => :tree, :label => :label_issue)
+    add_available_filter("checklist_id", :type => :tree, :label => :label_checklist)
+
     add_available_filter(
       "issue.tracker_id",
       :type => :list,
       :name => l("label_attribute_of_issue", :name => l(:field_tracker)),
       :values => lambda { trackers.map {|t| [t.name, t.id.to_s]} })
+
     add_available_filter(
       "issue.status_id",
       :type => :list,
       :name => l("label_attribute_of_issue", :name => l(:field_status)),
       :values => lambda { issue_statuses_values })
+
     add_available_filter(
       "issue.fixed_version_id",
       :type => :list,
       :name => l("label_attribute_of_issue", :name => l(:field_fixed_version)),
       :values => lambda { fixed_version_values })
+
     add_available_filter(
       "issue.category_id",
       :type => :list_optional,
       :name => l("label_attribute_of_issue", :name => l(:field_category)),
       :values => lambda { project.issue_categories.collect{|s| [s.name, s.id.to_s] } }
     ) if project
+
     add_available_filter(
       "user_id",
       :type => :list_optional, :values => lambda { author_values }
     )
+
     add_available_filter(
       "author_id",
       :type => :list_optional, :values => lambda { author_values }
     )
+
     activities = (project ? project.activities : TimeEntryActivity.shared)
+
     add_available_filter(
       "activity_id",
       :type => :list, :values => activities.map {|a| [a.name, a.id.to_s]}
     )
+
     add_available_filter(
       "project.status",
       :type => :list,
@@ -161,6 +173,24 @@ class TimeEntryQuery < Query
   # Returns sum of all the spent hours
   def total_for_hours(scope)
     map_total(scope.sum(:hours)) {|t| t.to_f.round(2)}
+  end
+
+  def sql_for_checklist_id_field(field, operator, value)
+    case operator
+    when "="
+      "#{TimeEntry.table_name}.checklist_id = #{value.first.to_i}"
+    when "~"
+      checklist = Checklist.where(:id => value.first.to_i).first
+      if checklist && (checklist_ids = checklist.self_and_descendants.pluck(:id)).any?
+        "#{TimeEntry.table_name}.checklist_id IN (#{checklist_ids.join(',')})"
+      else
+        "1=0"
+      end
+    when "!*"
+      "#{TimeEntry.table_name}.checklist_id IS NULL"
+    when "*"
+      "#{TimeEntry.table_name}.checklist_id IS NOT NULL"
+    end
   end
 
   def sql_for_issue_id_field(field, operator, value)
