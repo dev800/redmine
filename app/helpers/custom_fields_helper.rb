@@ -122,9 +122,11 @@ module CustomFieldsHelper
     tag = custom_field_tag(name, custom_value)
     tag_id = nil
     ids = tag.scan(/ id="(.+?)"/)
+
     if ids.size == 1
       tag_id = ids.first.first
     end
+
     custom_field_label_tag(name, custom_value, options.merge(:for_tag_id => tag_id)) + tag
   end
 

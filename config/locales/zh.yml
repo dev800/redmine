@@ -272,6 +272,7 @@ zh:
   field_homepage: 主页
   field_is_public: 公开
   field_cross_collaboration: 垮部门协作
+  field_member_grouped: 成员分组显示
   field_parent: 上级项目
   field_is_in_roadmap: 在路线图中显示
   field_login: 登录名
@@ -463,6 +464,8 @@ zh:
   project_module_calendar: 日历
   project_module_gantt: 甘特图
 
+  label_ungroup: '未分组'
+  label_display_group_name: '显示分组名'
   label_copy_text_report: '复制文本报告'
   label_importance_5: '很重要'
   label_importance_4: '重要'

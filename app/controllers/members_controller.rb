@@ -90,6 +90,7 @@ class MembersController < ApplicationController
     if params[:membership]
       @member.set_editable_role_ids(params[:membership][:role_ids])
       @member.default_watched = params[:membership][:default_watched] == 'true'
+      @member.display_group_name = (params[:membership][:display_group_name] || '').strip
     end
     saved = @member.save
     respond_to do |format|

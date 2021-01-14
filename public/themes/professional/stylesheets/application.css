@@ -6,6 +6,8 @@ body{ color:#303030; background:#e8eaec; }
   padding-left: 0;
 }
 
+.tabular textarea { min-height: 64px; }
+
 #top-menu { font-size: 80%; height: 2em; padding-top: 0.5em; background-color: #578bb8; }
 #top-menu a { font-weight: bold; }
 #header { background: #467aa7;padding: 10px 0 0 0; }

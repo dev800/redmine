@@ -27,4 +27,8 @@
     <%= link_to_function l(:button_cancel),
                          "$('#member-#{@member.id}-roles').show(); $('#member-#{@member.id}-form').empty(); return false;" if request.xhr? %>
   </p>
+  <p style="padding: 0.5em 0">
+    <%= l(:label_display_group_name) %>
+    <%= text_field_tag "membership[display_group_name]", @member.display_group_name %>
+  </p>
 <% end %>

@@ -780,6 +780,7 @@ class Project < ActiveRecord::Base
   end
 
   safe_attributes(
+    'member_grouped',
     'cross_collaboration',
     'name',
     'description',
@@ -935,6 +936,19 @@ class Project < ActiveRecord::Base
     user ||= User.current
     custom_field_values.select do |value|
       value.custom_field.visible_by?(project, user)
+    end
+  end
+
+  def member_groups
+    return @member_groups if @member_groups
+
+    @member_groups = self.members.includes(:user).group_by(&:display_group_name).map do |group_name, members|
+      {
+        :label => group_name.blank? ? l(:label_ungroup) : group_name,
+        :members => members
+      }
+    end.sort do |a, b|
+      a[:label] <=> b[:label]
     end
   end
 

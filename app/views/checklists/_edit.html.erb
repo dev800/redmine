@@ -38,7 +38,7 @@
           <p><%= time_entry.select :activity_id, activity_collection_for_select_options %></p>
           </div>
           </div>
-          <p><%= time_entry.text_field :comments, :size => 60 %></p>
+          <p><%= time_entry.text_field :comments, :size => 60, :maxlength => 1024 %></p>
           <% @time_entry.custom_field_values.each do |value| %>
             <p><%= custom_field_tag_with_label :time_entry, value %></p>
           <% end %>

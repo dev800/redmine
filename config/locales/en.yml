@@ -573,6 +573,8 @@ en:
   project_module_calendar: Calendar
   project_module_gantt: Gantt
 
+  label_ungroup: 'Ungroup'
+  label_display_group_name: 'Display Group Name'
   label_copy_text_report: 'Copy text report'
   label_user: User
   label_user_plural: Users

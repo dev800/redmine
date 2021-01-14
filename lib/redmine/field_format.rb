@@ -629,21 +629,26 @@ module Redmine
       # Renders the edit tag as check box or radio tags
       def check_box_edit_tag(view, tag_id, tag_name, custom_value, options={})
         opts = []
+
         unless custom_value.custom_field.multiple? || custom_value.custom_field.is_required?
           opts << ["(#{l(:label_none)})", '']
         end
+
         opts += possible_custom_value_options(custom_value)
         s = ''.html_safe
         tag_method = custom_value.custom_field.multiple? ? :check_box_tag : :radio_button_tag
+
         opts.each do |label, value|
           value ||= label
           checked = (custom_value.value.is_a?(Array) && custom_value.value.include?(value)) || custom_value.value.to_s == value
           tag = view.send(tag_method, tag_name, value, checked, :id => nil)
           s << view.content_tag('label', tag + ' ' + label)
         end
+
         if custom_value.custom_field.multiple?
           s << view.hidden_field_tag(tag_name, '', :id => nil)
         end
+
         css = "#{options[:class]} check_box_group"
         view.content_tag('span', s, options.merge(:class => css))
       end

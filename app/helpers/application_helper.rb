@@ -604,17 +604,51 @@ module ApplicationHelper
   # Returns a string for users/groups option tags
   def principals_options_for_select(collection, selected=nil)
     s = +''
+
     if collection.include?(User.current)
       s << content_tag('option', "<< #{l(:label_me)} >>", :value => User.current.id)
     end
+
     groups = +''
+
     collection.sort.each do |element|
       selected_attribute = ' selected="selected"' if option_value_selected?(element, selected) || element.id.to_s == selected.to_s
       (element.is_a?(Group) ? groups : s) << %(<option value="#{element.id}"#{selected_attribute}>#{h element.name}</option>)
     end
+
     unless groups.empty?
       s << %(<optgroup label="#{h(l(:label_group_plural))}">#{groups}</optgroup>)
     end
+
+    s.html_safe
+  end
+
+  def principals_options_for_select_grouped(member_groups, selected=nil)
+    s = +''
+
+    users = member_groups.map do |group|
+      group[:members].map(&:user)
+    end.compact.flatten
+
+    if users.include?(User.current)
+      s << content_tag('option', "<< #{l(:label_me)} >>", :value => User.current.id)
+    end
+
+    member_groups.each do |group|
+      group_html = +''
+
+      group[:members].each do |member|
+        user = member.try(:user)
+
+        if user
+          selected_attribute = ' selected="selected"' if option_value_selected?(user, selected) || user.id.to_s == selected.to_s
+          group_html << %(<option value="#{user.id}"#{selected_attribute}>#{h user.name}</option>)
+        end
+      end
+
+      s << %(<optgroup label="#{group[:label]}">#{group_html}</optgroup>)
+    end
+
     s.html_safe
   end
 

@@ -1131,9 +1131,11 @@ class Issue < ActiveRecord::Base
   def assignable_users
     users = project.assignable_users(tracker).to_a
     users << author if author && author.active?
+
     if assigned_to_id_was.present? && assignee = Principal.find_by_id(assigned_to_id_was)
       users << assignee
     end
+
     users.uniq.sort
   end
 
