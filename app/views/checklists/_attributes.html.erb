@@ -22,11 +22,24 @@
       <p><%= f.select :priority_id, (priorities.collect {|p| [p.name, p.id]}), {:required => true} %></p>
     <% end %>
 
-    <% if checklist.safe_attribute? 'assigned_to_id' %>
-      <p>
-        <%= f.select :assigned_to_id, principals_options_for_select(checklist.assignable_users, checklist.assigned_to),
-          :include_blank => true, :required => checklist.required_attribute?('assigned_to_id') %>
-      </p>
+    <% if @checklist.safe_attribute? 'assigned_to_id' %>
+      <% if @project.member_grouped %>
+        <p>
+          <%= f.select :assigned_to_id,
+            principals_options_for_select_grouped(@project.member_groups, @checklist.assigned_to),
+            :include_blank => true,
+            :required => @checklist.required_attribute?('assigned_to_id')
+          %>
+        </p>
+      <% else %>
+        <p>
+          <%= f.select :assigned_to_id,
+            principals_options_for_select(@checklist.assignable_users, @checklist.assigned_to),
+            :include_blank => true,
+            :required => @checklist.required_attribute?('assigned_to_id')
+          %>
+        </p>
+      <% end %>
     <% end %>
   </div>
 

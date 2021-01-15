@@ -22,10 +22,10 @@
 <% end %>
 
 <% if @issue.safe_attribute? 'assigned_to_id' %>
-  <% if @project.member_grouped %>
+  <% if @issue.project && @issue.project.member_grouped %>
     <p>
       <%= f.select :assigned_to_id,
-        principals_options_for_select_grouped(@project.member_groups, @issue.assigned_to),
+        principals_options_for_select_grouped(@issue.project.member_groups, @issue.assigned_to),
         :include_blank => true,
         :required => @issue.required_attribute?('assigned_to_id')
       %>
