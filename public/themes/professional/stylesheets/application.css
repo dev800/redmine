@@ -1,4 +1,4 @@
-@import url(../../../stylesheets/application.css?v=202101131106);
+@import url(../../../stylesheets/application.css?v=202101131110);
 
 body{ color:#303030; background:#e8eaec; }
 
@@ -1629,11 +1629,6 @@ tr.issue td.assigned_to .arrow {
 #main a.checklist.closed:hover,
 #main a.issue.closed:hover {
   color: #467aa7;
-}
-
-#content .message .wiki p {
-  padding-left: 0;
-  padding-right: 0;
 }
 
 #replies .message,
