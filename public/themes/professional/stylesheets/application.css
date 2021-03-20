@@ -1,4 +1,4 @@
-@import url(../../../stylesheets/application.css?v=202101131110);
+@import url(../../../stylesheets/application.css?v=202101131111);
 
 body{ color:#303030; background:#e8eaec; }
 
@@ -1680,7 +1680,7 @@ tr.issue td.assigned_to .arrow {
 #main .journal h4.note-header {
   border-bottom: dotted 1px #c0c0c0;
   padding: 0.58em 0.8em;
-  margin-top: 0.25em;
+  margin-top: 0;
   margin-bottom: 0;
 }
 
